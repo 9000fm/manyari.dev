@@ -11,30 +11,33 @@ type Language = 'ES' | 'EN' | 'JP';
 const translations = {
   ES: {
     welcome: 'BIENVENIDO/A.',
-    willYouContinue: 'CONTINUAR AL SITIO?',
-    yes: 'SI',
+    willYouContinue: 'DESEA CONTINUAR AL SITIO?',
+    yes: 'SÍ',
     no: 'NO',
     shuttingDown: 'apagando',
     about: '> acerca',
     shop: '> tienda',
     welcomeTitle: 'superself.exe',
-    welcomeMessage: 'Aviso del sistema. Se encontro una invitacion activa.',
+    welcomeMessage: 'Aviso del sistema. Se encontró una invitación activa.',
     ok: 'OK',
     aboutTitle: 'acerca.txt',
-    aboutText: '(2023) es un sello y colectivo de musica electronica. Publicamos sets, musica original y recomendaciones fuera del radar. Impulsamos nuevas propuestas, conectamos oyentes reales y colaboramos para sumar a la escena local con experiencias honestas. Poco floro. Sonido primero. Energia real. Gente correcta.',
+    aboutText: '(2023) es un sello y colectivo de música electrónica. Compartimos mixes, recomendaciones selectas y música original. Nos mueve apoyar proyectos con identidad, acercar artistas a oyentes reales y fomentar una cultura de colaboración. Sonido primero. Poco floro. Energía real.',
     close: 'Cerrar',
     shopTitle: 'tienda.exe',
-    shopMessage: 'Tienda proximamente...',
+    shopMessage: 'Tienda próximamente...',
     copyright: '{ superself • 2026 }',
-    message: '1 mensaje',
+    message: '1 mensaje nuevo',
+    allRightsReserved: 'todos los derechos reservados',
     emailCopied: 'email copiado',
+    invalidEmail: 'ingresa un email válido',
     subscribe: 'suscribirse',
     subscribePrompt: 'Ingresa tu e-mail para suscribirte! :)',
     emailPlaceholder: 'tu@email.com',
-    subscribed: 'suscrito!',
+    subscribed: '¡suscrito!',
     subscribedMessage: 'Gracias por suscribirte',
     confirm: 'Confirmar',
     cancel: 'Cancelar',
+    skip: 'saltar',
   },
   EN: {
     welcome: 'WELCOME.',
@@ -48,13 +51,15 @@ const translations = {
     welcomeMessage: 'System notice. Active invitation found.',
     ok: 'OK',
     aboutTitle: 'about.txt',
-    aboutText: '(2023) is an electronic music label and collective. We publish sets, original music and off-the-radar recommendations. We push new proposals, connect real listeners and collaborate to add to the local scene with honest experiences. Less bullsh!t. Sound first. Real energy. Right people.',
+    aboutText: '(2023) is an electronic music label and collective. We share mixes, curated recommendations and original music. We support projects with identity, bring artists closer to real listeners and foster a culture of collaboration. Sound first. Less talk. Real energy.',
     close: 'Close',
     shopTitle: 'shop.exe',
     shopMessage: 'Shop coming soon...',
     copyright: '{ superself • 2026 }',
-    message: '1 message',
+    message: '1 new message',
+    allRightsReserved: 'all rights reserved',
     emailCopied: 'email copied',
+    invalidEmail: 'enter a valid email',
     subscribe: 'subscribe',
     subscribePrompt: 'Enter your e-mail to subscribe.',
     emailPlaceholder: 'your@email.com',
@@ -62,6 +67,7 @@ const translations = {
     subscribedMessage: 'Thanks for subscribing',
     confirm: 'Confirm',
     cancel: 'Cancel',
+    skip: 'skip',
   },
   JP: {
     welcome: 'ようこそ。',
@@ -75,13 +81,15 @@ const translations = {
     welcomeMessage: 'システム通知。アクティブな招待が見つかりました。',
     ok: 'OK',
     aboutTitle: '概要.txt',
-    aboutText: '(2023) は電子音楽レーベル＆コレクティブ。セット、オリジナル音楽、レーダー外のおすすめを発信。新しい提案を推進し、本物のリスナーをつなぎ、誠実な体験でローカルシーンに貢献。余計な言葉なし。サウンド優先。リアルなエネルギー。正しい人々。',
+    aboutText: '(2023) は電子音楽レーベル＆コレクティブ。ミックス、厳選レコメンド、オリジナル音楽を共有。個性あるプロジェクトを支援し、アーティストと本物のリスナーを繋ぎ、コラボ文化を育む。サウンド優先。余計な言葉なし。リアルなエネルギー。',
     close: '閉じる',
     shopTitle: '店舗.exe',
     shopMessage: 'ショップは近日公開...',
     copyright: '{ superself • 2026 }',
-    message: '1件',
+    message: '1件の新着',
+    allRightsReserved: '全著作権所有',
     emailCopied: 'コピーしました',
+    invalidEmail: '有効なメールを入力',
     subscribe: '登録',
     subscribePrompt: 'メールを入力して登録。',
     emailPlaceholder: 'メール@例.com',
@@ -89,6 +97,7 @@ const translations = {
     subscribedMessage: '登録ありがとう',
     confirm: '確認',
     cancel: 'キャンセル',
+    skip: 'スキップ',
   },
 };
 
@@ -98,6 +107,8 @@ export default function Home() {
   const [showLoader, setShowLoader] = useState(false);
   const [language, setLanguage] = useState<Language>('ES');
   const t = translations[language];
+  // Japanese uses middle dot (・) instead of period for animated dots
+  const dotChar = language === 'JP' ? '・' : '.';
 
   const [selectedOption, setSelectedOption] = useState<'yes' | 'no'>('yes');
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
@@ -112,6 +123,7 @@ export default function Home() {
   const [showNotification, setShowNotification] = useState(false);
   const [showEmailCopied, setShowEmailCopied] = useState(false);
   const [emailToastPos, setEmailToastPos] = useState({ x: 0, y: 0 });
+  const [showEmailError, setShowEmailError] = useState(false);
   const [typedAboutText, setTypedAboutText] = useState('');
   const [aboutTypingComplete, setAboutTypingComplete] = useState(false);
   const [subscribeEmail, setSubscribeEmail] = useState('');
@@ -127,10 +139,16 @@ export default function Home() {
   // Ref for ASCII art ripple creation
   const asciiRef = useRef<AsciiArtRef>(null);
 
-  // Welcome popup positioning (only popup that's draggable)
+  // Popup positioning (draggable popups)
   const [welcomePos, setWelcomePos] = useState({ x: 0, y: 0 });
+  const [aboutPos, setAboutPos] = useState({ x: 0, y: 0 });
+  // Track which window is on top (like real Windows)
+  const [activeWindow, setActiveWindow] = useState<'welcome' | 'about' | null>(null);
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const [hasDraggedPastThreshold, setHasDraggedPastThreshold] = useState(false);
+  const DRAG_THRESHOLD = 5; // pixels before drag activates
 
   // Menu dropdown state
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
@@ -138,6 +156,21 @@ export default function Home() {
 
   // Shutdown animation
   const [shutdownText, setShutdownText] = useState('');
+
+  // Skip mode for fast entrance
+  const [skipMode, setSkipMode] = useState(false);
+
+  // Track if replaying entrance (to hide skip button)
+  const [isReplaying, setIsReplaying] = useState(false);
+  const [replayTrigger, setReplayTrigger] = useState(0);
+
+  // Main screen language scramble effect (use ref to avoid effect re-triggering)
+  const isMainLangScramblingRef = useRef(false);
+  const [scrambledAbout, setScrambledAbout] = useState('');
+  const [scrambledShop, setScrambledShop] = useState('');
+  const [scrambledMessage, setScrambledMessage] = useState('');
+  const [scrambledCopyright, setScrambledCopyright] = useState('');
+  const prevMainLangRef = useRef<Language>(language);
   const [rebootCount, setRebootCount] = useState(0);
 
   // Confirm screen typing
@@ -147,6 +180,32 @@ export default function Home() {
   const [typedYes, setTypedYes] = useState('');
   const [typedNo, setTypedNo] = useState('');
   const [showSelector, setShowSelector] = useState(false);
+  const [confirmLangVisible, setConfirmLangVisible] = useState(false); // Stays true once shown
+  const [isConfirmScrambling, setIsConfirmScrambling] = useState(false); // For language change scramble
+  const prevLangRef = useRef<Language>(language); // Track previous language
+
+  // Ref to track all active timers/intervals for proper cleanup
+  const confirmTimersRef = useRef<{ timers: NodeJS.Timeout[], intervals: NodeJS.Timeout[] }>({ timers: [], intervals: [] });
+
+  // Scramble effect characters (used in multiple places)
+  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+
+  // Reset confirm screen state when language changes during confirm phase
+  // This ensures the typing animation restarts with the new language
+  useEffect(() => {
+    if (phase === 'confirm' && prevLangRef.current !== language) {
+      // Language changed during confirm - reset all typed text
+      setTypedWelcome('');
+      setWelcomeDots('');
+      setTypedConfirm('');
+      setTypedYes('');
+      setTypedNo('');
+      setShowSelector(false);
+      setShowConfirmCursor(false);
+      // Update ref so we don't trigger this again
+      prevLangRef.current = language;
+    }
+  }, [language, phase]);
 
   // Boot sequence: blue → logo appears → loader starts
   useEffect(() => {
@@ -210,51 +269,81 @@ export default function Home() {
       setShowWelcomePopup(false);
       setWelcomeStep('message');
       setShowSubscribedPopup(true);
+    } else {
+      // Show error toast for invalid email
+      setShowEmailError(true);
+      setTimeout(() => setShowEmailError(false), 2000);
     }
   };
 
   // Replay entrance animation when clicking title
   const handleReplayEntrance = () => {
-    // Reset entrance states
+    // Mark as replaying to hide skip button
+    setIsReplaying(true);
+
+    // Close any open sections/popups first
+    setActiveSection(null);
+    setShowWelcomePopup(false);
+    setShowNotification(false);
+    setShowMenuDropdown(false);
+
+    // Hide all main content elements immediately
     setShowFrame(false);
     setShowTitlePrompt(false);
     setTypedTitle('');
     setShowTitleCursor(false);
     setShowFooter(false);
-    setShowWelcomePopup(false);
-    setShowNotification(false);
-    setShowMenuDropdown(false);
     setBurgerVisible(false);
+
     // Reset about panel typing state
     setTypedAboutText('');
     setAboutTypingComplete(false);
     setAboutHasTyped(false);
 
-    // Trigger re-run by toggling phase
-    setPhase('confirm');
-    setTimeout(() => setPhase('main'), 50);
+    // Reset language scramble states
+    setScrambledAbout('');
+    setScrambledShop('');
+    setScrambledMessage('');
+    setScrambledCopyright('');
+
+    // Wait briefly for elements to hide, then restart entrance (snappy)
+    setTimeout(() => {
+      setReplayTrigger(prev => prev + 1); // Trigger entrance effect re-run
+      setIsReplaying(false);
+    }, 150);
   };
 
   const handleConfirmSelect = (option: 'yes' | 'no') => {
     if (option === 'yes') {
-      setPhase('main');
+      // Fade out everything first
+      // NOTE: Don't reset showSelector to false - that would re-trigger typing effect
+      setConfirmLangVisible(false);
+      setTypedWelcome('');
+      setTypedConfirm('');
+      setTypedYes('');
+      setTypedNo('');
+      // Hold on blue screen longer for more deliberate transition, then go to main
+      setTimeout(() => {
+        setPhase('main');
+      }, 1200);
     } else {
       // Start shutdown sequence
       setPhase('shutdown');
       const shutBase = t.shuttingDown;
 
       // 2 full passes + first dot of third pass, then shutdown
+      const d = dotChar;
       const dotTimings = [
         { text: shutBase, delay: 0 },
-        { text: shutBase + '.', delay: 400 },
-        { text: shutBase + '..', delay: 800 },
-        { text: shutBase + '...', delay: 1200 },
+        { text: shutBase + d, delay: 400 },
+        { text: shutBase + d + d, delay: 800 },
+        { text: shutBase + d + d + d, delay: 1200 },
         { text: shutBase, delay: 1800 },
-        { text: shutBase + '.', delay: 2200 },
-        { text: shutBase + '..', delay: 2600 },
-        { text: shutBase + '...', delay: 3000 },
+        { text: shutBase + d, delay: 2200 },
+        { text: shutBase + d + d, delay: 2600 },
+        { text: shutBase + d + d + d, delay: 3000 },
         { text: shutBase, delay: 3600 },
-        { text: shutBase + '.', delay: 4000 }, // 7th dot - shutdown after this
+        { text: shutBase + d, delay: 4000 }, // 7th dot - shutdown after this
       ];
 
       dotTimings.forEach(({ text, delay }) => {
@@ -275,6 +364,7 @@ export default function Home() {
         setTypedYes('');
         setTypedNo('');
         setShowSelector(false);
+        setConfirmLangVisible(false);
         setSelectedOption('yes');
         setShowWelcomePopup(false);
         setActiveSection(null);
@@ -295,10 +385,54 @@ export default function Home() {
     }
   };
 
+  // Skip to main handler - elegant transition
+  const handleSkip = () => {
+    // Clear any existing timers
+    clearAllConfirmTimers();
+    // Hide all current content
+    setShowLogo(false);
+    setShowLoader(false);
+    setTypedWelcome('');
+    setTypedConfirm('');
+    setTypedYes('');
+    setTypedNo('');
+    setShowSelector(false);
+    setConfirmLangVisible(false);
+    // Enable skip mode for faster entrance
+    setSkipMode(true);
+    // Brief pause on blue, then go to main
+    setTimeout(() => {
+      setPhase('main');
+    }, 400);
+  };
+
   // Typing effect for confirm screen - hacker style
+  // Only runs when typing hasn't completed yet (showSelector is false)
   const [showConfirmCursor, setShowConfirmCursor] = useState(false);
+
+  // Helper to add timer/interval to tracking ref
+  const addTimer = (timer: NodeJS.Timeout) => {
+    confirmTimersRef.current.timers.push(timer);
+    return timer;
+  };
+  const addInterval = (interval: NodeJS.Timeout) => {
+    confirmTimersRef.current.intervals.push(interval);
+    return interval;
+  };
+
+  // Clear all tracked timers/intervals
+  const clearAllConfirmTimers = () => {
+    confirmTimersRef.current.timers.forEach(t => clearTimeout(t));
+    confirmTimersRef.current.intervals.forEach(i => clearInterval(i));
+    confirmTimersRef.current = { timers: [], intervals: [] };
+  };
+
   useEffect(() => {
-    if (phase === 'confirm') {
+    // Don't re-run if selector is already shown (typing complete) - let scramble effect handle language changes
+    if (phase === 'confirm' && !showSelector && !isConfirmScrambling) {
+      // Clear any existing timers first
+      clearAllConfirmTimers();
+
       const welcomeText = t.welcome;
       const confirmText = t.willYouContinue;
       const yesText = t.yes;
@@ -317,13 +451,13 @@ export default function Home() {
       setShowConfirmCursor(false);
 
       // First show blinking cursor, then start typing
-      const cursorTimer = setTimeout(() => {
+      addTimer(setTimeout(() => {
         setShowConfirmCursor(true);
-      }, 300);
+      }, 300));
 
-      const typeTimer = setTimeout(() => {
+      addTimer(setTimeout(() => {
         // Type WELCOME first
-        const welcomeInterval = setInterval(() => {
+        const welcomeInterval = addInterval(setInterval(() => {
           if (welcomeIndex < welcomeText.length) {
             setTypedWelcome(welcomeText.slice(0, welcomeIndex + 1));
             welcomeIndex++;
@@ -332,15 +466,15 @@ export default function Home() {
 
             // Animate dots: . then .. then ...
             let dotCount = 0;
-            const dotsInterval = setInterval(() => {
+            const dotsInterval = addInterval(setInterval(() => {
               dotCount++;
-              setWelcomeDots('.'.repeat(dotCount));
+              setWelcomeDots(dotChar.repeat(dotCount));
               if (dotCount >= 3) {
                 clearInterval(dotsInterval);
 
                 // Pause after dots, then type the question
-                setTimeout(() => {
-                  const confirmInterval = setInterval(() => {
+                addTimer(setTimeout(() => {
+                  const confirmInterval = addInterval(setInterval(() => {
                     if (confirmIndex < confirmText.length) {
                       setTypedConfirm(confirmText.slice(0, confirmIndex + 1));
                       confirmIndex++;
@@ -348,8 +482,8 @@ export default function Home() {
                       clearInterval(confirmInterval);
 
                       // Pause, then type YES
-                      setTimeout(() => {
-                        const yesInterval = setInterval(() => {
+                      addTimer(setTimeout(() => {
+                        const yesInterval = addInterval(setInterval(() => {
                           if (yesIndex < yesText.length) {
                             setTypedYes(yesText.slice(0, yesIndex + 1));
                             yesIndex++;
@@ -357,8 +491,8 @@ export default function Home() {
                             clearInterval(yesInterval);
 
                             // Small pause, then type NO
-                            setTimeout(() => {
-                              const noInterval = setInterval(() => {
+                            addTimer(setTimeout(() => {
+                              const noInterval = addInterval(setInterval(() => {
                                 if (noIndex < noText.length) {
                                   setTypedNo(noText.slice(0, noIndex + 1));
                                   noIndex++;
@@ -366,28 +500,107 @@ export default function Home() {
                                   clearInterval(noInterval);
 
                                   // Show selector after everything is typed
-                                  setTimeout(() => setShowSelector(true), 400);
+                                  addTimer(setTimeout(() => {
+                                    setShowSelector(true);
+                                    setConfirmLangVisible(true);
+                                  }, 400));
                                 }
-                              }, 80);
-                            }, 200);
+                              }, 80));
+                            }, 200));
                           }
-                        }, 80);
-                      }, 400);
+                        }, 80));
+                      }, 400));
                     }
-                  }, 50);
-                }, 600); // Pause after dots
+                  }, 50));
+                }, 600)); // Pause after dots
               }
-            }, 300); // Dot animation speed
+            }, 300)); // Dot animation speed
           }
-        }, 70);
-      }, 1000);
+        }, 70));
+      }, 1000));
 
       return () => {
-        clearTimeout(cursorTimer);
-        clearTimeout(typeTimer);
+        clearAllConfirmTimers();
       };
     }
-  }, [phase, t]);
+  }, [phase, t, showSelector, isConfirmScrambling, dotChar]);
+
+  // Language change scramble effect for confirm screen
+  useEffect(() => {
+    if (phase !== 'confirm' || !showSelector || isConfirmScrambling) return;
+
+    // Check if language actually changed
+    if (prevLangRef.current !== language) {
+      const prevLang = prevLangRef.current;
+      prevLangRef.current = language;
+
+      // Get old and new texts
+      const oldConfirm = translations[prevLang].willYouContinue;
+      const newConfirm = t.willYouContinue;
+      const oldYes = translations[prevLang].yes;
+      const newYes = t.yes;
+      const oldNo = translations[prevLang].no;
+      const newNo = t.no;
+
+      setIsConfirmScrambling(true);
+
+      // Scramble all text simultaneously
+      let frame = 0;
+      const maxFrames = 15;
+
+      const scrambleInterval = setInterval(() => {
+        frame++;
+
+        // Calculate how many chars to lock (progressive reveal)
+        const confirmLocked = Math.floor((frame / maxFrames) * newConfirm.length);
+        const yesLocked = Math.floor((frame / maxFrames) * newYes.length);
+        const noLocked = Math.floor((frame / maxFrames) * newNo.length);
+
+        // Build scrambled strings
+        let confirmDisplay = '';
+        for (let i = 0; i < newConfirm.length; i++) {
+          if (i < confirmLocked) {
+            confirmDisplay += newConfirm[i];
+          } else {
+            confirmDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          }
+        }
+
+        let yesDisplay = '';
+        for (let i = 0; i < newYes.length; i++) {
+          if (i < yesLocked) {
+            yesDisplay += newYes[i];
+          } else {
+            yesDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          }
+        }
+
+        let noDisplay = '';
+        for (let i = 0; i < newNo.length; i++) {
+          if (i < noLocked) {
+            noDisplay += newNo[i];
+          } else {
+            noDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          }
+        }
+
+        setTypedConfirm(confirmDisplay);
+        setTypedYes(yesDisplay);
+        setTypedNo(noDisplay);
+
+        if (frame >= maxFrames) {
+          // Final values
+          setTypedConfirm(newConfirm);
+          setTypedYes(newYes);
+          setTypedNo(newNo);
+          clearInterval(scrambleInterval);
+          setIsConfirmScrambling(false);
+        }
+      }, 50);
+
+      return () => clearInterval(scrambleInterval);
+    }
+  }, [language, phase, showSelector, isConfirmScrambling, t, scrambleChars]);
 
   // Keyboard navigation for confirm screen
   useEffect(() => {
@@ -405,61 +618,160 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [phase, selectedOption, showSelector]);
 
-  // Main content entrance sequence
+  // Main content entrance sequence - frame first, then title scramble
+  // Uses faster timings when skipMode is enabled
   useEffect(() => {
     if (phase === 'main') {
       const titleText = 'superself';
-      let titleIndex = 0;
+      let scrambleFrame = 0;
+      let scrambleInterval: NodeJS.Timeout | null = null;
 
-      // Step 1: Show frame
+      // Timings depend on skip mode
+      // Skip mode: faster but still shows the sequence properly
+      // Normal: deliberate pacing for first-time experience
+      const timings = skipMode
+        ? { frame: 300, title: 800, footer: 1500, burger: 2000, popup: 12000 }
+        : { frame: 800, title: 1500, footer: 3500, burger: 5000, popup: 18000 + Math.random() * 4000 };
+
+      // Step 1: Show frame first
       const frameTimer = setTimeout(() => {
         setShowFrame(true);
-      }, 200);
+      }, timings.frame);
 
-      // Step 2: Show ">" prompt
-      const promptTimer = setTimeout(() => {
+      // Step 2: Start title scramble after frame is visible
+      const titleTimer = setTimeout(() => {
         setShowTitlePrompt(true);
-      }, 700);
-
-      // Step 3: Show blinking cursor after prompt
-      const cursorTimer = setTimeout(() => {
         setShowTitleCursor(true);
-      }, 900);
 
-      // Step 4: Start typing "superself" (dramatic pause with blinking cursor first)
-      const titleStartTimer = setTimeout(() => {
-        const titleInterval = setInterval(() => {
-          if (titleIndex < titleText.length) {
-            setTypedTitle(titleText.slice(0, titleIndex + 1));
-            titleIndex++;
-          } else {
-            clearInterval(titleInterval);
+        // Per-character lock frame targets (randomized for organic feel)
+        // Faster lock in skip mode
+        const lockMultiplier = skipMode ? 6 : 10;
+        const lockTargets = titleText.split('').map((_, i) => {
+          const baseDelay = (i + 1) * lockMultiplier;
+          const randomVariation = Math.floor(Math.random() * 8) - 4;
+          return baseDelay + randomVariation;
+        });
+        const isLocked = new Array(titleText.length).fill(false);
+
+        // Scramble animation (faster interval in skip mode)
+        const scrambleSpeed = skipMode ? 25 : 40;
+        scrambleInterval = setInterval(() => {
+          scrambleFrame++;
+
+          let display = '';
+          let allLocked = true;
+
+          for (let i = 0; i < titleText.length; i++) {
+            if (!isLocked[i] && scrambleFrame >= lockTargets[i]) {
+              isLocked[i] = true;
+            }
+
+            if (isLocked[i]) {
+              display += titleText[i];
+            } else {
+              display += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+              allLocked = false;
+            }
           }
-        }, 60);
-      }, 1500);
+          setTypedTitle(display);
 
-      // Step 5: Show footer (languages + copyright) with fade
-      const footerTimer = setTimeout(() => {
+          if (allLocked) {
+            setTypedTitle(titleText);
+            if (scrambleInterval) clearInterval(scrambleInterval);
+            // Reset skip mode after entrance complete
+            if (skipMode) setSkipMode(false);
+          }
+        }, scrambleSpeed);
+      }, timings.title);
+
+      // Step 3: Show ASCII background
+      const bgTimer = setTimeout(() => {
         setShowFooter(true);
-      }, 3500);
+      }, timings.footer);
 
-      // Step 6: Show welcome popup (random 12-15 seconds)
-      const randomDelay = 12000 + Math.random() * 3000;
+      // Step 4: Show burger (icons and language)
+      const burgerTimer = setTimeout(() => {
+        setBurgerVisible(true);
+      }, timings.burger);
+
+      // Step 5: Show welcome popup
       const welcomeTimer = setTimeout(() => {
         setShowWelcomePopup(true);
-      }, randomDelay);
+      }, timings.popup);
 
       return () => {
+        if (scrambleInterval) clearInterval(scrambleInterval);
         clearTimeout(frameTimer);
-        clearTimeout(promptTimer);
-        clearTimeout(cursorTimer);
-        clearTimeout(titleStartTimer);
-        clearTimeout(footerTimer);
+        clearTimeout(titleTimer);
+        clearTimeout(bgTimer);
+        clearTimeout(burgerTimer);
         clearTimeout(welcomeTimer);
       };
     }
-  }, [phase]);
+  }, [phase, skipMode, replayTrigger]);
 
+
+  // Language change scramble effect for main screen
+  useEffect(() => {
+    if (phase !== 'main' || isMainLangScramblingRef.current) return;
+
+    // Check if language changed
+    if (prevMainLangRef.current !== language) {
+      const prevLang = prevMainLangRef.current;
+      prevMainLangRef.current = language;
+
+      // Get old and new texts
+      const oldAbout = translations[prevLang].about;
+      const newAbout = t.about;
+      const oldShop = translations[prevLang].shop;
+      const newShop = t.shop;
+      const oldMessage = translations[prevLang].message;
+      const newMessage = t.message;
+      const oldCopyright = translations[prevLang].allRightsReserved;
+      const newCopyright = t.allRightsReserved;
+
+      isMainLangScramblingRef.current = true;
+
+      // Scramble all visible text simultaneously
+      let frame = 0;
+      const maxFrames = 18;
+
+      const scrambleInterval = setInterval(() => {
+        frame++;
+
+        // Progressive reveal for each text
+        const scrambleText = (oldText: string, newText: string) => {
+          const locked = Math.floor((frame / maxFrames) * newText.length);
+          let result = '';
+          for (let i = 0; i < newText.length; i++) {
+            if (i < locked) {
+              result += newText[i];
+            } else {
+              result += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+            }
+          }
+          return result;
+        };
+
+        setScrambledAbout(scrambleText(oldAbout, newAbout));
+        setScrambledShop(scrambleText(oldShop, newShop));
+        setScrambledMessage(scrambleText(oldMessage, newMessage));
+        setScrambledCopyright(scrambleText(oldCopyright, newCopyright));
+
+        if (frame >= maxFrames) {
+          // Final values
+          setScrambledAbout('');
+          setScrambledShop('');
+          setScrambledMessage('');
+          setScrambledCopyright('');
+          clearInterval(scrambleInterval);
+          isMainLangScramblingRef.current = false;
+        }
+      }, 40);
+
+      return () => clearInterval(scrambleInterval);
+    }
+  }, [language, phase, t, scrambleChars]);
 
   // Handle Esc key to close popups and menu
   useEffect(() => {
@@ -479,11 +791,11 @@ export default function Home() {
     if (activeSection === 'shop') {
       setShopDots('');
       const interval = setInterval(() => {
-        setShopDots(prev => prev.length >= 3 ? '' : prev + '.');
+        setShopDots(prev => prev.length >= 3 ? '' : prev + dotChar);
       }, 400);
       return () => clearInterval(interval);
     }
-  }, [activeSection]);
+  }, [activeSection, dotChar]);
 
   // Spinner animation for copyright
   useEffect(() => {
@@ -492,16 +804,6 @@ export default function Home() {
     }, 150);
     return () => clearInterval(interval);
   }, []);
-
-  // Burger appears after brief delay (instant, no fade)
-  useEffect(() => {
-    if (showFooter && !burgerVisible) {
-      const timer = setTimeout(() => {
-        setBurgerVisible(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [showFooter, burgerVisible]);
 
   // About typing effect - only types once per session, not on every open
   useEffect(() => {
@@ -532,8 +834,9 @@ export default function Home() {
     }
   }, [activeSection, aboutHasTyped, t]);
 
-  // Dragging logic for welcome popup - supports both mouse and touch
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+  // Dragging logic for popups - supports both mouse and touch
+  // Uses threshold to distinguish taps from drags (prevents button click issues)
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, popupId: string) => {
     const rect = (e.target as HTMLElement).closest('.popup-window')?.getBoundingClientRect();
     if (rect) {
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -542,7 +845,9 @@ export default function Home() {
         x: clientX - rect.left,
         y: clientY - rect.top,
       });
-      setIsDragging('welcome');
+      setDragStartPos({ x: clientX, y: clientY });
+      setHasDraggedPastThreshold(false);
+      setIsDragging(popupId);
     }
   };
 
@@ -551,18 +856,38 @@ export default function Home() {
       if (isDragging) {
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-        setWelcomePos({
-          x: clientX - dragOffset.x,
-          y: clientY - dragOffset.y,
-        });
+
+        // Check if we've moved past threshold
+        const deltaX = Math.abs(clientX - dragStartPos.x);
+        const deltaY = Math.abs(clientY - dragStartPos.y);
+
+        if (!hasDraggedPastThreshold && (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD)) {
+          setHasDraggedPastThreshold(true);
+        }
+
+        // Only update position if past threshold
+        if (hasDraggedPastThreshold || deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+          const newPos = {
+            x: clientX - dragOffset.x,
+            y: clientY - dragOffset.y,
+          };
+          if (isDragging === 'welcome') {
+            setWelcomePos(newPos);
+          } else if (isDragging === 'about') {
+            setAboutPos(newPos);
+          }
+        }
       }
     };
-    const handleEnd = () => setIsDragging(null);
+    const handleEnd = () => {
+      setIsDragging(null);
+      setHasDraggedPastThreshold(false);
+    };
 
     if (isDragging) {
       window.addEventListener('mousemove', handleMove);
       window.addEventListener('mouseup', handleEnd);
-      window.addEventListener('touchmove', handleMove);
+      window.addEventListener('touchmove', handleMove, { passive: true });
       window.addEventListener('touchend', handleEnd);
     }
     return () => {
@@ -571,7 +896,7 @@ export default function Home() {
       window.removeEventListener('touchmove', handleMove);
       window.removeEventListener('touchend', handleEnd);
     };
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, dragStartPos, hasDraggedPastThreshold, DRAG_THRESHOLD]);
 
   const showMainContent = phase === 'main';
 
@@ -582,11 +907,15 @@ export default function Home() {
     boxShadow: 'inset -1px -1px 0 #0a0a0a, inset 1px 1px 0 #ffffff, inset -2px -2px 0 #808080, inset 2px 2px 0 #dfdfdf',
   };
 
-  // Classic Windows font
-  const winFont = 'Fixedsys, Terminal, "Perfect DOS VGA 437", "Lucida Console", Consolas, monospace';
+  // Classic Windows font - VT323 loaded via CSS variable, fallbacks for system fonts
+  const winFont = 'var(--font-terminal), VT323, Fixedsys, Terminal, Consolas, monospace';
 
-  const frameInset = 'clamp(50px, 8vw, 60px)';
-  const contentInset = 'clamp(65px, 10vw, 80px)';
+  // Frame and content insets with safe-area support for iOS
+  // Tighter margins on mobile (30px min vs 60px max)
+  const frameInset = 'max(clamp(30px, 5vw, 60px), env(safe-area-inset-top, 0px))';
+  const frameInsetBottom = 'max(clamp(30px, 5vw, 60px), env(safe-area-inset-bottom, 0px))';
+  const contentInset = 'max(clamp(45px, 7vw, 80px), env(safe-area-inset-top, 0px))';
+  const contentInsetBottom = 'max(clamp(45px, 7vw, 80px), env(safe-area-inset-bottom, 0px))';
 
   // Win95 popup component (only used for welcome popup now)
   const Win95Popup = ({
@@ -594,22 +923,26 @@ export default function Home() {
     children,
     onClose,
     position,
-    width = '340px'
+    width = '340px',
+    windowId = 'welcome'
   }: {
     title: string;
     children: React.ReactNode;
     onClose: () => void;
     position: { x: number; y: number };
     width?: string;
+    windowId?: 'welcome' | 'about';
   }) => (
     <div
       className="popup-window"
+      onMouseDown={() => setActiveWindow(windowId)}
+      onTouchStart={() => setActiveWindow(windowId)}
       style={{
         position: 'fixed',
         top: position.y || '50%',
         left: position.x || '50%',
         transform: position.x || position.y ? 'none' : 'translate(-50%, -50%)',
-        zIndex: 150,
+        zIndex: activeWindow === windowId ? 160 : 150,
       }}
     >
       <div
@@ -622,15 +955,15 @@ export default function Home() {
         }}
       >
         <div
-          onMouseDown={handleDragStart}
-          onTouchStart={handleDragStart}
+          onMouseDown={(e) => handleDragStart(e, 'welcome')}
+          onTouchStart={(e) => handleDragStart(e, 'welcome')}
           style={{
             background: 'linear-gradient(90deg, #000080, #1084d0)',
             padding: '3px 4px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            cursor: isDragging ? 'grabbing' : 'grab',
+            cursor: isDragging === 'welcome' ? 'grabbing' : 'grab',
             userSelect: 'none',
           }}
         >
@@ -647,9 +980,11 @@ export default function Home() {
           <button
             onClick={(e) => { e.stopPropagation(); onClose(); }}
             onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
             style={{
-              width: '20px',
-              height: '18px',
+              width: '24px',
+              height: '22px',
               fontSize: '14px',
               fontWeight: 'bold',
               display: 'flex',
@@ -660,6 +995,7 @@ export default function Home() {
               fontFamily: 'Arial, sans-serif',
               color: '#000',
               lineHeight: 1,
+              touchAction: 'manipulation',
               ...win95Button,
             }}
           >
@@ -694,11 +1030,12 @@ export default function Home() {
           top: frameInset,
           left: frameInset,
           right: frameInset,
-          bottom: frameInset,
+          bottom: frameInsetBottom,
           display: showMainContent ? 'block' : 'none',
           pointerEvents: 'none',
           border: '1px solid rgba(255,255,255,0.4)',
           opacity: showFrame ? 1 : 0,
+          transition: 'opacity 0.6s ease-in-out',
         }}
       />
 
@@ -748,7 +1085,9 @@ export default function Home() {
       </div>
 
       {/* === CONFIRM PHASE - "BIENVENIDO" then question === */}
+      {/* key={language} forces complete re-render when language changes, restarting typing animation */}
       <div
+        key={`confirm-${language}`}
         style={{
           position: 'absolute',
           top: '50%',
@@ -758,11 +1097,12 @@ export default function Home() {
           fontFamily: winFont,
           color: 'white',
           textAlign: 'left',
+          width: 'clamp(280px, 70vw, 450px)', // Fixed width so text types from left edge
         }}
       >
         {/* BIENVENIDO/A... line - disappears when question starts */}
         <div style={{
-          fontSize: 'clamp(1.1rem, 3.5vw, 1.6rem)',
+          fontSize: 'clamp(1.4rem, 5vw, 2.2rem)',
           marginBottom: '1rem',
           letterSpacing: '0.05em',
           display: typedConfirm ? 'none' : 'block',
@@ -771,11 +1111,11 @@ export default function Home() {
           <span className={showConfirmCursor && !welcomeDots ? 'blink' : ''} style={{ opacity: showConfirmCursor && welcomeDots.length < 3 ? 1 : 0 }}>_</span>
         </div>
         {/* Question line - appears after welcome disappears */}
-        <div style={{ fontSize: 'clamp(1.1rem, 3.5vw, 1.6rem)', marginBottom: '1.5rem', letterSpacing: '0.05em', display: typedConfirm ? 'block' : 'none' }}>
+        <div style={{ fontSize: 'clamp(1.4rem, 5vw, 2.2rem)', marginBottom: '1.5rem', letterSpacing: '0.05em', display: typedConfirm ? 'block' : 'none' }}>
           {typedConfirm}
           <span className={typedConfirm && !typedYes ? 'blink' : ''} style={{ opacity: typedConfirm && !typedYes ? 1 : 0 }}>_</span>
         </div>
-        <div style={{ fontSize: 'clamp(1rem, 3vw, 1.3rem)', marginLeft: '1rem' }}>
+        <div style={{ fontSize: 'clamp(1.2rem, 4vw, 1.6rem)', marginLeft: '1rem' }}>
           {/* YES option */}
           <div
             onClick={() => showSelector && handleConfirmSelect('yes')}
@@ -828,8 +1168,10 @@ export default function Home() {
           display: phase === 'shutdown' ? 'block' : 'none',
           fontFamily: winFont,
           color: 'white',
-          fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
+          fontSize: 'clamp(1.2rem, 4vw, 1.8rem)',
           textAlign: 'center',
+          textTransform: 'uppercase',
+          letterSpacing: '0.1em',
         }}
       >
         {shutdownText}
@@ -847,9 +1189,7 @@ export default function Home() {
           display: showMainContent ? 'block' : 'none',
           fontFamily: winFont,
           fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-          color: '#000080',
-          backgroundColor: '#c0c0c0',
-          padding: '4px 10px',
+          color: 'white',
           visibility: showTitlePrompt ? 'visible' : 'hidden',
           cursor: 'pointer',
           zIndex: 10,
@@ -877,7 +1217,7 @@ export default function Home() {
           top: frameInset,
           left: frameInset,
           right: frameInset,
-          bottom: frameInset,
+          bottom: frameInsetBottom,
           display: showMainContent ? 'block' : 'none',
           opacity: showFooter ? 1 : 0,
           transition: 'opacity 1.5s ease-in-out',
@@ -889,16 +1229,16 @@ export default function Home() {
         <AsciiArt ref={asciiRef} color="white" isVisible={showFooter} />
       </div>
 
-      {/* Social icons - bottom right outside frame, vertical */}
+      {/* Social icons - bottom right INSIDE frame, vertical */}
       <div
         className="social-icons-container"
         style={{
           position: 'absolute',
-          bottom: frameInset,
-          right: '8px',
+          bottom: contentInsetBottom,
+          right: contentInset,
           display: showMainContent ? 'flex' : 'none',
           flexDirection: 'column',
-          gap: '8px',
+          gap: '12px',
           opacity: showFooter ? 1 : 0,
           transition: 'opacity 0.6s ease-in-out',
           zIndex: 10,
@@ -946,7 +1286,8 @@ export default function Home() {
           display: showMainContent ? 'flex' : 'none',
           flexDirection: 'column',
           alignItems: 'flex-end',
-          visibility: burgerVisible ? 'visible' : 'hidden',
+          opacity: burgerVisible ? 1 : 0,
+          transition: 'opacity 0.6s ease-in-out',
           zIndex: 10,
         }}
       >
@@ -991,6 +1332,10 @@ export default function Home() {
               onClick={() => {
                 setActiveSection(activeSection === 'about' ? null : 'about');
                 setShowMenuDropdown(false);
+                if (showWelcomePopup) {
+                  setShowWelcomePopup(false);
+                  setShowNotification(true);
+                }
               }}
               style={{
                 fontFamily: winFont,
@@ -1001,13 +1346,17 @@ export default function Home() {
                 padding: '4px 8px',
               }}
             >
-              {t.about}<span className="nav-cursor" style={{ color: activeSection === 'about' ? '#000080' : undefined }}>_</span>
+              {scrambledAbout || t.about}<span className="nav-cursor" style={{ color: activeSection === 'about' ? '#000080' : undefined }}>_</span>
             </span>
             <span
               className={activeSection === 'shop' ? '' : 'nav-cli'}
               onClick={() => {
                 setActiveSection(activeSection === 'shop' ? null : 'shop');
                 setShowMenuDropdown(false);
+                if (showWelcomePopup) {
+                  setShowWelcomePopup(false);
+                  setShowNotification(true);
+                }
               }}
               style={{
                 fontFamily: winFont,
@@ -1018,7 +1367,7 @@ export default function Home() {
                 padding: '4px 8px',
               }}
             >
-              {t.shop}<span className="nav-cursor" style={{ color: activeSection === 'shop' ? '#000080' : undefined }}>_</span>
+              {scrambledShop || t.shop}<span className="nav-cursor" style={{ color: activeSection === 'shop' ? '#000080' : undefined }}>_</span>
             </span>
           </div>
         )}
@@ -1030,7 +1379,7 @@ export default function Home() {
           {welcomeStep === 'message' ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', width: '100%' }}>
-                <Image src="/smiley.png" alt=":)" width={48} height={48} style={{ minWidth: '48px', flexShrink: 0, marginTop: '8px' }} />
+                <Image src="/smiley.png" alt=":)" width={48} height={48} style={{ minWidth: '48px', flexShrink: 0, marginTop: '8px', animation: 'none' }} unoptimized />
                 <span style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', lineHeight: '1.5' }}>
                   {t.welcomeMessage}
                 </span>
@@ -1038,15 +1387,19 @@ export default function Home() {
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   onClick={handleWelcomeOk}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
                   className="win-btn"
-                  style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '3px 20px', cursor: 'pointer', ...win95Button }}
+                  style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '8px 20px', cursor: 'pointer', ...win95Button }}
                 >
                   {t.ok}
                 </button>
                 <button
                   onClick={handleCloseWelcome}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); handleCloseWelcome(); }}
                   className="win-btn"
-                  style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '3px 16px', cursor: 'pointer', ...win95Button }}
+                  style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '8px 16px', cursor: 'pointer', ...win95Button }}
                 >
                   {t.close}
                 </button>
@@ -1071,6 +1424,7 @@ export default function Home() {
                   onChange={(e) => setSubscribeEmail(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
                   placeholder={t.emailPlaceholder}
                   autoFocus
                   style={{
@@ -1088,16 +1442,20 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                   <button
                     type="submit"
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => e.stopPropagation()}
                     className="win-btn"
-                    style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '4px 24px', cursor: 'pointer', ...win95Button }}
+                    style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '8px 24px', cursor: 'pointer', ...win95Button }}
                   >
                     {isSubscribed ? t.subscribed : t.confirm}
                   </button>
                   <button
                     type="button"
                     onClick={handleCloseWelcome}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); handleCloseWelcome(); }}
                     className="win-btn"
-                    style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '4px 16px', cursor: 'pointer', ...win95Button }}
+                    style={{ fontFamily: '"MS Sans Serif", Arial, sans-serif', fontSize: '11px', color: '#000', padding: '8px 16px', cursor: 'pointer', ...win95Button }}
                   >
                     {t.cancel}
                   </button>
@@ -1167,10 +1525,9 @@ export default function Home() {
         </div>
       )}
 
-      {/* About Panel - MS-DOS Editor style */}
+      {/* About Panel - MS-DOS Editor style, draggable */}
       {activeSection === 'about' && (
         <div
-          onClick={(e) => { e.stopPropagation(); setActiveSection(null); }}
           style={{
             position: 'fixed',
             top: 0,
@@ -1178,13 +1535,18 @@ export default function Home() {
             right: 0,
             bottom: 0,
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'center',
-            zIndex: 90,
+            paddingTop: 'clamp(80px, 15vh, 150px)',
+            zIndex: activeWindow === 'about' ? 160 : 90,
+            pointerEvents: 'none',
           }}
         >
           <div
+            className="popup-window"
             onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => { setActiveWindow('about'); handleDragStart(e, 'about'); }}
+            onTouchStart={(e) => { setActiveWindow('about'); handleDragStart(e, 'about'); }}
             style={{
               backgroundColor: '#a8a8a8',
               border: '2px solid #000',
@@ -1192,11 +1554,15 @@ export default function Home() {
               fontFamily: winFont,
               fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
               color: '#000',
-              width: '520px',
+              width: '580px',
               maxWidth: '85vw',
               lineHeight: '1.8',
               textAlign: 'center',
-              position: 'relative',
+              position: aboutPos.x || aboutPos.y ? 'fixed' : 'relative',
+              top: aboutPos.y || undefined,
+              left: aboutPos.x || undefined,
+              cursor: isDragging === 'about' ? 'grabbing' : 'grab',
+              pointerEvents: 'auto',
             }}
           >
             <div style={{
@@ -1205,7 +1571,9 @@ export default function Home() {
               padding: '6px 6px 0 6px',
             }}>
               <button
-                onClick={() => setActiveSection(null)}
+                onClick={(e) => { e.stopPropagation(); setActiveSection(null); setAboutPos({ x: 0, y: 0 }); }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 style={{
                   width: '20px',
                   height: '18px',
@@ -1321,13 +1689,34 @@ export default function Home() {
         </div>
       )}
 
+      {/* Invalid email toast - appears centered */}
+      {showEmailError && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontFamily: winFont,
+            fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+            color: '#0000FF',
+            backgroundColor: '#fff',
+            padding: '8px 16px',
+            zIndex: 200,
+            pointerEvents: 'none',
+          }}
+        >
+          {t.invalidEmail}
+        </div>
+      )}
+
       {/* Bottom Left - Notification reminder */}
       {showNotification && (
         <div
           onClick={() => { setShowWelcomePopup(true); setShowNotification(false); }}
           style={{
             position: 'absolute',
-            bottom: contentInset,
+            bottom: contentInsetBottom,
             left: contentInset,
             cursor: 'pointer',
             fontFamily: winFont,
@@ -1336,28 +1725,31 @@ export default function Home() {
             zIndex: 10,
           }}
         >
-          <span className="blink-slow">▶</span> [{t.message}]
+          <span className="blink-slow" style={{ backgroundColor: 'rgba(255,255,255,0.15)', padding: '2px 4px' }}>▶</span> [{scrambledMessage || t.message}]
         </div>
       )}
 
-      {/* Bottom Left - Language switcher (vertical stack, rotated text) */}
+      {/* Language switcher - visible during confirm and main phases */}
+      {/* During main: positioned outside frame on left, between edge and frame */}
+      {/* Large and spaced like Keita Yamada's reference */}
       <div
         className="lang-container"
         style={{
           position: 'absolute',
-          bottom: frameInset,
-          left: '24px',
-          display: showMainContent ? 'flex' : 'none',
-          flexDirection: 'column',
-          gap: '18px',
+          bottom: phase === 'confirm' ? 'clamp(80px, 15vh, 120px)' : 'clamp(30px, 5vw, 60px)',
+          left: phase === 'confirm' ? '50%' : 'clamp(8px, 2vw, 18px)',
+          transform: phase === 'confirm' ? 'translateX(-50%)' : 'none',
+          display: (phase === 'confirm' || phase === 'main') ? 'flex' : 'none',
+          flexDirection: phase === 'confirm' ? 'row' : 'column-reverse',
+          gap: phase === 'confirm' ? '24px' : 'clamp(16px, 4vw, 24px)',
           fontFamily: winFont,
-          fontSize: 'clamp(0.95rem, 2.2vw, 1.1rem)',
-          opacity: showFooter ? 1 : 0,
+          fontSize: 'clamp(1rem, 2.5vw, 1.15rem)',
+          opacity: (phase === 'confirm' && confirmLangVisible) || (phase === 'main' && showFooter) ? 1 : 0,
           transition: 'opacity 0.6s ease-in-out',
           zIndex: 10,
         }}
       >
-        {(['JP', 'EN', 'ES'] as Language[]).map((lang) => (
+        {(['ES', 'EN', 'JP'] as Language[]).map((lang) => (
           <div
             key={lang}
             onClick={() => setLanguage(lang)}
@@ -1366,10 +1758,11 @@ export default function Home() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              writingMode: 'vertical-lr',
-              transform: 'rotate(180deg)',
+              writingMode: phase === 'confirm' ? 'horizontal-tb' : 'vertical-lr',
+              transform: phase === 'confirm' ? 'none' : 'rotate(180deg)',
               color: language === lang ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.4)',
               letterSpacing: '0.04em',
+              transition: 'color 0.25s ease',
             }}
           >
             <span>{language === lang ? '■' : '□'}</span>
@@ -1379,10 +1772,11 @@ export default function Home() {
       </div>
 
       {/* Bottom Center - Copyright */}
+      {/* Positioned centered between frame bottom and screen edge */}
       <div
         style={{
           position: 'absolute',
-          bottom: '20px',
+          bottom: 'max(clamp(10px, 2.5vw, 25px), env(safe-area-inset-bottom, 0px))',
           left: '50%',
           transform: 'translateX(-50%)',
           display: showMainContent ? 'block' : 'none',
@@ -1390,10 +1784,34 @@ export default function Home() {
           transition: 'opacity 0.6s ease-in-out',
         }}
       >
-        <span style={{ fontFamily: winFont, fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)', color: 'rgba(255,255,255,0.35)' }}>
-          {'{ superself '}<span>{spinnerChars[spinner]}</span>{' 2026 }'}
+        <span style={{ fontFamily: winFont, fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>
+          {'{ superself '}<span>{spinnerChars[spinner]}</span>{` 2026 - ${scrambledCopyright || t.allRightsReserved} }`}
         </span>
       </div>
+
+      {/* Skip button - visible only during confirm phase (after preloader) */}
+      {/* Positioned bottom-left */}
+      {phase === 'confirm' && !isReplaying && (
+        <div
+          onClick={handleSkip}
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(30px, 6vh, 50px)',
+            left: 'clamp(24px, 5vw, 40px)',
+            fontFamily: winFont,
+            fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+            color: 'rgba(255,255,255,0.5)',
+            cursor: 'pointer',
+            zIndex: 20,
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '6px',
+          }}
+        >
+          <span className="blink-slow" style={{ fontSize: '0.75em' }}>▶</span>
+          <span>{t.skip}</span>
+        </div>
+      )}
     </main>
   );
 }

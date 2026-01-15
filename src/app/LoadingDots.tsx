@@ -51,7 +51,7 @@ export default function LoadingDots({ onComplete }: LoadingDotsProps) {
     <div
       style={{
         width: '100%',
-        fontFamily: 'Fixedsys, Terminal, "Perfect DOS VGA 437", "Lucida Console", Consolas, monospace',
+        fontFamily: 'var(--font-terminal), VT323, Fixedsys, Terminal, Consolas, monospace',
         fontSize: '0.8rem',
         color: 'rgba(255,255,255,0.6)',
         display: 'flex',
