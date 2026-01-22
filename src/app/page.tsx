@@ -442,6 +442,9 @@ export default function Home() {
           visibility: entrance.showTitlePrompt ? 'visible' : 'hidden',
           cursor: 'pointer',
           zIndex: 10,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          maxWidth: `calc(100vw - ${contentInset} - ${contentInset} - 60px)`,
         }}
         onClick={handleReplayEntrance}
       >
