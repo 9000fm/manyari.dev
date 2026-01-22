@@ -1,10 +1,31 @@
 # Future Updates - superself.online
 
-Last updated: January 2026 (v2.4)
+Last updated: January 2026 (v2.6)
 
 ---
 
-## Recently Completed (v2.4)
+## Recently Completed (v2.6)
+
+### Shop Release
+- [x] **Shop component** - Full product carousel with 4 SUPERSELF-T variants
+- [x] **Polaroid-style photos** - Exaggerated bottom padding (60px desktop)
+- [x] **Size selector** - S/M/L/XL buttons with Win95 styling
+- [x] **WhatsApp ordering** - Pre-filled message with product + size
+- [x] **Multi-language** - ES/EN/JP with scramble effects on change
+- [x] **Touch swipe** - Carousel navigation on mobile
+- [x] **Keyboard nav** - Arrow keys for carousel
+- [x] **Code refactoring** - Extracted Shop, Toast, Win95Button components
+- [x] **Constants file** - Centralized fonts, styles, contact info
+- [x] **Products data** - Separate file for product catalog
+
+### UI Polish (v2.5)
+- [x] **Landscape warning** - Popup for mobile landscape mode
+- [x] **Consistent Win95 bevels** - Unified button styling
+- [x] **Improved spacing** - Better breathing room throughout
+
+---
+
+## Previously Completed (v2.4)
 
 ### Safari Mobile & UI Fixes
 - [x] **Safari mobile viewport fix** - Changed `100vh` to `100dvh` with `-webkit-fill-available` fallback
@@ -81,9 +102,7 @@ Last updated: January 2026 (v2.4)
 
 ## Priority: LOW
 
-### 8. Shop Page (When Ready)
-- Merchandise display
-- Bandcamp integration
+### 8. ~~Shop Page~~ DONE (v2.6)
 
 ### 9. Analytics
 - Vercel Analytics or Plausible
@@ -116,6 +135,8 @@ Last updated: January 2026 (v2.4)
 | v2.2 | Jan 2026 | Ripples, sparkles, UI polish |
 | v2.3 | Jan 2026 | Skip button, mobile layout, scramble effect |
 | v2.4 | Jan 2026 | Safari fixes, popup fixes, loading dots, scramble everywhere |
+| v2.5 | Jan 2026 | Landscape warning, UI improvements |
+| v2.6 | Jan 2026 | **Shop release** - SUPERSELF-T collection, WhatsApp ordering |
 
 ---
 
@@ -137,3 +158,42 @@ npm run lint
 ```
 
 **Reminder**: Test on mobile Safari after every change!
+
+---
+
+## flavio.superself.online - Personal Portfolio
+
+**Status**: Planning phase
+**Domain**: Subdomain of superself.online (configured in Vercel)
+**Identity**: Creative Developer / Creative Technologist
+
+### Concept
+Personal portfolio showcasing creative code, tools, and projects. Same Win95/DOS aesthetic as main site.
+
+### Planned Sections
+- **LAB** - p5.js sketches, interactive experiments
+- **PROJECTS** - Web projects, tools, scripts
+- **NOTES** - Blog/thoughts (optional)
+- **INFO** - About, contact, skills
+
+### Technical Approach
+- Same Next.js repo (shared codebase)
+- Subdomain routing in Vercel
+- Reuse Win95 components from main site
+
+### To Define
+- [ ] Which p5.js sketches to include
+- [ ] Which tools/scripts to showcase
+- [ ] Bio text (Creative Technologist focus)
+- [ ] Layout structure
+
+---
+
+## Cleanup Notes
+
+**Stale worktrees** - Can be removed:
+```bash
+cd E:\WEB+DESIGN\superself.online
+git worktree remove ../superself-feature
+git worktree remove ../superself-review
+```
