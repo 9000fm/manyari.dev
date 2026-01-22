@@ -54,7 +54,13 @@ export function useLanguageScramble({
   const prevLangRef = useRef<Language>(language);
 
   useEffect(() => {
-    if (phase !== 'main' || isScrambling.current) return;
+    if (phase !== 'main') {
+      // Keep prevLangRef in sync when not in main phase so
+      // entering main doesn't trigger a stale scramble
+      prevLangRef.current = language;
+      return;
+    }
+    if (isScrambling.current) return;
 
     if (prevLangRef.current !== language) {
       prevLangRef.current = language;

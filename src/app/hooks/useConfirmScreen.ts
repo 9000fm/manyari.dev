@@ -24,6 +24,7 @@ interface UseConfirmScreenReturn {
   handleConfirmSelect: (option: ConfirmOption) => void;
   loadingDots: string;
   showLoadingDots: boolean;
+  scrambledSkip: string;
   resetConfirmState: () => void;
 }
 
@@ -35,7 +36,6 @@ export function useConfirmScreen({
 }: UseConfirmScreenProps): UseConfirmScreenReturn {
   const t = translations[language];
   const dotChar = getDotChar(language);
-  const scrambleChars = language === 'JP' ? SCRAMBLE_CHARS.japanese : SCRAMBLE_CHARS.base;
 
   // Typing states
   const [typedWelcome, setTypedWelcome] = useState('');
@@ -52,6 +52,9 @@ export function useConfirmScreen({
   // Loading dots for YES transition
   const [loadingDots, setLoadingDots] = useState('');
   const [showLoadingDots, setShowLoadingDots] = useState(false);
+
+  // Skip text scramble on language change
+  const [scrambledSkip, setScrambledSkip] = useState('');
 
   // Track previous language for scramble effect
   const prevLangRef = useRef<Language>(language);
@@ -130,6 +133,53 @@ export function useConfirmScreen({
     },
     [dotChar, addTimer, onSelectYes, onSelectNo]
   );
+
+  // Reset typing when language changes during confirm phase
+  useEffect(() => {
+    if (phase !== 'confirm') return;
+    if (prevLangRef.current !== language) {
+      prevLangRef.current = language;
+      clearAllTimers();
+      setShowSelector(false);
+      setIsConfirmScrambling(false);
+      setTypedWelcome('');
+      setWelcomeDots('');
+      setTypedConfirm('');
+      setTypedYes('');
+      setTypedNo('');
+      setShowConfirmCursor(false);
+
+      // Scramble the skip text
+      const scrambleChars = language === 'JP' ? SCRAMBLE_CHARS.japanese : SCRAMBLE_CHARS.base;
+      const newSkip = t.skip;
+      let frame = 0;
+      const maxFrames = 12;
+
+      const skipInterval = setInterval(() => {
+        frame++;
+        const locked = Math.floor((frame / maxFrames) * newSkip.length);
+        let result = '';
+        for (let i = 0; i < newSkip.length; i++) {
+          if (i < locked) {
+            result += newSkip[i];
+          } else {
+            result += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          }
+        }
+        setScrambledSkip(result);
+
+        if (frame >= maxFrames) {
+          setScrambledSkip('');
+          clearInterval(skipInterval);
+        }
+      }, 40);
+
+      return () => {
+        clearInterval(skipInterval);
+        setScrambledSkip('');
+      };
+    }
+  }, [language, phase, t, clearAllTimers]);
 
   // Typing effect for confirm screen
   useEffect(() => {
@@ -250,74 +300,6 @@ export function useConfirmScreen({
     }
   }, [phase, t, showSelector, isConfirmScrambling, dotChar, addTimer, addInterval, clearAllTimers]);
 
-  // Language change scramble effect
-  useEffect(() => {
-    if (phase !== 'confirm' || !showSelector || isConfirmScrambling) return;
-
-    if (prevLangRef.current !== language) {
-      const prevLang = prevLangRef.current;
-      prevLangRef.current = language;
-
-      const newConfirm = t.willYouContinue;
-      const newYes = t.yes;
-      const newNo = t.no;
-
-      setIsConfirmScrambling(true);
-
-      let frame = 0;
-      const maxFrames = 15;
-
-      const scrambleInterval = setInterval(() => {
-        frame++;
-
-        const confirmLocked = Math.floor((frame / maxFrames) * newConfirm.length);
-        const yesLocked = Math.floor((frame / maxFrames) * newYes.length);
-        const noLocked = Math.floor((frame / maxFrames) * newNo.length);
-
-        let confirmDisplay = '';
-        for (let i = 0; i < newConfirm.length; i++) {
-          if (i < confirmLocked) {
-            confirmDisplay += newConfirm[i];
-          } else {
-            confirmDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-          }
-        }
-
-        let yesDisplay = '';
-        for (let i = 0; i < newYes.length; i++) {
-          if (i < yesLocked) {
-            yesDisplay += newYes[i];
-          } else {
-            yesDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-          }
-        }
-
-        let noDisplay = '';
-        for (let i = 0; i < newNo.length; i++) {
-          if (i < noLocked) {
-            noDisplay += newNo[i];
-          } else {
-            noDisplay += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-          }
-        }
-
-        setTypedConfirm(confirmDisplay);
-        setTypedYes(yesDisplay);
-        setTypedNo(noDisplay);
-
-        if (frame >= maxFrames) {
-          setTypedConfirm(newConfirm);
-          setTypedYes(newYes);
-          setTypedNo(newNo);
-          clearInterval(scrambleInterval);
-          setIsConfirmScrambling(false);
-        }
-      }, 50);
-
-      return () => clearInterval(scrambleInterval);
-    }
-  }, [language, phase, showSelector, isConfirmScrambling, t, scrambleChars]);
-
   // Keyboard navigation
   useEffect(() => {
     if (phase !== 'confirm' || !showSelector) return;
@@ -348,6 +330,7 @@ export function useConfirmScreen({
     handleConfirmSelect,
     loadingDots,
     showLoadingDots,
+    scrambledSkip,
     resetConfirmState,
   };
 }

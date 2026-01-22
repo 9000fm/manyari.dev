@@ -76,7 +76,7 @@ export const translations: Record<Language, TranslationKeys> = {
   },
   EN: {
     welcome: 'WELCOME.',
-    willYouContinue: 'DO YOU WISH TO CONTINUE?',
+    willYouContinue: 'WILL YOU CONTINUE?',
     yes: 'YES',
     no: 'NO',
     shuttingDown: 'shutting down',

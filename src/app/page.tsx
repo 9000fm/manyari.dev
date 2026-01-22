@@ -256,15 +256,35 @@ export default function Home() {
     setTimeout(() => setShowEmailCopied(false), 2000);
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (emailRegex.test(subscribeEmail)) {
-      setSubscribeEmail('');
-      setShowWelcomePopup(false);
-      setWelcomeStep('message');
-      setShowSubscribedPopup(true);
-    } else {
+    if (!emailRegex.test(subscribeEmail)) {
+      setEmailErrorPos({ x: lastClickPos.current.x, y: lastClickPos.current.y });
+      setShowEmailError(true);
+      setTimeout(() => setShowEmailError(false), 2000);
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: subscribeEmail }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setSubscribeEmail('');
+        setShowWelcomePopup(false);
+        setWelcomeStep('message');
+        setShowSubscribedPopup(true);
+      } else {
+        setEmailErrorPos({ x: lastClickPos.current.x, y: lastClickPos.current.y });
+        setShowEmailError(true);
+        setTimeout(() => setShowEmailError(false), 2000);
+      }
+    } catch {
       setEmailErrorPos({ x: lastClickPos.current.x, y: lastClickPos.current.y });
       setShowEmailError(true);
       setTimeout(() => setShowEmailError(false), 2000);
@@ -945,7 +965,7 @@ export default function Home() {
           }}
         >
           <span className="blink-slow" style={{ fontSize: '0.75em' }}>▶</span>
-          <span>{t.skip}</span>
+          <span>{confirmScreen.scrambledSkip || t.skip}</span>
         </div>
       )}
 
