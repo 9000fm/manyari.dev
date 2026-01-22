@@ -1,10 +1,27 @@
 # Future Updates - superself.online
 
-Last updated: January 2026 (v2.6)
+Last updated: January 2026 (v2.8)
 
 ---
 
-## Recently Completed (v2.6)
+## Recently Completed (v2.8)
+
+### Mailing List & Bug Fixes
+- [x] **Buttondown integration** - Mailing list form in About section now submits to Buttondown
+- [x] **JP title overflow fix** - Added `nowrap` + `overflow: hidden` + `maxWidth` to prevent wide katakana characters from overlapping burger menu on mobile during scramble animation
+
+### BSOD & Refactoring (v2.7)
+- [x] **BSOD error screen** - Windows-style blue screen of death on shutdown with random error codes
+- [x] **Default language English** - Site now defaults to EN instead of ES
+- [x] **Improved shutdown sequence** - Better animation flow before BSOD
+- [x] **Code refactoring** - Extracted hooks, components, and translations from page.tsx into separate files
+- [x] **Hooks extraction** - `useConfirmScreen`, `useShutdownSequence`, `useMainEntrance` etc.
+- [x] **Components extraction** - Separated reusable UI components
+- [x] **Translations file** - All i18n strings in dedicated module
+
+---
+
+## Previously Completed (v2.6)
 
 ### Shop Release
 - [x] **Shop component** - Full product carousel with 4 SUPERSELF-T variants
@@ -25,7 +42,7 @@ Last updated: January 2026 (v2.6)
 
 ---
 
-## Previously Completed (v2.4)
+## Previously Completed (v2.4-v2.5)
 
 ### Safari Mobile & UI Fixes
 - [x] **Safari mobile viewport fix** - Changed `100vh` to `100dvh` with `-webkit-fill-available` fallback
@@ -67,18 +84,11 @@ Last updated: January 2026 (v2.6)
 - Jump on drag start fixed
 - Could still benefit from momentum/physics
 
-### 2. Mailing List Integration
-**Status**: Not implemented
-**Current**: Form submits but doesn't actually save emails
-**Options**:
-- Buttondown (simple, free tier)
-- Mailchimp (popular, robust)
-- ConvertKit (creator-focused)
-- Supabase (if you want your own DB)
+### ~~2. Mailing List Integration~~ DONE (v2.8)
+**Status**: Implemented with Buttondown
 
-### 3. Code Refactoring
-**Problem**: page.tsx is ~1900 lines - hard to maintain
-**Solution**: Extract components to separate files
+### ~~3. Code Refactoring~~ DONE (v2.7)
+**Status**: Extracted hooks, components, and translations into separate modules
 
 ---
 
@@ -121,7 +131,7 @@ Last updated: January 2026 (v2.6)
 
 2. **Font loading**: VT323 from Google Fonts works but custom Fixedsys would be more authentic
 
-3. **State management**: All in one component - consider extracting if it grows more complex
+3. ~~**State management**: All in one component~~ - Resolved in v2.7 refactor (hooks extracted)
 
 ---
 
@@ -137,6 +147,8 @@ Last updated: January 2026 (v2.6)
 | v2.4 | Jan 2026 | Safari fixes, popup fixes, loading dots, scramble everywhere |
 | v2.5 | Jan 2026 | Landscape warning, UI improvements |
 | v2.6 | Jan 2026 | **Shop release** - SUPERSELF-T collection, WhatsApp ordering |
+| v2.7 | Jan 2026 | BSOD error screen, default EN, code refactoring (hooks/components/translations) |
+| v2.8 | Jan 2026 | Buttondown mailing list, JP title overflow fix |
 
 ---
 

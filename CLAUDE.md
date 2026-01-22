@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **superself.online** - Electronic music label & creative brand website.
 
-## Current State (v2.3)
+## Current State (v2.8)
 
 Full interactive landing page with Windows 95/DOS CLI aesthetic:
 
@@ -20,7 +20,7 @@ Full interactive landing page with Windows 95/DOS CLI aesthetic:
 - "CONTINUAR AL SITIO?" with blinking cursor
 - SI/NO options with keyboard navigation (arrows + enter)
 - Selecting NO triggers shutdown animation with animated dots
-- Shutdown leads to black screen, then reboots
+- Shutdown leads to BSOD error screen (random error codes), then reboots
 
 ### Main Screen
 - Thin white frame border (Keita Yamada style, tighter on mobile)
@@ -36,11 +36,14 @@ Full interactive landing page with Windows 95/DOS CLI aesthetic:
 ### About Section (acerca)
 - Minimal overlay (no Windows chrome)
 - Bio text types out character by character
-- Mailing list form appears after typing completes
+- Mailing list form appears after typing completes (Buttondown integration)
 
 ### Shop Section (tienda)
-- Minimal overlay with "coming soon" message
-- Animated dots (like shutdown animation)
+- Product carousel with SUPERSELF-T collection (4 variants)
+- Polaroid-style product photos
+- Size selector (S/M/L/XL) with Win95 button styling
+- WhatsApp ordering (pre-filled message with product + size)
+- Touch swipe + keyboard arrow navigation
 
 ### Welcome Popup (Easter Egg)
 - Windows 95 style popup with titlebar
@@ -49,7 +52,7 @@ Full interactive landing page with Windows 95/DOS CLI aesthetic:
 - Shows notification after closing
 
 ### Features
-- Multi-language support (ES/EN/JP) - all text translates
+- Multi-language support (ES/EN/JP) - defaults to EN, all text translates
 - Nav items re-type when language changes
 - Click title to replay entrance animation
 - Email icon copies flavio@superself.online to clipboard
@@ -95,22 +98,41 @@ npm run lint     # Run ESLint
 
 ```
 src/app/
-├── page.tsx        # Main landing page (~1800 lines)
-├── layout.tsx      # Root layout with font config
-├── LoadingDots.tsx # Boot loader progress bar
-├── AsciiArt.tsx    # Interactive ASCII background with ripples
-├── AsciiEye.tsx    # Alternative ASCII (unused)
-├── AsciiGlobe.tsx  # Alternative ASCII (unused)
-└── globals.css     # Base styles + animations
+├── page.tsx           # Main landing page (orchestrates phases)
+├── layout.tsx         # Root layout with font config
+├── constants.ts       # Shared constants (fonts, insets, styles, contact)
+├── translations.ts    # All i18n strings (ES/EN/JP)
+├── types.ts           # Shared TypeScript types
+├── globals.css        # Base styles + animations
+├── LoadingDots.tsx    # Boot loader progress bar
+├── AsciiArt.tsx       # Interactive ASCII background with ripples
+├── hooks/
+│   ├── useConfirmScreen.ts
+│   ├── useDraggable.ts
+│   ├── useLanguageScramble.ts
+│   ├── useMainEntrance.ts
+│   └── useShutdownSequence.ts
+├── components/
+│   ├── ConfirmScreen.tsx
+│   ├── ErrorScreen.tsx   # BSOD-style error screen
+│   ├── Shop.tsx
+│   ├── ShutdownScreen.tsx
+│   ├── Toast.tsx
+│   ├── Win95Button.tsx
+│   └── Win95Popup.tsx
+├── data/
+│   └── products.ts       # Shop product catalog
+└── api/
+    └── subscribe/        # Buttondown mailing list endpoint
 public/
 ├── superself-logo-wh.png
-└── smiley.png      # Win95 popup icon
+└── smiley.png            # Win95 popup icon
 ```
 
 ## Key States (page.tsx)
 
 ```typescript
-type Phase = 'boot' | 'loading' | 'pause' | 'confirm' | 'shutdown' | 'off' | 'main';
+type Phase = 'boot' | 'loading' | 'pause' | 'confirm' | 'shutdown' | 'error' | 'off' | 'main';
 type Language = 'ES' | 'EN' | 'JP';
 
 // Main states
