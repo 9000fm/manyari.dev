@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         'Content-Type': 'application/json',
         Authorization: `Token ${apiKey}`,
       },
-      body: JSON.stringify({ email, tags: ['website'] }),
+      body: JSON.stringify({ email_address: email, tags: ['website'] }),
     });
 
     if (res.status === 201) {
