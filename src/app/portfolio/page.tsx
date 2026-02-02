@@ -2345,73 +2345,97 @@ export default function PortfolioPage() {
               position: 'relative',
             }}
           >
-            {/* FM Logo with rotating cube - left aligned with icons */}
+            {/* HERO ZONE - FM Logo centered with breathing room */}
             <div style={{
               display: 'flex',
-              justifyContent: 'flex-start',
+              justifyContent: 'center',
               alignItems: 'center',
-              padding: '20px 16px 24px 16px',
-              gap: '24px',
+              padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 32px)',
+              gap: 'clamp(20px, 4vw, 36px)',
             }}>
               <FmLogo show={showContent} />
-              <div style={{ transform: 'scale(0.55)', transformOrigin: 'left center' }}>
+              <div style={{
+                transform: 'scale(0.7)',
+                transformOrigin: 'center center',
+                opacity: showContent ? 0.8 : 0,
+                transition: 'opacity 0.5s ease-out',
+              }}>
                 <RotatingCube show={showContent} delay={0} />
               </div>
             </div>
 
-            {/* Desktop Icons - ASCII style with staggered appearance */}
+            {/* NAVIGATION - Main icons in single row */}
             <div
               style={{
                 display: 'flex',
-                flexWrap: 'wrap',
                 justifyContent: 'center',
-                gap: 'clamp(16px, 4vw, 40px)',
-                padding: '16px',
+                alignItems: 'center',
+                gap: 'clamp(8px, 3vw, 32px)',
+                padding: '0 16px',
               }}
             >
               <DesktopIcon
                 label="ABOUT"
                 onClick={() => setAboutOpen(true)}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[?]</span>}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '20px' }}>[?]</span>}
                 show={showRest}
                 delay={0}
               />
               <DesktopIcon
                 label="PROJECTS"
                 onClick={() => setActiveSection('projects')}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[ ]</span>}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '20px' }}>[ ]</span>}
                 show={showRest}
-                delay={80}
+                delay={60}
               />
               <DesktopIcon
                 label="LAB"
                 onClick={() => setActiveSection('lab')}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>&lt;/&gt;</span>}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '20px' }}>&lt;/&gt;</span>}
                 show={showRest}
-                delay={160}
+                delay={120}
               />
               <DesktopIcon
                 label="APPS"
                 onClick={() => setShowAppsGroup(true)}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>:::</span>}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '20px' }}>:::</span>}
                 show={showRest}
-                delay={240}
+                delay={180}
               />
               <DesktopIcon
                 label="SUPERSELF"
                 onClick={handleExit}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>S_</span>}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '20px' }}>S_</span>}
                 show={showRest}
-                delay={320}
+                delay={240}
               />
-              {/* Color scheme button as an icon */}
-              <DesktopIcon
-                label="COLORS"
+            </div>
+
+            {/* UTILITY - Colors as subtle tertiary action */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '12px 16px 8px 16px',
+                opacity: showRest ? 0.6 : 0,
+                transition: 'opacity 0.4s ease-out 0.4s',
+              }}
+            >
+              <div
                 onClick={cycleColorScheme}
-                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[@]</span>}
-                show={showRest}
-                delay={400}
-              />
+                style={{
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  color: WIN31.border,
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  transition: 'opacity 0.2s ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.7'; }}
+              >
+                [@] COLORS
+              </div>
             </div>
 
             {/* App Windows - rendered INSIDE the content area */}
