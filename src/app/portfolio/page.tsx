@@ -399,13 +399,28 @@ function DesktopIcon({
   label,
   onClick,
   icon,
+  show = true,
+  delay = 0,
 }: {
   label: string;
   onClick?: () => void;
   icon: React.ReactNode;
+  show?: boolean;
+  delay?: number;
 }) {
   const [selected, setSelected] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  // Staggered appearance
+  useEffect(() => {
+    if (!show) {
+      setVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [show, delay]);
 
   // Inverted colors on hover
   const isActive = selected || hovered;
@@ -426,8 +441,9 @@ function DesktopIcon({
         padding: '10px',
         userSelect: 'none',
         minWidth: '80px',
-        transition: 'transform 0.1s ease',
+        transition: 'transform 0.1s ease, opacity 0.3s ease',
         transform: selected ? 'scale(0.95)' : 'scale(1)',
+        opacity: visible ? 1 : 0,
       }}
     >
       <div
@@ -2343,7 +2359,7 @@ export default function PortfolioPage() {
               </div>
             </div>
 
-            {/* Desktop Icons - ASCII style */}
+            {/* Desktop Icons - ASCII style with staggered appearance */}
             <div
               style={{
                 display: 'flex',
@@ -2351,39 +2367,50 @@ export default function PortfolioPage() {
                 justifyContent: 'center',
                 gap: 'clamp(16px, 4vw, 40px)',
                 padding: '16px',
-                opacity: showRest ? 1 : 0,
               }}
             >
               <DesktopIcon
                 label="ABOUT"
                 onClick={() => setAboutOpen(true)}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[?]</span>}
+                show={showRest}
+                delay={0}
               />
               <DesktopIcon
                 label="PROJECTS"
                 onClick={() => setActiveSection('projects')}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[ ]</span>}
+                show={showRest}
+                delay={80}
               />
               <DesktopIcon
                 label="LAB"
                 onClick={() => setActiveSection('lab')}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>&lt;/&gt;</span>}
+                show={showRest}
+                delay={160}
               />
               <DesktopIcon
                 label="APPS"
                 onClick={() => setShowAppsGroup(true)}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>:::</span>}
+                show={showRest}
+                delay={240}
               />
               <DesktopIcon
                 label="SUPERSELF"
                 onClick={handleExit}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>S_</span>}
+                show={showRest}
+                delay={320}
               />
               {/* Color scheme button as an icon */}
               <DesktopIcon
                 label="COLORS"
                 onClick={cycleColorScheme}
                 icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[@]</span>}
+                show={showRest}
+                delay={400}
               />
             </div>
 
