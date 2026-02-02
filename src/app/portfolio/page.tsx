@@ -2319,16 +2319,18 @@ export default function PortfolioPage() {
               position: 'relative',
             }}
           >
-            {/* FM Logo with rotating cube - symmetric layout */}
+            {/* FM Logo with rotating cube - left aligned with icons */}
             <div style={{
               display: 'flex',
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
               alignItems: 'center',
-              padding: '8px',
-              gap: 'clamp(16px, 4vw, 32px)',
+              padding: '20px 16px 24px 16px',
+              gap: '12px',
             }}>
               <FmLogo show={showContent} />
-              <RotatingCube show={showContent} delay={0} />
+              <div style={{ transform: 'scale(0.6)', transformOrigin: 'left center' }}>
+                <RotatingCube show={showContent} delay={0} />
+              </div>
             </div>
 
             {/* Desktop Icons - ASCII style */}
