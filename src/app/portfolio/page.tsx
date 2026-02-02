@@ -405,12 +405,18 @@ function DesktopIcon({
   icon: React.ReactNode;
 }) {
   const [selected, setSelected] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  // Inverted colors on hover
+  const isActive = selected || hovered;
 
   return (
     <div
       onClick={onClick}
       onMouseDown={() => setSelected(true)}
       onMouseUp={() => setTimeout(() => setSelected(false), 200)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -420,6 +426,8 @@ function DesktopIcon({
         padding: '10px',
         userSelect: 'none',
         minWidth: '80px',
+        transition: 'transform 0.1s ease',
+        transform: selected ? 'scale(0.95)' : 'scale(1)',
       }}
     >
       <div
@@ -430,9 +438,10 @@ function DesktopIcon({
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: '28px',
-          backgroundColor: selected ? WIN31.titlebar : 'transparent',
-          color: selected ? WIN31.titlebarText : WIN31.border,
+          backgroundColor: isActive ? WIN31.border : 'transparent',
+          color: isActive ? '#FFFFFF' : WIN31.border,
           border: '1px solid transparent',
+          transition: 'background-color 0.15s ease, color 0.15s ease',
         }}
       >
         {icon}
@@ -441,11 +450,12 @@ function DesktopIcon({
         style={{
           fontFamily: '"MS Sans Serif", Arial, sans-serif',
           fontSize: '13px',
-          backgroundColor: selected ? WIN31.titlebar : 'transparent',
-          color: selected ? WIN31.titlebarText : WIN31.border,
+          backgroundColor: isActive ? WIN31.border : 'transparent',
+          color: isActive ? '#FFFFFF' : WIN31.border,
           padding: '2px 6px',
           textAlign: 'center',
           whiteSpace: 'nowrap',
+          transition: 'background-color 0.15s ease, color 0.15s ease',
         }}
       >
         {label}
