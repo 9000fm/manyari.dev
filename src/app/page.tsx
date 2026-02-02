@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import LoadingDots from './LoadingDots';
 import AsciiArt, { AsciiArtRef } from './AsciiArt';
@@ -47,12 +48,13 @@ function Spinner() {
   return <span>{chars[frame]}</span>;
 }
 
-export default function Home() {
-  // Core state
-  const [phase, setPhase] = useState<Phase>('boot');
+function HomeContent({ shouldSkipIntro }: { shouldSkipIntro: boolean }) {
+
+  // Core state - start at 'main' if skip param present
+  const [phase, setPhase] = useState<Phase>(shouldSkipIntro ? 'main' : 'boot');
   const [showLogo, setShowLogo] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [language, setLanguage] = useState<Language>('EN');
+  const [language, setLanguage] = useState<Language>('ES');
   const t = translations[language];
 
   // Popup/section states
@@ -82,7 +84,7 @@ export default function Home() {
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
 
   // Skip and replay state
-  const [skipMode, setSkipMode] = useState(false);
+  const [skipMode, setSkipMode] = useState(shouldSkipIntro);
   const [isReplaying, setIsReplaying] = useState(false);
   const [replayTrigger, setReplayTrigger] = useState(0);
   const [rebootCount, setRebootCount] = useState(0);
@@ -939,7 +941,10 @@ export default function Home() {
           bottom: 'max(clamp(10px, 2.5vw, 25px), env(safe-area-inset-bottom, 0px))',
           left: '50%',
           transform: 'translateX(-50%)',
-          display: showMainContent ? 'block' : 'none',
+          display: showMainContent ? 'flex' : 'none',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '4px',
           opacity: entrance.showFooter ? 1 : 0,
           transition: 'opacity 0.6s ease-in-out',
         }}
@@ -1045,5 +1050,20 @@ export default function Home() {
         </div>
       )}
     </main>
+  );
+}
+
+// Wrapper component to handle useSearchParams with Suspense
+function HomeWrapper() {
+  const searchParams = useSearchParams();
+  const shouldSkipIntro = searchParams.get('skip') === '1';
+  return <HomeContent shouldSkipIntro={shouldSkipIntro} />;
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div style={{ backgroundColor: '#0000FF', minHeight: '100dvh' }} />}>
+      <HomeWrapper />
+    </Suspense>
   );
 }

@@ -1,35 +1,155 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { COLORS, WIN_FONT, DISPLAY_FONT, BODY_FONT, SCRAMBLE_CHARS, FRAME_INSETS } from '../constants';
+import { WIN31, MSDOS, WIN_FONT, SCRAMBLE_CHARS } from '../constants';
 import Toast from '../components/Toast';
+import { useWindowManager, WindowState } from './hooks/useWindowManager';
+import Win31Window from './components/Win31Window';
+import Clock from './components/apps/Clock';
+import Calculator from './components/apps/Calculator';
+import Notepad from './components/apps/Notepad';
+import Minesweeper from './components/apps/Minesweeper';
+import Solitaire from './components/apps/Solitaire';
+import Paint from './components/apps/Paint';
+import WireframeScene from './components/WireframeScene';
 
 // Portfolio translations
 const portfolioText = {
-  ES: { tagline: 'código + sonido', work: 'proyectos', lab: '+', about: 'info', emailCopied: 'email copiado' },
-  EN: { tagline: 'code + sound', work: 'projects', lab: '+', about: 'info', emailCopied: 'email copied' },
-  JP: { tagline: 'コード + サウンド', work: 'プロジェクト', lab: '+', about: '情報', emailCopied: 'メールをコピー' },
+  ES: {
+    tagline: 'Diseño & Desarrollo',
+    work: 'Proyectos',
+    lab: 'Lab',
+    about: 'Info',
+    emailCopied: 'email copiado',
+    file: 'Archivo',
+    options: 'Opciones',
+    window: 'Ventana',
+    help: 'Ayuda',
+    exit: 'Salir',
+    language: 'Idioma',
+    aboutMenu: 'Acerca de...',
+    // Win3.1 menu items
+    restore: 'Restaurar',
+    move: 'Mover',
+    size: 'Tamano',
+    minimize: 'Minimizar',
+    maximize: 'Maximizar',
+    close: 'Cerrar',
+    switchTo: 'Cambiar a...',
+    // Apps
+    apps: 'Aplicaciones',
+    games: 'Juegos',
+    accessories: 'Accesorios',
+    clock: 'Reloj',
+    calculator: 'Calculadora',
+    notepad: 'Bloc de notas',
+    solitaire: 'Solitario',
+    minesweeper: 'Buscaminas',
+    tile: 'Mosaico',
+    cascade: 'Cascada',
+    ready: 'Listo',
+    comingSoon: 'Proximamente...',
+    emptyFolder: '(Carpeta vacia)',
+    paint: 'Paint',
+    shutdown: 'CERRANDO SESION',
+  },
+  EN: {
+    tagline: 'Design & Development',
+    work: 'Projects',
+    lab: 'Lab',
+    about: 'Info',
+    emailCopied: 'email copied',
+    file: 'File',
+    options: 'Options',
+    window: 'Window',
+    help: 'Help',
+    exit: 'Exit',
+    language: 'Language',
+    aboutMenu: 'About...',
+    // Win3.1 menu items
+    restore: 'Restore',
+    move: 'Move',
+    size: 'Size',
+    minimize: 'Minimize',
+    maximize: 'Maximize',
+    close: 'Close',
+    switchTo: 'Switch To...',
+    // Apps
+    apps: 'Apps',
+    games: 'Games',
+    accessories: 'Accessories',
+    clock: 'Clock',
+    calculator: 'Calculator',
+    notepad: 'Notepad',
+    solitaire: 'Solitaire',
+    minesweeper: 'Minesweeper',
+    tile: 'Tile',
+    cascade: 'Cascade',
+    ready: 'Ready',
+    comingSoon: 'Coming soon...',
+    emptyFolder: '(Empty folder)',
+    paint: 'Paint',
+    shutdown: 'CLOSING SESSION',
+  },
+  JP: {
+    tagline: 'デザイン & 開発',
+    work: 'プロジェクト',
+    lab: 'ラボ',
+    about: '情報',
+    emailCopied: 'メールをコピー',
+    file: 'ファイル',
+    options: 'オプション',
+    window: 'ウィンドウ',
+    help: 'ヘルプ',
+    exit: '終了',
+    language: '言語',
+    aboutMenu: 'について...',
+    // Win3.1 menu items
+    restore: '元に戻す',
+    move: '移動',
+    size: 'サイズ',
+    minimize: '最小化',
+    maximize: '最大化',
+    close: '閉じる',
+    switchTo: '切り替え...',
+    // Apps
+    apps: 'アプリ',
+    games: 'ゲーム',
+    accessories: 'アクセサリ',
+    clock: '時計',
+    calculator: '電卓',
+    notepad: 'メモ帳',
+    solitaire: 'ソリティア',
+    minesweeper: 'マインスイーパ',
+    tile: '並べて表示',
+    cascade: '重ねて表示',
+    ready: '準備完了',
+    comingSoon: '近日公開...',
+    emptyFolder: '(空のフォルダ)',
+    paint: 'ペイント',
+    shutdown: 'セッション終了中',
+  },
 };
 
 // About section content
 const aboutContent = {
   EN: {
-    bio: 'Developer + electronic music producer in Lima. Founder of SUPERSELF.',
+    bio: 'Developer and electronic music producer based in Lima. Code, sound, design. Founder of SUPERSELF.',
     skills: ['JavaScript', 'React', 'Next.js', 'Node.js', 'Python', 'HTML/CSS', 'Tailwind', 'Git', 'SQL', 'Ableton Live'],
     status: 'Currently available',
     location: 'Lima, Peru',
     email: 'flavio@superself.online',
   },
   ES: {
-    bio: 'Desarrollador + productor de música electrónica en Lima. Fundador de SUPERSELF.',
+    bio: 'Desarrollador y productor de musica electronica basado en Lima. Codigo, sonido, diseno. Fundador de SUPERSELF.',
     skills: ['JavaScript', 'React', 'Next.js', 'Node.js', 'Python', 'HTML/CSS', 'Tailwind', 'Git', 'SQL', 'Ableton Live'],
     status: 'Actualmente disponible',
     location: 'Lima, Peru',
     email: 'flavio@superself.online',
   },
   JP: {
-    bio: 'リマを拠点とする開発者 + 電子音楽プロデューサー。SUPERSELFの創設者。',
+    bio: 'リマのデベロッパー、電子音楽プロデューサー。コード、サウンド、デザイン。SUPERSELF創設者。',
     skills: ['JavaScript', 'React', 'Next.js', 'Node.js', 'Python', 'HTML/CSS', 'Tailwind', 'Git', 'SQL', 'Ableton Live'],
     status: '現在対応可能',
     location: 'リマ、ペルー',
@@ -37,30 +157,37 @@ const aboutContent = {
   },
 };
 
-// ASCII Art for "FM" - Minimal blocks style
-const ASCII_ART = `
-██████╗ ███╗   ███╗
-██╔═══╝ ████╗ ████║
-█████╗  ██╔████╔██║
-██╔══╝  ██║╚██╔╝██║
-██║     ██║ ╚═╝ ██║
-╚═╝     ╚═╝     ╚═╝
-`.trim();
-
 type Language = 'EN' | 'ES' | 'JP';
+type MenuType = 'file' | 'options' | 'window' | 'help' | null;
 
-// Scramble hook matching original superself speed (40ms)
-// frames parameter controls reveal duration (more frames = slower reveal)
-// key parameter forces re-scramble when incremented (for language changes)
-function useScrambleReveal(text: string, trigger: boolean, speed: number = 40, key: number = 0, frames?: number) {
+// DOS block characters for scramble effect
+const SCRAMBLE_GLITCH_CHARS = '█▀▄░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌';
+
+// Scramble reveal hook with optional delay for staggered effects
+function useScrambleReveal(text: string, trigger: boolean, speed: number = 40, key: number = 0, frames?: number, glitchOnly?: boolean, delay: number = 0) {
   const [displayed, setDisplayed] = useState('');
-  const chars = SCRAMBLE_CHARS.base;
+  const [started, setStarted] = useState(false);
+  const chars = glitchOnly ? SCRAMBLE_GLITCH_CHARS : SCRAMBLE_CHARS.base;
 
   useEffect(() => {
-    if (!trigger) return;
+    if (!trigger) {
+      setStarted(false);
+      setDisplayed('');
+      return;
+    }
+
+    // Apply delay before starting
+    const delayTimeout = setTimeout(() => {
+      setStarted(true);
+    }, delay);
+
+    return () => clearTimeout(delayTimeout);
+  }, [trigger, delay, key]);
+
+  useEffect(() => {
+    if (!started) return;
 
     let frame = 0;
-    // Default 18 frames for short text, or use custom frames for longer text
     const maxFrames = frames ?? 18;
 
     const interval = setInterval(() => {
@@ -86,86 +213,14 @@ function useScrambleReveal(text: string, trigger: boolean, speed: number = 40, k
     }, speed);
 
     return () => clearInterval(interval);
-  }, [text, trigger, speed, chars, key]);
+  }, [text, started, speed, chars, key, frames]);
 
   return displayed;
 }
 
-// Scramble dissolve hook - reverse of reveal, scrambles text as it fades out
-function useScrambleDissolve(text: string, trigger: boolean, speed: number = 40) {
-  const [displayed, setDisplayed] = useState(text);
-  const chars = SCRAMBLE_CHARS.base;
 
-  useEffect(() => {
-    if (!trigger) {
-      setDisplayed(text);
-      return;
-    }
-
-    let frame = 0;
-    const maxFrames = 18;
-
-    const interval = setInterval(() => {
-      frame++;
-      // Reverse: unlock from the end, scrambling from left to right
-      const scrambled = Math.floor((frame / maxFrames) * text.length);
-
-      let result = '';
-      for (let i = 0; i < text.length; i++) {
-        if (i < scrambled) {
-          // Already scrambled positions become random chars then empty
-          if (frame > maxFrames * 0.7) {
-            result += ' ';
-          } else {
-            result += chars[Math.floor(Math.random() * chars.length)];
-          }
-        } else if (text[i] === ' ') {
-          result += ' ';
-        } else {
-          result += text[i];
-        }
-      }
-      setDisplayed(result);
-
-      if (frame >= maxFrames) {
-        setDisplayed('');
-        clearInterval(interval);
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [text, trigger, speed, chars]);
-
-  return displayed;
-}
-
-// Typing effect hook
-function useTypingEffect(text: string, trigger: boolean, speed: number = 30) {
-  const [displayed, setDisplayed] = useState('');
-
-  useEffect(() => {
-    if (!trigger) {
-      setDisplayed('');
-      return;
-    }
-
-    let index = 0;
-    const interval = setInterval(() => {
-      index++;
-      setDisplayed(text.slice(0, index));
-      if (index >= text.length) {
-        clearInterval(interval);
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [text, trigger, speed]);
-
-  return displayed;
-}
-
-// CLI-style typewriter - chunky, variable speed, occasional stutter
-function useTypewriter(text: string, trigger: boolean, baseSpeed: number = 25) {
+// Typewriter hook with optional key for re-triggering
+function useTypewriter(text: string, trigger: boolean, baseSpeed: number = 25, key: number = 0) {
   const [displayed, setDisplayed] = useState('');
   const [done, setDone] = useState(false);
 
@@ -176,6 +231,10 @@ function useTypewriter(text: string, trigger: boolean, baseSpeed: number = 25) {
       return;
     }
 
+    // Reset on key change (language change)
+    setDisplayed('');
+    setDone(false);
+
     let index = 0;
     let timeout: NodeJS.Timeout;
 
@@ -185,65 +244,484 @@ function useTypewriter(text: string, trigger: boolean, baseSpeed: number = 25) {
         return;
       }
 
-      // Random chunk size (1-3 chars at once for CLI feel)
       const chunk = Math.random() > 0.7 ? Math.floor(Math.random() * 3) + 1 : 1;
       index = Math.min(index + chunk, text.length);
       setDisplayed(text.slice(0, index));
 
-      // Variable delay - occasional stutter/pause
       let delay = baseSpeed;
-      if (Math.random() > 0.9) delay = baseSpeed * 4; // Occasional long pause
-      else if (Math.random() > 0.7) delay = baseSpeed * 0.5; // Sometimes faster
+      if (Math.random() > 0.9) delay = baseSpeed * 4;
+      else if (Math.random() > 0.7) delay = baseSpeed * 0.5;
 
       timeout = setTimeout(typeNext, delay);
     };
 
     timeout = setTimeout(typeNext, baseSpeed);
     return () => clearTimeout(timeout);
-  }, [text, trigger, baseSpeed]);
+  }, [text, trigger, baseSpeed, key]);
 
   return { displayed, done };
 }
 
-// About Section Component - Minimal CLI style with white bg
-function AboutSection({
+// Win3.1 Button Component - FLAT 1985 style
+function Win31Button({
+  children,
+  onClick,
+  style,
+  disabled,
+}: {
+  children: React.ReactNode;
+  onClick?: (e: React.MouseEvent) => void;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+}) {
+  const [pressed, setPressed] = useState(false);
+
+  return (
+    <button
+      onClick={(e) => onClick?.(e)}
+      disabled={disabled}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      style={{
+        backgroundColor: pressed ? '#808080' : '#C0C0C0',
+        border: '1px solid #000000',
+        fontFamily: '"MS Sans Serif", Arial, sans-serif',
+        fontSize: '11px',
+        color: '#000000',
+        padding: '4px 16px',
+        minWidth: '70px',
+        cursor: disabled ? 'default' : 'pointer',
+        opacity: disabled ? 0.6 : 1,
+        ...style,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+// Win3.1 Control Button (minimize, maximize, close) - FLAT 1985 style
+function ControlButton({ icon, onClick, disabled }: { icon: string; onClick?: () => void; disabled?: boolean }) {
+  const [pressed, setPressed] = useState(false);
+
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      onMouseDown={() => !disabled && setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      style={{
+        width: '22px',
+        height: '20px',
+        backgroundColor: pressed && !disabled ? '#808080' : '#C0C0C0',
+        border: '1px solid #000000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: '"MS Sans Serif", Arial, sans-serif',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        cursor: disabled ? 'default' : 'pointer',
+        padding: 0,
+        lineHeight: 1,
+        opacity: disabled ? 0.5 : 1,
+      }}
+    >
+      {icon}
+    </button>
+  );
+}
+
+// Win3.1 Menu Separator - FLAT 1985 style
+function MenuSeparator() {
+  return (
+    <div
+      style={{
+        height: '1px',
+        backgroundColor: '#808080',
+        margin: '4px 2px',
+      }}
+    />
+  );
+}
+
+// Win3.1 Menu Item
+function MenuItem({
+  label,
+  onClick,
+  hasSubmenu,
+  shortcut,
+  disabled,
+}: {
+  label: string;
+  onClick?: () => void;
+  hasSubmenu?: boolean;
+  shortcut?: string;
+  disabled?: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  // Underline first character
+  const firstChar = label[0];
+  const rest = label.slice(1);
+
+  return (
+    <div
+      onClick={disabled ? undefined : onClick}
+      onMouseEnter={() => !disabled && setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        ...WIN31.menuItem,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontFamily: '"MS Sans Serif", Arial, sans-serif',
+        fontSize: '12px',
+        whiteSpace: 'nowrap',
+        backgroundColor: hovered && !disabled ? WIN31.titlebar : 'transparent',
+        color: disabled ? '#808080' : (hovered ? '#FFFFFF' : '#000000'),
+        cursor: disabled ? 'default' : 'pointer',
+      }}
+    >
+      <span>
+        <span style={{ textDecoration: disabled ? 'none' : 'underline' }}>{firstChar}</span>
+        {rest}
+      </span>
+      {hasSubmenu && <span style={{ marginLeft: '20px' }}>▶</span>}
+      {shortcut && <span style={{ marginLeft: '20px', opacity: 0.7 }}>{shortcut}</span>}
+    </div>
+  );
+}
+
+// Win3.1 Desktop Icon - bigger for better visibility
+function DesktopIcon({
+  label,
+  onClick,
+  icon,
+}: {
+  label: string;
+  onClick?: () => void;
+  icon: React.ReactNode;
+}) {
+  const [selected, setSelected] = useState(false);
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseDown={() => setSelected(true)}
+      onMouseUp={() => setTimeout(() => setSelected(false), 200)}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '6px',
+        cursor: 'pointer',
+        padding: '10px',
+        userSelect: 'none',
+        minWidth: '80px',
+      }}
+    >
+      <div
+        style={{
+          width: '44px',
+          height: '44px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '28px',
+          backgroundColor: selected ? WIN31.titlebar : 'transparent',
+          color: selected ? WIN31.titlebarText : WIN31.border,
+          border: '1px solid transparent',
+        }}
+      >
+        {icon}
+      </div>
+      <span
+        style={{
+          fontFamily: '"MS Sans Serif", Arial, sans-serif',
+          fontSize: '13px',
+          backgroundColor: selected ? WIN31.titlebar : 'transparent',
+          color: selected ? WIN31.titlebarText : WIN31.border,
+          padding: '2px 6px',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+// MS-DOS Executive File Item type
+type FileItem = {
+  name: string;
+  extension: string;
+  type: 'dir' | 'exe' | 'txt' | 'lnk';
+  action: () => void;
+};
+
+// MS-DOS Executive File List Item with retro staggered reveal (no fade, just appear)
+function FileListItem({
+  item,
+  isSelected,
+  onSelect,
+  onOpen,
+  delay = 0,
+  show,
+}: {
+  item: FileItem;
+  isSelected: boolean;
+  onSelect: () => void;
+  onOpen: () => void;
+  delay?: number;
+  show: boolean;
+}) {
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  // Staggered appearance - instant, no fade (retro cold style)
+  useEffect(() => {
+    if (!show) {
+      setVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [show, delay]);
+
+  const handleClick = () => {
+    const now = Date.now();
+    if (now - lastClickTime < 300) {
+      // Double click
+      onOpen();
+    } else {
+      // Single click
+      onSelect();
+    }
+    setLastClickTime(now);
+  };
+
+  // Don't render until visible (instant appear, no animation)
+  if (!visible) {
+    return (
+      <div
+        style={{
+          fontFamily: 'monospace',
+          fontSize: '12px',
+          padding: '2px 6px',
+          visibility: 'hidden',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {item.name}.{item.extension}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      onClick={handleClick}
+      style={{
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        padding: '2px 6px',
+        backgroundColor: isSelected ? '#000000' : 'transparent',
+        color: isSelected ? '#FFFFFF' : '#000000',
+        cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        userSelect: 'none',
+      }}
+    >
+      {item.name}.{item.extension}
+    </div>
+  );
+}
+
+// MS-DOS Executive File List Grid with keyboard navigation and staggered reveal
+function FileListGrid({
+  files,
+  selectedIndex,
+  onSelect,
+  onOpen,
+  columns = 3,
+  show,
+}: {
+  files: FileItem[];
+  selectedIndex: number;
+  onSelect: (index: number) => void;
+  onOpen: (index: number) => void;
+  columns?: number;
+  show: boolean;
+}) {
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't handle if an input is focused
+      if (document.activeElement?.tagName === 'INPUT' ||
+          document.activeElement?.tagName === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          onSelect(Math.max(0, selectedIndex - columns));
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          onSelect(Math.min(files.length - 1, selectedIndex + columns));
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          onSelect(Math.max(0, selectedIndex - 1));
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          onSelect(Math.min(files.length - 1, selectedIndex + 1));
+          break;
+        case 'Enter':
+          e.preventDefault();
+          onOpen(selectedIndex);
+          break;
+      }
+    };
+
+    if (show) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, files.length, columns, onSelect, onOpen, show]);
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(auto-fit, minmax(120px, 1fr))`, // Responsive columns
+        gap: '2px 16px',
+        padding: '16px',
+        backgroundColor: '#FFFFFF',
+        maxWidth: '100%',
+      }}
+    >
+      {files.map((file, index) => (
+        <FileListItem
+          key={`${file.name}.${file.extension}`}
+          item={file}
+          isSelected={index === selectedIndex}
+          onSelect={() => onSelect(index)}
+          onOpen={() => onOpen(index)}
+          delay={index * 60} // Stagger each item by 60ms
+          show={show}
+        />
+      ))}
+    </div>
+  );
+}
+
+// About Dialog labels
+const aboutLabels = {
+  EN: {
+    title: 'About Flavio Manyari',
+    tagline: 'Design & Development',
+    copyright: 'Copyright (c) 2026',
+    stack: 'Stack',
+    tools: 'Tools',
+    status: 'Status',
+    availableForProjects: 'Available for projects',
+  },
+  ES: {
+    title: 'Acerca de Flavio Manyari',
+    tagline: 'Diseño & Desarrollo',
+    copyright: 'Copyright (c) 2026',
+    stack: 'Stack',
+    tools: 'Herramientas',
+    status: 'Estado',
+    availableForProjects: 'Disponible para proyectos',
+  },
+  JP: {
+    title: 'Flavio Manyariについて',
+    tagline: 'デザイン & 開発',
+    copyright: 'Copyright (c) 2026',
+    stack: 'スタック',
+    tools: 'ツール',
+    status: 'ステータス',
+    availableForProjects: 'プロジェクト対応可能',
+  },
+};
+
+// About Dialog Component - Faithful Win3.1 "About Program Manager" style
+function AboutDialog({
   isOpen,
   onClose,
-  language
+  language,
+  colorScheme,
 }: {
   isOpen: boolean;
   onClose: () => void;
   language: Language;
+  colorScheme: ColorScheme;
 }) {
-  const [asciiPhase, setAsciiPhase] = useState(0); // 0=hidden, 1=glitching, 2=revealed
-  const [asciiGlitch, setAsciiGlitch] = useState('');
-  const [nameTyped, setNameTyped] = useState('');
-  const [namePhase, setNamePhase] = useState(0); // 0=hidden, 1=typing, 2=done
-  const [nameGlitched, setNameGlitched] = useState(''); // For random glitch effect
-  const [closeHovered, setCloseHovered] = useState(false);
-  const [fmHovered, setFmHovered] = useState(false);
-  const [scrambledAscii, setScrambledAscii] = useState(ASCII_ART);
-  const fmRef = useRef<HTMLPreElement>(null);
-  const fmMousePosRef = useRef<{ x: number; y: number }>({ x: -100, y: -100 });
-
-  // Individual triggers for each section (random staggered start)
-  const [showBio, setShowBio] = useState(false);
-  const [showSkills, setShowSkills] = useState(false);
-  const [showStatus, setShowStatus] = useState(false);
-  const [showLocation, setShowLocation] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
-  const [showLinks, setShowLinks] = useState(false);
   const [showEmailCopied, setShowEmailCopied] = useState(false);
   const [emailToastPos, setEmailToastPos] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const content = aboutContent[language];
   const t = portfolioText[language];
+  const labels = aboutLabels[language];
 
-  // Email copy handler
-  const handleCopyEmail = async (e: React.MouseEvent | React.TouchEvent) => {
-    const clientX = 'touches' in e ? e.touches[0]?.clientX || 0 : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0]?.clientY || 0 : e.clientY;
+  // Reset position when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setPosition(null);
+    }
+  }, [isOpen]);
 
+  // Drag handlers (mouse + touch)
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!dialogRef.current) return;
+    const rect = dialogRef.current.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    setDragOffset({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    });
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      setPosition({
+        x: clientX - dragOffset.x,
+        y: clientY - dragOffset.y,
+      });
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragOffset]);
+
+  const handleCopyEmail = async (e: React.MouseEvent) => {
     try {
       await navigator.clipboard.writeText(content.email);
     } catch {
@@ -252,204 +730,16 @@ function AboutSection({
       textarea.style.position = 'fixed';
       textarea.style.opacity = '0';
       document.body.appendChild(textarea);
-      textarea.focus();
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
 
-    setEmailToastPos({ x: clientX, y: clientY });
+    setEmailToastPos({ x: e.clientX, y: e.clientY });
     setShowEmailCopied(true);
     setTimeout(() => setShowEmailCopied(false), 2000);
   };
-  const glitchChars = '█▓▒░╔╗╚╝║═┌┐└┘│─';
-  const nameGlitchChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
 
-  // ASCII glitch effect - slower, gentler reveal
-  useEffect(() => {
-    if (asciiPhase !== 1) return;
-
-    let frame = 0;
-    const maxFrames = 16; // More frames for smoother reveal
-    const lines = ASCII_ART.split('\n');
-
-    const interval = setInterval(() => {
-      frame++;
-      const revealedLines = Math.floor((frame / maxFrames) * lines.length);
-
-      const glitched = lines.map((line, i) => {
-        if (i < revealedLines) return line;
-        return line.split('').map(c =>
-          c === ' ' ? ' ' : glitchChars[Math.floor(Math.random() * glitchChars.length)]
-        ).join('');
-      }).join('\n');
-
-      setAsciiGlitch(glitched);
-
-      if (frame >= maxFrames) {
-        setAsciiPhase(2);
-        clearInterval(interval);
-      }
-    }, 80); // Slower interval
-
-    return () => clearInterval(interval);
-  }, [asciiPhase]);
-
-  // FM ASCII localized scramble on hover - continuous update using ref for position
-  useEffect(() => {
-    if (!fmHovered) {
-      setScrambledAscii(ASCII_ART);
-      return;
-    }
-
-    const lines = ASCII_ART.split('\n');
-    const radius = 2; // Character radius for scramble effect
-
-    const interval = setInterval(() => {
-      const pos = fmMousePosRef.current;
-      const scrambled = lines.map((line, lineIdx) => {
-        return line.split('').map((c, charIdx) => {
-          if (c === ' ') return ' ';
-          // Calculate distance from mouse position (in character units)
-          const dist = Math.sqrt(
-            Math.pow(charIdx - pos.x, 2) +
-            Math.pow(lineIdx - pos.y, 2)
-          );
-          // Only scramble if within radius
-          if (dist < radius) {
-            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-          }
-          return c;
-        }).join('');
-      }).join('\n');
-      setScrambledAscii(scrambled);
-    }, 40); // Faster interval for smoother effect
-
-    return () => clearInterval(interval);
-  }, [fmHovered]);
-
-  // Name typewriter effect
-  useEffect(() => {
-    if (namePhase !== 1) return;
-
-    const name = 'FLAVIO MANYARI';
-    let index = 0;
-
-    const interval = setInterval(() => {
-      index++;
-      setNameTyped(name.slice(0, index));
-
-      if (index >= name.length) {
-        setNamePhase(2);
-        clearInterval(interval);
-      }
-    }, 100); // 100ms per character - slower, more deliberate
-
-    return () => clearInterval(interval);
-  }, [namePhase]);
-
-  // Random subtle glitch effect on name after typing completes
-  useEffect(() => {
-    if (namePhase !== 2) {
-      setNameGlitched('');
-      return;
-    }
-
-    const name = 'FLAVIO MANYARI';
-
-    // Random interval between glitches (3-8 seconds)
-    const scheduleGlitch = () => {
-      const delay = 3000 + Math.random() * 5000;
-      return setTimeout(() => {
-        // 70% chance to actually glitch
-        if (Math.random() > 0.3) {
-          // Pick 1-3 random characters to glitch
-          const numChars = Math.floor(Math.random() * 3) + 1;
-          const positions = new Set<number>();
-          while (positions.size < numChars) {
-            const pos = Math.floor(Math.random() * name.length);
-            if (name[pos] !== ' ') positions.add(pos);
-          }
-
-          // Glitch for 80-150ms
-          let glitchFrame = 0;
-          const glitchDuration = 2 + Math.floor(Math.random() * 3); // 2-4 frames
-
-          const glitchInterval = setInterval(() => {
-            glitchFrame++;
-            let result = '';
-            for (let i = 0; i < name.length; i++) {
-              if (positions.has(i)) {
-                result += nameGlitchChars[Math.floor(Math.random() * nameGlitchChars.length)];
-              } else {
-                result += name[i];
-              }
-            }
-            setNameGlitched(result);
-
-            if (glitchFrame >= glitchDuration) {
-              setNameGlitched('');
-              clearInterval(glitchInterval);
-            }
-          }, 50);
-        }
-
-        // Schedule next glitch
-        timeoutRef.current = scheduleGlitch();
-      }, delay);
-    };
-
-    const timeoutRef = { current: scheduleGlitch() };
-    return () => clearTimeout(timeoutRef.current);
-  }, [namePhase, nameGlitchChars]);
-
-  // Typewriter for each section - faster, glitchier typing
-  const bioTyped = useTypewriter(content.bio, showBio, 25);
-  const statusTyped = useTypewriter(content.status, showStatus, 28);
-  const locationTyped = useTypewriter(content.location, showLocation, 28);
-  const emailTyped = useTypewriter(content.email, showEmail, 28);
-
-  // Sequential entrance - gentle, predictable cascade
-  useEffect(() => {
-    if (isOpen) {
-      // Phase 1: ASCII glitches in (slightly slower)
-      const t1 = setTimeout(() => setAsciiPhase(1), 200);
-      // Phase 2: Name types in after ASCII settles
-      const t2 = setTimeout(() => setNamePhase(1), 1200);
-
-      // Phase 3: Sections cascade in sequence (faster stagger)
-      const t3 = setTimeout(() => setShowBio(true), 2200);
-      const t4 = setTimeout(() => setShowSkills(true), 2450);
-      const t5 = setTimeout(() => setShowStatus(true), 2700);
-      const t6 = setTimeout(() => setShowLocation(true), 2900);
-      const t7 = setTimeout(() => setShowEmail(true), 3100);
-      const t8 = setTimeout(() => setShowLinks(true), 3300);
-
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-        clearTimeout(t3);
-        clearTimeout(t4);
-        clearTimeout(t5);
-        clearTimeout(t6);
-        clearTimeout(t7);
-        clearTimeout(t8);
-      };
-    } else {
-      setAsciiPhase(0);
-      setAsciiGlitch('');
-      setNamePhase(0);
-      setNameTyped('');
-      setShowBio(false);
-      setShowSkills(false);
-      setShowStatus(false);
-      setShowLocation(false);
-      setShowEmail(false);
-      setShowLinks(false);
-    }
-  }, [isOpen]);
-
-  // ESC to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) onClose();
@@ -460,733 +750,1847 @@ function AboutSection({
 
   if (!isOpen) return null;
 
-  const cursor = <span className="blink" style={{ color: COLORS.primary }}>_</span>;
+  // FM ASCII for logo box - compact version
+  const FM_MINI = [
+    '█▀▀ █▀▄▀█',
+    '█▀  █ ▀ █',
+    '▀   ▀   ▀',
+  ];
 
   return (
     <div
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: COLORS.secondary,
-        zIndex: 100,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: 'clamp(20px, 4vw, 50px)',
-        paddingTop: 'clamp(60px, 10vw, 100px)',
-        overflow: 'auto',
-        fontFamily: WIN_FONT,
-        animation: 'fadeIn 0.3s ease-out',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        display: position ? 'block' : 'flex',
+        alignItems: position ? undefined : 'center',
+        justifyContent: position ? undefined : 'center',
+        zIndex: 200,
       }}
+      onClick={onClose}
     >
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        onMouseEnter={() => setCloseHovered(true)}
-        onMouseLeave={() => setCloseHovered(false)}
-        style={{
-          position: 'fixed',
-          top: 'clamp(20px, 4vw, 50px)',
-          right: 'clamp(20px, 4vw, 50px)',
-          background: closeHovered ? COLORS.primary : 'transparent',
-          border: 'none',
-          color: closeHovered ? COLORS.secondary : COLORS.primary,
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-          cursor: 'pointer',
-          padding: '0.3em 0.6em',
-          letterSpacing: '0.1em',
-          opacity: closeHovered ? 1 : 0.7,
-          zIndex: 101,
-        }}
-      >
-        [x] close{closeHovered && cursor}
-      </button>
-
-      {/* ASCII Art - FM blocks with glitch reveal + localized hover scramble */}
-      <pre
-        ref={fmRef}
-        onMouseEnter={() => setFmHovered(true)}
-        onMouseMove={(e) => {
-          if (!fmRef.current) return;
-          const rect = fmRef.current.getBoundingClientRect();
-          const lines = ASCII_ART.split('\n');
-          const charWidth = rect.width / (lines[0]?.length || 1);
-          const lineHeight = rect.height / lines.length;
-          const x = (e.clientX - rect.left) / charWidth;
-          const y = (e.clientY - rect.top) / lineHeight;
-          fmMousePosRef.current = { x, y };
-        }}
-        onMouseLeave={() => {
-          setFmHovered(false);
-          fmMousePosRef.current = { x: -100, y: -100 };
-        }}
-        style={{
-          color: COLORS.primary,
-          fontSize: 'clamp(0.5rem, 1.5vw, 1rem)',
-          lineHeight: 1.15,
-          textAlign: 'center',
-          margin: 0,
-          marginBottom: '0.5rem',
-          visibility: asciiPhase > 0 ? 'visible' : 'hidden',
-          minHeight: 'clamp(3rem, 8vw, 6rem)',
-          cursor: 'pointer',
-        }}
-      >
-        {asciiPhase === 2 ? scrambledAscii : asciiGlitch}
-      </pre>
-
-      {/* Name under ASCII with typewriter reveal + persistent cursor */}
       <div
+        ref={dialogRef}
+        onClick={(e) => e.stopPropagation()}
         style={{
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(1.4rem, 3.5vw, 2rem)',
-          fontWeight: 400,
-          color: COLORS.primary,
-          letterSpacing: '0.15em',
-          marginBottom: 'clamp(2rem, 5vw, 3rem)',
-          visibility: namePhase > 0 ? 'visible' : 'hidden',
-          minHeight: '1.5em',
+          backgroundColor: WIN31.windowBg,
+          border: '1px solid #000000',
+          width: '440px',
+          maxWidth: '95vw',
+          ...(position ? {
+            position: 'absolute',
+            left: position.x,
+            top: position.y,
+          } : {}),
         }}
       >
-        {nameGlitched || nameTyped}
-        <span className="blink">_</span>
-      </div>
+        {/* Titlebar with X on right - uses color scheme */}
+        <div
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          style={{
+            backgroundColor: colorScheme.titlebar,
+            padding: '3px 6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            userSelect: 'none',
+            transition: 'background-color 0.3s ease',
+          }}
+        >
+          <span
+            style={{
+              color: colorScheme.titleText,
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 'bold',
+            }}
+          >
+            {labels.title}
+          </span>
+          <ControlButton icon="×" onClick={onClose} />
+        </div>
 
-      {/* Content sections with typewriter */}
-      <div
-        style={{
-          maxWidth: '600px',
-          width: '100%',
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.85rem, 1.5vw, 1rem)',
-          fontWeight: 400,
-          lineHeight: 1.8,
-        }}
-      >
-        {/* Bio */}
-        {showBio && (
-          <div style={{ marginBottom: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.3rem', textTransform: 'uppercase' }}>bio</div>
-            <div style={{ color: COLORS.primary }}>{bioTyped.displayed}{!bioTyped.done && cursor}</div>
-          </div>
-        )}
-
-        {/* Skills */}
-        {showSkills && (
-          <div style={{ marginBottom: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.3rem', textTransform: 'uppercase' }}>skills</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {content.skills.map((skill, i) => (
-                <span key={skill} className="blink-in glitch-tag skill-tag" style={{
-                  padding: '0.15em 0.4em',
-                  border: `1px solid ${COLORS.primary}`,
-                  fontSize: '0.9em',
-                  animationDelay: `${i * 0.03}s`,
-                }}>
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Status */}
-        {showStatus && (
-          <div style={{ marginBottom: 'clamp(0.6rem, 1.5vw, 0.9rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.3rem', textTransform: 'uppercase' }}>status</div>
-            <div style={{ color: COLORS.primary }}>{statusTyped.displayed}{!statusTyped.done && cursor}</div>
-          </div>
-        )}
-
-        {/* Location */}
-        {showLocation && (
-          <div style={{ marginBottom: 'clamp(0.6rem, 1.5vw, 0.9rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.3rem', textTransform: 'uppercase' }}>location</div>
-            <div style={{ color: COLORS.primary }}>{locationTyped.displayed}{!locationTyped.done && cursor}</div>
-          </div>
-        )}
-
-        {/* Email */}
-        {showEmail && (
-          <div style={{ marginBottom: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.3rem', textTransform: 'uppercase' }}>email</div>
-            <span
-              onClick={handleCopyEmail}
-              style={{ color: COLORS.primary, textDecoration: 'none', borderBottom: `1px solid ${COLORS.primary}`, cursor: 'pointer' }}
+        {/* Content - Grey background like Win3.1 About dialogs */}
+        <div style={{ padding: '16px', backgroundColor: WIN31.windowBg }}>
+          {/* Top section: Logo box + Name/Info + OK button */}
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '12px' }}>
+            {/* Logo box - just FM ASCII - FLAT 1985 style */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '12px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #000000',
+                minWidth: '90px',
+              }}
             >
-              {emailTyped.displayed}{!emailTyped.done && cursor}
-            </span>
-          </div>
-        )}
+              {/* FM ASCII only */}
+              <div
+                style={{
+                  fontFamily: 'monospace',
+                  fontSize: '10px',
+                  lineHeight: 1,
+                  color: colorScheme.titlebar,
+                  whiteSpace: 'pre',
+                  transition: 'color 0.3s ease',
+                }}
+              >
+                {FM_MINI.map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </div>
+            </div>
 
-        {/* Links - vertical orientation with bigger icons */}
-        {showLinks && (
-          <div style={{ marginBottom: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
-            <div style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', letterSpacing: '0.2em', color: COLORS.primary, opacity: 0.5, marginBottom: '0.5rem', textTransform: 'uppercase' }}>links</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <a href="https://github.com/9000fm" target="_blank" rel="noopener noreferrer" className="blink-in glitch-tag social-link" style={{ color: COLORS.primary, textDecoration: 'none', opacity: 0.7, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: 'clamp(1rem, 1.8vw, 1.2rem)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                </svg>
-                github
-              </a>
-              <a href="https://www.instagram.com/manyari___/" target="_blank" rel="noopener noreferrer" className="blink-in glitch-tag social-link" style={{ color: COLORS.primary, textDecoration: 'none', opacity: 0.7, animationDelay: '0.04s', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: 'clamp(1rem, 1.8vw, 1.2rem)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
-                instagram
-              </a>
-              <a href="https://soundcloud.com/manyari-fm" target="_blank" rel="noopener noreferrer" className="blink-in glitch-tag social-link" style={{ color: COLORS.primary, textDecoration: 'none', opacity: 0.7, animationDelay: '0.08s', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: 'clamp(1rem, 1.8vw, 1.2rem)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-                </svg>
-                soundcloud
-              </a>
+            {/* Name + Tagline + Copyright (right-aligned info) */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div
+                style={{
+                  fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  marginBottom: '2px',
+                }}
+              >
+                Flavio Manyari
+              </div>
+              <div
+                style={{
+                  fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                  fontSize: '11px',
+                  color: '#000000',
+                  marginBottom: '2px',
+                }}
+              >
+                {labels.tagline}
+              </div>
+              <div
+                style={{
+                  fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                  fontSize: '11px',
+                  color: '#808080',
+                }}
+              >
+                {labels.copyright}
+              </div>
+            </div>
+
+            {/* OK Button - Top right like Win3.1 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <Win31Button onClick={onClose}>
+                OK
+              </Win31Button>
             </div>
           </div>
-        )}
+
+          {/* Bio section */}
+          <div
+            style={{
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '11px',
+              lineHeight: 1.5,
+              color: '#000000',
+              marginBottom: '12px',
+            }}
+          >
+            {content.bio}
+          </div>
+
+          {/* Separator line - FLAT */}
+          <div
+            style={{
+              height: '1px',
+              backgroundColor: '#808080',
+              marginBottom: '12px',
+            }}
+          />
+
+          {/* System info style section - table-like alignment */}
+          <div style={{ marginBottom: '12px' }}>
+            {/* Stack */}
+            <div
+              style={{
+                display: 'flex',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '11px',
+                marginBottom: '4px',
+              }}
+            >
+              <span style={{ color: '#808080', minWidth: '80px' }}>{labels.stack}:</span>
+              <span style={{ color: '#000000' }}>React, Next.js, TypeScript, Node.js, Python, Tailwind</span>
+            </div>
+            {/* Tools */}
+            <div
+              style={{
+                display: 'flex',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '11px',
+                marginBottom: '4px',
+              }}
+            >
+              <span style={{ color: '#808080', minWidth: '80px' }}>{labels.tools}:</span>
+              <span style={{ color: '#000000' }}>VS Code, Ableton Live, Git, Vercel</span>
+            </div>
+            {/* Status */}
+            <div
+              style={{
+                display: 'flex',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '11px',
+              }}
+            >
+              <span style={{ color: '#808080', minWidth: '80px' }}>{labels.status}:</span>
+              <span style={{ color: '#008000' }}>{labels.availableForProjects}</span>
+            </div>
+          </div>
+
+          {/* Separator line - FLAT */}
+          <div
+            style={{
+              height: '1px',
+              backgroundColor: '#808080',
+              marginBottom: '12px',
+            }}
+          />
+
+          {/* Social buttons row */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              flexWrap: 'wrap',
+              marginBottom: '12px',
+            }}
+          >
+            <Win31Button
+              onClick={() => window.open('https://github.com/9000fm', '_blank')}
+              style={{ padding: '4px 12px' }}
+            >
+              GitHub
+            </Win31Button>
+            <Win31Button
+              onClick={() => window.open('https://www.instagram.com/manyari___/', '_blank')}
+              style={{ padding: '4px 12px' }}
+            >
+              Instagram
+            </Win31Button>
+            <Win31Button
+              onClick={() => window.open('https://soundcloud.com/superselfmusic', '_blank')}
+              style={{ padding: '4px 12px' }}
+            >
+              SoundCloud
+            </Win31Button>
+          </div>
+
+          {/* Email with Copy button */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '11px',
+            }}
+          >
+            <span
+              style={{ color: WIN31.titlebar, cursor: 'pointer', textDecoration: 'underline' }}
+              onClick={handleCopyEmail}
+            >
+              {content.email}
+            </span>
+            <Win31Button onClick={handleCopyEmail} style={{ padding: '2px 8px', minWidth: 'auto', fontSize: '10px' }}>
+              Copy
+            </Win31Button>
+          </div>
+        </div>
       </div>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-
-      {/* Email copied toast */}
-      <Toast
-        message={t.emailCopied}
-        position={emailToastPos}
-        visible={showEmailCopied}
-      />
+      <Toast message={t.emailCopied} position={emailToastPos} visible={showEmailCopied} />
     </div>
   );
 }
 
+// Big ASCII Art - FLAVIO MANYARI (your exact ASCII art, properly escaped)
+const BIG_ASCII_FLAVIO = [
+  '__/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\__/\\\\\\_________________/\\\\\\\\\\\\\\\\\\_____/\\\\\\________/\\\\\\__/\\\\\\\\\\\\\\\\\\\\\\_______/\\\\\\\\\\\\______',
+  ' _\\/\\\\\\///////////__\\/\\\\\\_______________/\\\\\\\\\\\\\\\\\\\\\\\\\\\\__\\/\\\\\\_______\\/\\\\\\_\\/////\\\\\\///______/\\\\\\///\\\\\\____',
+  '  _\\/\\\\\\_____________\\/\\\\\\______________/\\\\\\/////////\\\\\\__\\//\\\\\\______/\\\\\\______\\/\\\\\\______/\\\\\\/__\\///\\\\\\__',
+  '   _\\/\\\\\\\\\\\\\\\\\\\\\\_____\\/\\\\\\_____________\\/\\\\\\_______\\/\\\\\\__\\//\\\\\\____/\\\\\\_______\\/\\\\\\______/\\\\\\______\\//\\\\\\_',
+  '    _\\/\\\\\\///////______\\/\\\\\\_____________\\/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\___\\//\\\\\\__/\\\\\\________\\/\\\\\\_____\\/\\\\\\_______\\/\\\\\\_',
+  '     _\\/\\\\\\_____________\\/\\\\\\_____________\\/\\\\\\/////////\\\\\\____\\//\\\\\\/\\\\\\_________\\/\\\\\\_____\\//\\\\\\______/\\\\\\__',
+  '      _\\/\\\\\\_____________\\/\\\\\\_____________\\/\\\\\\_______\\/\\\\\\_____\\//\\\\\\\\\\__________\\/\\\\\\______\\///\\\\\\__/\\\\\\____',
+  '       _\\/\\\\\\_____________\\/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\__\\/\\\\\\_______\\/\\\\\\______\\//\\\\\\________/\\\\\\\\\\\\\\\\\\\\\\_____\\///\\\\\\\\\\/_____',
+  '        _\\///______________\\///////////////__\\///________\\///________\\///________\\///////////_______\\/////________',
+];
+
+const BIG_ASCII_MANYARI = [
+  '__/\\\\\\\\____________/\\\\\\\\_____/\\\\\\\\\\\\\\\\\\_____/\\\\\\\\\\_____/\\\\\\__/\\\\\\________/\\\\\\_____/\\\\\\\\\\\\\\\\\\_______/\\\\\\\\\\\\\\\\\\\\______/\\\\\\\\\\\\\\\\\\\\\\_',
+  ' _\\/\\\\\\\\\\\\________/\\\\\\\\\\\\___/\\\\\\\\\\\\\\\\\\\\\\\\\\\\__\\/\\\\\\\\\\\\___\\/\\\\\\_\\///\\\\\\____/\\\\\\/____/\\\\\\\\\\\\\\\\\\\\\\\\\\\\___/\\\\\\///////\\\\\\___\\/////\\\\\\///__',
+  '  _\\/\\\\\\//\\\\\\____/\\\\\\//\\\\\\__/\\\\\\/////////\\\\\\__\\/\\\\\\/\\\\\\__\\/\\\\\\___\\///\\\\\\/\\\\\\/______/\\\\\\/////////\\\\\\__\\/\\\\\\_____\\/\\\\\\_______\\/\\\\\\_____',
+  '   _\\/\\\\\\\\///\\\\\\/\\\\\\/_\\/\\\\\\__\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\//\\\\\\_\\/\\\\\\_____\\///\\\\\\/______\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\\\\\\\\\\\\\\\\\/________\\/\\\\\\_____',
+  '    _\\/\\\\\\__\\///\\\\\\/___\\/\\\\\\__\\/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\__\\/\\\\\\\\//\\\\\\\\/\\\\\\_______\\/\\\\\\_______\\/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\__\\/\\\\\\//////\\\\\\________\\/\\\\\\_____',
+  '     _\\/\\\\\\____\\///_____\\/\\\\\\__\\/\\\\\\/////////\\\\\\__\\/\\\\\\_\\//\\\\\\/\\\\\\_______\\/\\\\\\_______\\/\\\\\\/////////\\\\\\__\\/\\\\\\____\\//\\\\\\_______\\/\\\\\\_____',
+  '      _\\/\\\\\\_____________\\/\\\\\\__\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\__\\//\\\\\\\\\\\\_______\\/\\\\\\_______\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\_____\\//\\\\\\______\\/\\\\\\_____',
+  '       _\\/\\\\\\_____________\\/\\\\\\__\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\___\\//\\\\\\\\\\_______\\/\\\\\\_______\\/\\\\\\_______\\/\\\\\\__\\/\\\\\\______\\//\\\\\\__/\\\\\\\\\\\\\\\\\\\\\\_',
+  '        _\\///______________\\///__\\///________\\///__\\///_____\\/////________\\///________\\///________\\///__\\///________\\///__\\///////////__',
+];
+
+// Compact FM ASCII for after intro (SMALL version)
+const FM_COMPACT = [
+  '█▀▀ █▀▄▀█',
+  '█▀  █ ▀ █',
+  '▀   ▀   ▀',
+];
+
+// FM ASCII OPTIONS - Pick one!
+
+// OPTION A: Block style (medium)
+const FM_OPTION_A = [
+  '█████  █   █',
+  '█      ██ ██',
+  '████   █ █ █',
+  '█      █   █',
+  '█      █   █',
+];
+
+// OPTION B: Filled blocks (larger)
+const FM_OPTION_B = [
+  '██████╗   ███╗   ███╗',
+  '██╔═══╝   ████╗ ████║',
+  '█████╗    ██╔████╔██║',
+  '██╔══╝    ██║╚██╔╝██║',
+  '██║       ██║ ╚═╝ ██║',
+  '╚═╝       ╚═╝     ╚═╝',
+];
+
+// OPTION C: Dotted/Braille style
+const FM_OPTION_C = [
+  '⣿⣿⣿⣿⣿⣿  ⣿⣿⣿   ⣿⣿⣿',
+  '⣿⣿          ⣿⣿⣿⣿ ⣿⣿⣿⣿',
+  '⣿⣿⣿⣿⣿    ⣿⣿ ⣿⣿ ⣿⣿',
+  '⣿⣿          ⣿⣿  ⣿  ⣿⣿',
+  '⣿⣿          ⣿⣿     ⣿⣿',
+];
+
+// OPTION D: Simple hash blocks (very readable)
+const FM_OPTION_D = [
+  '######    ##   ##',
+  '##        ### ###',
+  '#####     ## # ##',
+  '##        ##   ##',
+  '##        ##   ##',
+];
+
+// OPTION E: Slashes and pipes (more characters, ASCII only)
+const FM_OPTION_E = [
+  '/======\\    /\\      /\\',
+  '||          ||\\\\  //||',
+  '||====      || \\\\// ||',
+  '||          ||  \\/  ||',
+  '||          ||      ||',
+];
+
+// CURRENT SELECTION (change this to use different option)
+const FM_BIG = FM_OPTION_B;
+
+type AsciiPhase = 'waiting' | 'entering' | 'rainbow' | 'complete' | 'fading' | 'done';
+
+// Rainbow colors for celebration
+const RAINBOW_COLORS = [
+  '#FF0000', '#FF7F00', '#FFFF00', '#00FF00',
+  '#0000FF', '#4B0082', '#9400D3', '#FF1493',
+];
+
+function BigAsciiIntro({
+  show,
+  onComplete,
+}: {
+  show: boolean;
+  onComplete: () => void;
+}) {
+  const [phase, setPhase] = useState<AsciiPhase>('waiting');
+  const [revealedChars, setRevealedChars] = useState<Set<string>>(new Set());
+  const [colorOffset, setColorOffset] = useState(0);
+
+  // Full ASCII combining both lines
+  const FULL_ASCII = [...BIG_ASCII_FLAVIO, '', ...BIG_ASCII_MANYARI];
+
+  useEffect(() => {
+    if (!show) {
+      setPhase('waiting');
+      setRevealedChars(new Set());
+      setColorOffset(0);
+      return;
+    }
+
+    // Collect all non-space characters with positions
+    const allChars: { line: number; col: number }[] = [];
+    FULL_ASCII.forEach((line, lineIdx) => {
+      line.split('').forEach((char, colIdx) => {
+        if (char !== ' ' && char !== '') {
+          allChars.push({ line: lineIdx, col: colIdx });
+        }
+      });
+    });
+
+    // Sort by line (typewriter style - line by line, left to right)
+    allChars.sort((a, b) => {
+      if (a.line !== b.line) return a.line - b.line;
+      return a.col - b.col;
+    });
+
+    const timers: NodeJS.Timeout[] = [];
+    const intervals: NodeJS.Timeout[] = [];
+
+    // Start entering phase
+    const startTimer = setTimeout(() => {
+      setPhase('entering');
+
+      // Reveal characters with typewriter timing
+      const charDelay = 1;
+      allChars.forEach((pos, idx) => {
+        const timer = setTimeout(() => {
+          setRevealedChars((prev) => {
+            const newSet = new Set(prev);
+            newSet.add(`${pos.line}-${pos.col}`);
+            return newSet;
+          });
+        }, idx * charDelay);
+        timers.push(timer);
+      });
+
+      // Let it breathe - pause after typing completes before rainbow
+      const rainbowTimer = setTimeout(() => {
+        setPhase('rainbow');
+        // Cycle colors smoothly
+        const colorInterval = setInterval(() => {
+          setColorOffset(o => o + 1);
+        }, 100);
+        intervals.push(colorInterval);
+      }, allChars.length * charDelay + 800); // Longer pause before rainbow
+      timers.push(rainbowTimer);
+
+      // Complete phase - settle to black, let rainbow breathe
+      const completeTimer = setTimeout(() => {
+        intervals.forEach(i => clearInterval(i));
+        setPhase('complete');
+      }, allChars.length * charDelay + 3500); // Rainbow runs for ~2.7s
+      timers.push(completeTimer);
+
+      // Let it breathe in black before fading
+      const fadeTimer = setTimeout(() => {
+        setPhase('fading');
+      }, allChars.length * charDelay + 4500); // 1s pause in black
+      timers.push(fadeTimer);
+
+      // Notify parent when done
+      const doneTimer = setTimeout(() => {
+        setPhase('done');
+        onComplete();
+      }, allChars.length * charDelay + 5800); // Slower fade out
+      timers.push(doneTimer);
+    }, 300);
+    timers.push(startTimer);
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+      intervals.forEach((i) => clearInterval(i));
+    };
+  }, [show, onComplete]);
+
+  if (phase === 'done' || !show) return null;
+
+  // Color based on position - creates wave effect during rainbow phase
+  const getCharColor = (lineIdx: number, colIdx: number) => {
+    if (phase === 'rainbow') {
+      const idx = (lineIdx * 3 + colIdx + colorOffset) % RAINBOW_COLORS.length;
+      return RAINBOW_COLORS[idx];
+    }
+    // Black text on white background
+    return '#000000';
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: MSDOS.white,  // White background
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        opacity: phase === 'fading' ? 0 : 1,
+        transition: 'opacity 1.2s ease-out',
+        overflow: 'hidden',
+        padding: '20px',
+      }}
+    >
+      <div
+        style={{
+          fontFamily: '"Courier New", Courier, "Lucida Console", monospace',
+          fontSize: 'clamp(0.1rem, 0.38vw, 0.35rem)', // Even smaller for mobile fit
+          lineHeight: 1.0,
+          textAlign: 'left',
+          whiteSpace: 'pre',
+          letterSpacing: '-0.03em',
+          transform: phase === 'fading' ? 'scale(0.9)' : 'scale(1)',
+          transition: 'transform 0.8s ease-out, opacity 1.2s ease-out',
+          maxWidth: '98vw',
+          overflow: 'hidden',
+        }}
+      >
+        {FULL_ASCII.map((line, lineIndex) => (
+          <div key={lineIndex} style={{ height: line === '' ? '0.5em' : 'auto' }}>
+            {line.split('').map((char, charIndex) => {
+              const isRevealed = char === ' ' || revealedChars.has(`${lineIndex}-${charIndex}`);
+              return (
+                <span
+                  key={charIndex}
+                  style={{
+                    display: 'inline-block',
+                    opacity: isRevealed ? 1 : 0,
+                    color: getCharColor(lineIndex, charIndex),
+                    transform: isRevealed ? 'scale(1)' : 'scale(0)',
+                    transition: phase === 'rainbow' ? 'color 0.05s linear' : 'transform 0.05s ease-out, opacity 0.03s ease-out',
+                  }}
+                >
+                  {char}
+                </span>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// FM ASCII logo for main content area - using FM_BIG (Option B)
+function FmLogo({ show }: { show: boolean }) {
+  return (
+    <div
+      style={{
+        fontFamily: '"Courier New", Courier, "Lucida Console", monospace',
+        fontSize: 'clamp(0.6rem, 1.5vw, 1rem)', // Bigger for mobile
+        lineHeight: 1.0,
+        color: '#000000', // Pure black for code-like aesthetic
+        textAlign: 'center',
+        marginBottom: '8px',
+        opacity: show ? 1 : 0,
+        transition: 'opacity 0.5s ease-out',
+        whiteSpace: 'pre',
+        overflow: 'hidden',
+        maxWidth: '100%',
+      }}
+    >
+      {FM_BIG.map((line, i) => (
+        <div key={i}>{line}</div>
+      ))}
+    </div>
+  );
+}
+
+// Rotating wireframe cube with proper 3D projection
+function RotatingCube({ show, delay = 0 }: { show: boolean; delay?: number }) {
+  const [visible, setVisible] = useState(false);
+  const [angleY, setAngleY] = useState(0);
+  const [angleX, setAngleX] = useState(0);
+
+  useEffect(() => {
+    if (!show) {
+      setVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [show, delay]);
+
+  useEffect(() => {
+    if (!visible) return;
+    const interval = setInterval(() => {
+      setAngleY(a => (a + 1.5) % 360);
+      setAngleX(a => (a + 0.8) % 360);
+    }, 40);
+    return () => clearInterval(interval);
+  }, [visible]);
+
+  if (!visible) return null;
+
+  // 3D cube vertices (centered at origin, size 1)
+  const vertices3D = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], // back face
+    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],     // front face
+  ];
+
+  // Edges connecting vertices
+  const edges = [
+    [0, 1], [1, 2], [2, 3], [3, 0], // back face
+    [4, 5], [5, 6], [6, 7], [7, 4], // front face
+    [0, 4], [1, 5], [2, 6], [3, 7], // connecting edges
+  ];
+
+  // Rotation matrices
+  const radY = (angleY * Math.PI) / 180;
+  const radX = (angleX * Math.PI) / 180;
+  const cosY = Math.cos(radY), sinY = Math.sin(radY);
+  const cosX = Math.cos(radX), sinX = Math.sin(radX);
+
+  // Project 3D to 2D with rotation
+  const size = 28;
+  const cx = 50, cy = 50;
+  const project = (v: number[]) => {
+    // Rotate around Y axis
+    let x = v[0] * cosY - v[2] * sinY;
+    let z = v[0] * sinY + v[2] * cosY;
+    let y = v[1];
+    // Rotate around X axis
+    const y2 = y * cosX - z * sinX;
+    const z2 = y * sinX + z * cosX;
+    // Simple perspective projection
+    const scale = 2.5 / (3 + z2);
+    return { x: cx + x * size * scale, y: cy + y2 * size * scale, z: z2 };
+  };
+
+  const projected = vertices3D.map(v => project(v));
+
+  return (
+    <svg width="100" height="100" viewBox="0 0 100 100">
+      {edges.map(([i, j], idx) => (
+        <line
+          key={idx}
+          x1={projected[i].x}
+          y1={projected[i].y}
+          x2={projected[j].x}
+          y2={projected[j].y}
+          stroke="rgba(0,0,0,0.5)"
+          strokeWidth="1.5"
+        />
+      ))}
+    </svg>
+  );
+}
+
+// Rotating wireframe sphere with proper latitude/longitude lines
+function RotatingSphere({ show, delay = 0 }: { show: boolean; delay?: number }) {
+  const [visible, setVisible] = useState(false);
+  const [angle, setAngle] = useState(0);
+
+  useEffect(() => {
+    if (!show) {
+      setVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [show, delay]);
+
+  useEffect(() => {
+    if (!visible) return;
+    const interval = setInterval(() => {
+      setAngle(a => (a + 1.5) % 360);
+    }, 40);
+    return () => clearInterval(interval);
+  }, [visible]);
+
+  if (!visible) return null;
+
+  const rad = (angle * Math.PI) / 180;
+  const cx = 50, cy = 50;
+  const radius = 38;
+
+  // Generate longitude lines (vertical meridians) that rotate
+  const longitudes: string[] = [];
+  const numLongitudes = 6;
+  for (let i = 0; i < numLongitudes; i++) {
+    const baseAngle = (i * Math.PI) / numLongitudes + rad;
+    const rx = Math.abs(Math.cos(baseAngle)) * radius;
+    if (rx > 2) {
+      // Create ellipse path for longitude
+      const path = `M ${cx - rx} ${cy} A ${rx} ${radius} 0 0 1 ${cx + rx} ${cy} A ${rx} ${radius} 0 0 1 ${cx - rx} ${cy}`;
+      longitudes.push(path);
+    }
+  }
+
+  // Latitude lines (horizontal)
+  const latitudes = [0.3, 0.6, 0.9].map(t => {
+    const y = cy + (t - 0.5) * 2 * radius * 0.9;
+    const latRadius = Math.sqrt(1 - Math.pow((t - 0.5) * 2, 2)) * radius;
+    return { y: cy - radius * (t - 0.5) * 2, rx: latRadius };
+  });
+
+  return (
+    <svg width="100" height="100" viewBox="0 0 100 100">
+      {/* Outer circle (equator outline) */}
+      <circle cx={cx} cy={cy} r={radius} fill="none" stroke="rgba(0,0,0,0.5)" strokeWidth="1.5" />
+
+      {/* Latitude lines */}
+      {latitudes.map((lat, i) => (
+        <ellipse
+          key={`lat-${i}`}
+          cx={cx}
+          cy={lat.y}
+          rx={lat.rx}
+          ry={lat.rx * 0.25}
+          fill="none"
+          stroke="rgba(0,0,0,0.35)"
+          strokeWidth="1"
+        />
+      ))}
+
+      {/* Longitude lines (rotating meridians) */}
+      {longitudes.map((path, i) => (
+        <path
+          key={`long-${i}`}
+          d={path}
+          fill="none"
+          stroke="rgba(0,0,0,0.35)"
+          strokeWidth="1"
+        />
+      ))}
+
+      {/* Center equator ellipse */}
+      <ellipse cx={cx} cy={cy} rx={radius} ry={radius * 0.25} fill="none" stroke="rgba(0,0,0,0.4)" strokeWidth="1" />
+    </svg>
+  );
+}
+
+// Main Portfolio Page
+// Group Window Component (for Games/Accessories folders)
+function GroupWindow({
+  title,
+  onClose,
+  items,
+}: {
+  title: string;
+  onClose: () => void;
+  items: { label: string; icon: string; onClick: () => void }[];
+}) {
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const windowRef = useRef<HTMLDivElement>(null);
+
+  // Drag handlers (mouse + touch)
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!windowRef.current) return;
+    const rect = windowRef.current.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    setDragOffset({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    });
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      setPosition({
+        x: clientX - dragOffset.x,
+        y: clientY - dragOffset.y,
+      });
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragOffset]);
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        display: position ? 'block' : 'flex',
+        alignItems: position ? undefined : 'center',
+        justifyContent: position ? undefined : 'center',
+        zIndex: 150,
+      }}
+      onClick={onClose}
+    >
+      <div
+        ref={windowRef}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          backgroundColor: WIN31.windowBg,
+          border: '1px solid #000000',
+          minWidth: '280px',
+          ...(position ? {
+            position: 'absolute',
+            left: position.x,
+            top: position.y,
+          } : {}),
+        }}
+      >
+        {/* Titlebar - FLAT 1985 style */}
+        <div
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          style={{
+            backgroundColor: WIN31.titlebar,
+            padding: '2px 4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            userSelect: 'none',
+            borderBottom: '1px solid #000000',
+          }}
+        >
+          <span
+            style={{
+              color: WIN31.titlebarText,
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 'bold',
+            }}
+          >
+            {title}
+          </span>
+          <button
+            onClick={onClose}
+            style={{
+              width: '16px',
+              height: '14px',
+              backgroundColor: '#C0C0C0',
+              border: '1px solid #000000',
+              cursor: 'pointer',
+              fontSize: '10px',
+              fontWeight: 'bold',
+            }}
+          >
+            x
+          </button>
+        </div>
+
+        {/* Content - Icons grid */}
+        <div
+          style={{
+            padding: '20px',
+            backgroundColor: '#FFFFFF',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '20px',
+            justifyContent: 'center',
+            maxWidth: '400px',
+          }}
+        >
+          {items.map((item) => (
+            <div
+              key={item.label}
+              onClick={item.onClick}
+              className="group-window-item"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                cursor: 'pointer',
+                padding: '8px',
+                width: '64px',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#000080';
+                // Set all text to white
+                const allText = e.currentTarget.querySelectorAll('span, div');
+                allText.forEach(el => {
+                  (el as HTMLElement).style.color = '#FFFFFF';
+                });
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                // Reset text to black
+                const allText = e.currentTarget.querySelectorAll('span, div');
+                allText.forEach(el => {
+                  (el as HTMLElement).style.color = '#000000';
+                });
+              }}
+            >
+              <div style={{ fontSize: '24px', lineHeight: 1, color: '#000000' }}>{item.icon}</div>
+              <span
+                style={{
+                  fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                  fontSize: '11px',
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                  color: '#000000',
+                }}
+              >
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Placeholder Window for Projects/Lab (Coming Soon)
+function PlaceholderWindow({
+  title,
+  onClose,
+  message,
+}: {
+  title: string;
+  onClose: () => void;
+  message: string;
+}) {
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isClosing, setIsClosing] = useState(false);
+  const [isOpening, setIsOpening] = useState(true);
+  const windowRef = useRef<HTMLDivElement>(null);
+
+  // Opening animation
+  useEffect(() => {
+    const timer = setTimeout(() => setIsOpening(false), 150);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Drag handlers (mouse + touch)
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!windowRef.current) return;
+    const rect = windowRef.current.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    setDragOffset({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    });
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      setPosition({
+        x: clientX - dragOffset.x,
+        y: clientY - dragOffset.y,
+      });
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragOffset]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(onClose, 150);
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        display: position ? 'block' : 'flex',
+        alignItems: position ? undefined : 'center',
+        justifyContent: position ? undefined : 'center',
+        zIndex: 150,
+      }}
+      onClick={handleClose}
+    >
+      <div
+        ref={windowRef}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          backgroundColor: WIN31.windowBg,
+          border: '1px solid #000000',
+          minWidth: '300px',
+          transform: isOpening || isClosing ? 'scale(0.8)' : 'scale(1)',
+          opacity: isOpening || isClosing ? 0 : 1,
+          transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+          ...(position ? {
+            position: 'absolute',
+            left: position.x,
+            top: position.y,
+          } : {}),
+        }}
+      >
+        {/* Titlebar - FLAT 1985 style */}
+        <div
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          style={{
+            backgroundColor: WIN31.titlebar,
+            padding: '2px 4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            userSelect: 'none',
+            borderBottom: '1px solid #000000',
+          }}
+        >
+          <span
+            style={{
+              color: WIN31.titlebarText,
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 'bold',
+            }}
+          >
+            {title}
+          </span>
+          <button
+            onClick={handleClose}
+            style={{
+              width: '16px',
+              height: '14px',
+              backgroundColor: '#C0C0C0',
+              border: '1px solid #000000',
+              cursor: 'pointer',
+              fontSize: '10px',
+              fontWeight: 'bold',
+            }}
+          >
+            x
+          </button>
+        </div>
+
+        {/* Content */}
+        <div
+          style={{
+            padding: '40px 30px',
+            backgroundColor: '#FFFFFF',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+          }}
+        >
+          {/* Folder icon */}
+          <div style={{ fontSize: '32px' }}>📁</div>
+          <span
+            style={{
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              fontSize: '12px',
+              color: '#808080',
+              textAlign: 'center',
+            }}
+          >
+            {message}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Color scheme type
+type ColorScheme = {
+  titlebar: string;
+  titleText: string;
+  menu: string;
+  status: string;
+  background: string;
+};
+
+// Color palettes for random mixing - separated by use case
+const TITLEBAR_COLORS = [
+  '#000080', '#800080', '#008000', '#000000', '#8B0000', '#4B0082',
+  '#008080', '#800000', '#2F4F4F', '#191970', '#483D8B', '#556B2F',
+];
+
+const BACKGROUND_COLORS = [
+  '#008080', '#000080', '#800080', '#2F4F4F', '#191970', '#483D8B',
+  '#556B2F', '#4B0082', '#008000', '#800000', '#2E8B57', '#5F9EA0',
+];
+
+const MENU_COLORS = [
+  '#C0C0C0', '#D3D3D3', '#A9A9A9', '#DCDCDC', '#E0E0E0', '#B0B0B0',
+  '#C8C8C8', '#BEBEBE', '#D8D8D8', '#CCCCCC',
+];
+
+// Generate random color scheme with proper contrast
+function generateRandomScheme(): ColorScheme {
+  const pickTitlebar = () => TITLEBAR_COLORS[Math.floor(Math.random() * TITLEBAR_COLORS.length)];
+  const pickBackground = () => BACKGROUND_COLORS[Math.floor(Math.random() * BACKGROUND_COLORS.length)];
+  const pickMenu = () => MENU_COLORS[Math.floor(Math.random() * MENU_COLORS.length)];
+
+  const titlebar = pickTitlebar();
+  // Choose contrasting text (white or black based on titlebar brightness)
+  const r = parseInt(titlebar.slice(1, 3), 16);
+  const g = parseInt(titlebar.slice(3, 5), 16);
+  const b = parseInt(titlebar.slice(5, 7), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  const titleText = brightness > 128 ? '#000000' : '#FFFFFF';
+
+  return {
+    titlebar,
+    titleText,
+    menu: pickMenu(),
+    status: pickMenu(),
+    background: pickBackground(),
+  };
+}
+
+// Initial default scheme
+const DEFAULT_SCHEME: ColorScheme = {
+  titlebar: '#000080',
+  titleText: '#FFFFFF',
+  menu: '#C0C0C0',
+  status: '#C0C0C0',
+  background: '#008080',
+};
+
+// App components map
+const APP_COMPONENTS: Record<string, React.ComponentType> = {
+  clock: Clock,
+  calculator: Calculator,
+  notepad: Notepad,
+  minesweeper: Minesweeper,
+  solitaire: Solitaire,
+  paint: Paint,
+};
+
+// App window sizes
+const APP_SIZES: Record<string, { width: number; height: number }> = {
+  clock: { width: 220, height: 280 },
+  calculator: { width: 200, height: 320 },
+  notepad: { width: 450, height: 350 },
+  minesweeper: { width: 480, height: 380 },
+  solitaire: { width: 520, height: 450 },
+  paint: { width: 520, height: 420 },
+};
+
 export default function PortfolioPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [showFrame, setShowFrame] = useState(false);
-  const [showName, setShowName] = useState(false);
-  const [showTagline, setShowTagline] = useState(false);
-  const [showWork, setShowWork] = useState(false);
-  const [showLab, setShowLab] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [showBackLink, setShowBackLink] = useState(false);
-  const [showLangSwitcher, setShowLangSwitcher] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
-  const [bgColor, setBgColor] = useState<string>(COLORS.secondary);
   const [language, setLanguage] = useState<Language>('ES');
-  const [backLinkHovered, setBackLinkHovered] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<MenuType>(null);
+  const [showLangSubmenu, setShowLangSubmenu] = useState(false);
+  const [showBigAscii, setShowBigAscii] = useState(true);
+  const [showWindow, setShowWindow] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const [scrambleKey, setScrambleKey] = useState(0);
-  const [workHovered, setWorkHovered] = useState(false);
-  const [labHovered, setLabHovered] = useState(false);
-  const [aboutHovered, setAboutHovered] = useState(false);
-  const [taglineScrambled, setTaglineScrambled] = useState('');
-  const [navScrambled, setNavScrambled] = useState({ work: '', lab: '', about: '' });
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
+  const [showAppsGroup, setShowAppsGroup] = useState(false);
+  const [activeSection, setActiveSection] = useState<'projects' | 'lab' | null>(null);
+  const [isShuttingDown, setIsShuttingDown] = useState(false);
+  const [shutdownText, setShutdownText] = useState('');
+  const [shutdownDots, setShutdownDots] = useState('');
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(DEFAULT_SCHEME);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Exit phase states for staggered animation
-  // 0 = not exiting, 1 = back link, 2 = lang switcher, 3 = bottom nav (about),
-  // 4 = bottom nav (lab), 5 = bottom nav (work), 6 = tagline, 7 = name, 8 = frame, 9 = bg
-  const [exitPhase, setExitPhase] = useState(0);
+  // Window manager for apps
+  const windowManager = useWindowManager();
 
-  // Current text based on language
-  const currentText = portfolioText[language];
+  const t = portfolioText[language];
+  const [showRest, setShowRest] = useState(false);
 
-  // Name uses scramble reveal (matches main superself style)
-  const nameRevealed = useScrambleReveal('flavio manyari', showName, 30, 0, 120);
+  // Current color scheme
+  const currentScheme = colorScheme;
 
-  // Tagline uses scramble reveal with glitchy feel
-  const taglineRevealed = useScrambleReveal(currentText.tagline, showTagline, 35, scrambleKey, 25);
-
-  // Scramble dissolves for exit
-  const nameDissolve = useScrambleDissolve('flavio manyari', exitPhase >= 7, 40);
-
-  // Display the appropriate text based on exit state
-  const name = exitPhase >= 7 ? nameDissolve : nameRevealed;
-
-  // Calculate frame edge proximity for pulse effect
-  const edgeProximity = useMemo(() => {
-    const threshold = 0.15; // 15% from edge triggers
-    const xEdge = Math.min(mousePos.x, 1 - mousePos.x);
-    const yEdge = Math.min(mousePos.y, 1 - mousePos.y);
-    const closest = Math.min(xEdge, yEdge);
-    return closest < threshold ? 1 - (closest / threshold) : 0;
-  }, [mousePos]);
-
-  // Handle language change with in-place scramble effect (no fade out/in)
-  const handleLanguageChange = (newLang: Language) => {
-    if (newLang === language || exitPhase > 0) return;
-    setLanguage(newLang);
-    setScrambleKey(k => k + 1);  // Trigger re-scramble without hiding
+  // Generate random color scheme
+  const cycleColorScheme = () => {
+    setColorScheme(generateRandomScheme());
   };
+
+  // Open app helper
+  const openApp = (appId: string, title: string) => {
+    windowManager.openWindow(appId, title);
+  };
+
+  // Status bar text scrambles on language change
+  const readyLabel = useScrambleReveal(t.ready, showRest, 30, scrambleKey, 15);
+
+  // Handle language change
+  const handleLanguageChange = (newLang: Language) => {
+    setLanguage(newLang);
+    setScrambleKey((k) => k + 1);
+    setActiveMenu(null);
+    setShowLangSubmenu(false);
+    setShowLangDropdown(false);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setActiveMenu(null);
+        setShowLangSubmenu(false);
+      }
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+        setShowLangDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Callback when big ASCII intro completes
+  const handleAsciiComplete = useCallback(() => {
+    setShowBigAscii(false);
+    // Window appears instantly, then content fades in
+    setShowWindow(true);
+    setTimeout(() => setShowContent(true), 100);
+    setTimeout(() => setShowRest(true), 800);
+  }, []);
+
+  // Initial mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Handle exit - dramatic shutdown animation before navigating to SUPERSELF.ONLINE
+  const handleExit = useCallback(() => {
+    if (isShuttingDown) return; // Prevent double-click
+    setIsShuttingDown(true);
+    setShutdownText('');
+    setShutdownDots('');
+
+    const text = t.shutdown;
+    let charIndex = 0;
+
+    // Type out shutdown text character by character
+    const typeInterval = setInterval(() => {
+      if (charIndex < text.length) {
+        setShutdownText(text.slice(0, charIndex + 1));
+        charIndex++;
+      } else {
+        clearInterval(typeInterval);
+
+        // Animate dots: . .. ... . .. ...
+        let dotCount = 0;
+        let cycles = 0;
+        const dotsInterval = setInterval(() => {
+          dotCount++;
+          if (dotCount > 3) {
+            dotCount = 1;
+            cycles++;
+          }
+          setShutdownDots('.'.repeat(dotCount));
+          if (cycles >= 2 && dotCount === 3) {
+            clearInterval(dotsInterval);
+            // Navigate after animation completes
+            setTimeout(() => {
+              router.push('/?skip=1');
+            }, 500);
+          }
+        }, 350);
+      }
+    }, 60);
+  }, [isShuttingDown, t.shutdown, router]);
 
   const handleAboutClose = useCallback(() => {
     setAboutOpen(false);
   }, []);
 
-  // Scramble characters for effects
-  const scrambleChars = language === 'JP' ? SCRAMBLE_CHARS.japanese : SCRAMBLE_CHARS.base;
-
-  // Language change scramble effect for tagline and nav items
-  useEffect(() => {
-    if (scrambleKey === 0) return; // Skip initial mount
-
-    const tagline = currentText.tagline;
-    const work = currentText.work;
-    const lab = currentText.lab;
-    const about = currentText.about;
-
-    let frame = 0;
-    const maxFrames = 18;
-
-    const scrambleText = (text: string) => {
-      const locked = Math.floor((frame / maxFrames) * text.length);
-      let result = '';
-      for (let i = 0; i < text.length; i++) {
-        if (i < locked) {
-          result += text[i];
-        } else if (text[i] === ' ') {
-          result += ' ';
-        } else {
-          result += scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-        }
-      }
-      return result;
-    };
-
-    const interval = setInterval(() => {
-      frame++;
-      setTaglineScrambled(scrambleText(tagline));
-      setNavScrambled({
-        work: scrambleText(work),
-        lab: scrambleText(lab),
-        about: scrambleText(about),
-      });
-
-      if (frame >= maxFrames) {
-        setTaglineScrambled('');
-        setNavScrambled({ work: '', lab: '', about: '' });
-        clearInterval(interval);
-      }
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, [scrambleKey, currentText, scrambleChars]);
-
-  useEffect(() => {
-    setMounted(true);
-
-    // Cinematic entrance timing (800-1000ms gaps)
-    // 0ms → Frame starts (pulse-ready state)
-    // 300ms → Frame fades in
-    const frameTimer = setTimeout(() => setShowFrame(true), 300);
-
-    // 1100ms → Name scramble begins (90ms per frame - cinematic)
-    const nameTimer = setTimeout(() => setShowName(true), 1100);
-
-    // 2100ms → Tagline scramble begins (90ms per frame)
-    const taglineTimer = setTimeout(() => setShowTagline(true), 2100);
-
-    // 3000ms → "work" fades in
-    const workTimer = setTimeout(() => setShowWork(true), 3000);
-
-    // 3200ms → "lab" fades in
-    const labTimer = setTimeout(() => setShowLab(true), 3200);
-
-    // 3400ms → "about" fades in
-    const aboutTimer = setTimeout(() => setShowAbout(true), 3400);
-
-    // 3800ms → Back link fades in
-    const backLinkTimer = setTimeout(() => setShowBackLink(true), 3800);
-
-    // 4200ms → Language switcher fades in
-    const langTimer = setTimeout(() => setShowLangSwitcher(true), 4200);
-
-    return () => {
-      clearTimeout(frameTimer);
-      clearTimeout(nameTimer);
-      clearTimeout(taglineTimer);
-      clearTimeout(workTimer);
-      clearTimeout(labTimer);
-      clearTimeout(aboutTimer);
-      clearTimeout(backLinkTimer);
-      clearTimeout(langTimer);
-    };
-  }, []);
-
-  // Fast exit sequence (~1.4s total)
-  const handleExitToSuperself = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    if (exitPhase > 0) return; // Prevent double-clicks
-
-    // Phase 1: Back link fades (0ms)
-    setExitPhase(1);
-
-    // Phase 2: Language switcher fades (100ms)
-    setTimeout(() => setExitPhase(2), 100);
-
-    // Phase 3: Bottom nav fades (about first - reverse wave) (200ms)
-    setTimeout(() => setExitPhase(3), 200);
-
-    // Phase 4: Bottom nav (lab) (300ms)
-    setTimeout(() => setExitPhase(4), 300);
-
-    // Phase 5: Bottom nav (work) (400ms)
-    setTimeout(() => setExitPhase(5), 400);
-
-    // Phase 6: Tagline scramble-dissolves (350ms)
-    setTimeout(() => setExitPhase(6), 350);
-
-    // Phase 7: Name scramble-dissolves (550ms)
-    setTimeout(() => setExitPhase(7), 550);
-
-    // Phase 8: Frame fades (800ms)
-    setTimeout(() => setExitPhase(8), 800);
-
-    // Phase 9: Background transitions to blue (1000ms)
-    setTimeout(() => {
-      setExitPhase(9);
-      setBgColor(COLORS.primary);
-    }, 1000);
-
-    // Navigate after bg transition completes (1400ms)
-    setTimeout(() => {
-      router.push('/?skip=1');
-    }, 1400);
-  };
-
-  // Track mouse for subtle effects
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePos({
-        x: (e.clientX - rect.left) / rect.width,
-        y: (e.clientY - rect.top) / rect.height,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  // MS-DOS Executive file listing - organized: ABOUT first, then folders, then apps folder, then exit link
+  const portfolioFiles: FileItem[] = [
+    { name: 'ABOUT', extension: 'TXT', type: 'txt', action: () => setAboutOpen(true) },
+    { name: 'PROJECTS', extension: 'DIR', type: 'dir', action: () => setActiveSection('projects') },
+    { name: 'LAB', extension: 'DIR', type: 'dir', action: () => setActiveSection('lab') },
+    { name: 'APPS', extension: 'DIR', type: 'dir', action: () => setShowAppsGroup(true) },
+    { name: 'SUPERSELF', extension: 'ONLINE', type: 'lnk', action: handleExit },
+  ];
 
   if (!mounted) return null;
 
-  // Subtle gradient shift based on mouse position
-  const gradientAngle = 135 + (mousePos.x - 0.5) * 30;
-
   return (
     <div
-      ref={containerRef}
       style={{
         minHeight: '100dvh',
-        backgroundColor: bgColor,
-        color: COLORS.primary,
-        fontFamily: WIN_FONT,
+        backgroundColor: currentScheme.background,
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        transition: 'background-color 0.5s ease-in-out',
+        justifyContent: 'center',
+        padding: '20px',
+        transition: 'background-color 0.3s ease',
       }}
     >
-      {/* Subtle gradient overlay that follows mouse */}
+      {/* Big ASCII Intro */}
+      <BigAsciiIntro show={showBigAscii} onComplete={handleAsciiComplete} />
+
+      {/* Wireframe 3D Scene on desktop background */}
+      <WireframeScene show={showWindow && !showBigAscii} />
+
+      {/* Main Window - FLAT 1985 style */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(${gradientAngle}deg,
-            rgba(0, 0, 255, 0.03) 0%,
-            transparent 50%,
-            rgba(0, 0, 255, 0.02) 100%)`,
-          pointerEvents: 'none',
-          opacity: exitPhase >= 8 ? 0 : 1,
-          transition: 'opacity 0.3s ease-in, background 0.3s ease-out',
-        }}
-      />
-
-      {/* ASCII CLI-style corner borders */}
-      {/* Top-left corner with integrated back link */}
-      <div
-        style={{
-          position: 'absolute',
-          top: FRAME_INSETS.frame,
-          left: FRAME_INSETS.frame,
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-          lineHeight: 1.2,
-          color: `rgba(0, 0, 255, 0.5)`,
-          opacity: exitPhase >= 8 ? 0 : (showFrame ? 1 : 0),
-          transition: 'opacity 0.4s ease-out',
+          backgroundColor: MSDOS.white,
+          border: '1px solid #000000',
+          width: '100%',
+          maxWidth: '700px',
+          opacity: showWindow ? 1 : 0,
+          visibility: showWindow ? 'visible' : 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span>╔══</span>
-          <a
-            href="/?skip=1"
-            onClick={handleExitToSuperself}
-            onMouseEnter={() => exitPhase === 0 && setBackLinkHovered(true)}
-            onMouseLeave={() => setBackLinkHovered(false)}
-            onTouchStart={() => exitPhase === 0 && setBackLinkHovered(true)}
-            onTouchEnd={() => setBackLinkHovered(false)}
-            style={{
-              marginLeft: '1em',
-              fontSize: 'clamp(0.75rem, 1.4vw, 0.9rem)',
-              letterSpacing: '0.1em',
-              color: backLinkHovered ? COLORS.secondary : COLORS.primary,
-              textDecoration: 'none',
-              backgroundColor: backLinkHovered ? COLORS.primary : 'transparent',
-              opacity: exitPhase >= 1 ? 0 : (showBackLink ? (backLinkHovered ? 1 : 0.6) : 0),
-              padding: '0.1em 0.3em',
-              transition: 'opacity 0.25s ease-in, background-color 0.1s, color 0.1s',
-              pointerEvents: exitPhase >= 1 ? 'none' : 'auto',
-            }}
-          >
-            ← superself{backLinkHovered && <span className="blink">_</span>}
-          </a>
-        </div>
-        <div>║</div>
-      </div>
-
-      {/* Top-right corner */}
-      <pre
-        style={{
-          position: 'absolute',
-          top: FRAME_INSETS.frame,
-          right: FRAME_INSETS.frame,
-          margin: 0,
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-          lineHeight: 1.2,
-          color: `rgba(0, 0, 255, 0.5)`,
-          textAlign: 'right',
-          pointerEvents: 'none',
-          opacity: exitPhase >= 8 ? 0 : (showFrame ? 1 : 0),
-          transition: 'opacity 0.4s ease-out',
-        }}
-      >{`══╗\n  ║`}</pre>
-
-      {/* Bottom-left corner */}
-      <pre
-        style={{
-          position: 'absolute',
-          bottom: FRAME_INSETS.frameBottom,
-          left: FRAME_INSETS.frame,
-          margin: 0,
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-          lineHeight: 1.2,
-          color: `rgba(0, 0, 255, 0.5)`,
-          pointerEvents: 'none',
-          opacity: exitPhase >= 8 ? 0 : (showFrame ? 1 : 0),
-          transition: 'opacity 0.4s ease-out',
-        }}
-      >{`║\n╚══`}</pre>
-
-      {/* Bottom-right corner */}
-      <pre
-        style={{
-          position: 'absolute',
-          bottom: FRAME_INSETS.frameBottom,
-          right: FRAME_INSETS.frame,
-          margin: 0,
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-          lineHeight: 1.2,
-          color: `rgba(0, 0, 255, 0.5)`,
-          textAlign: 'right',
-          pointerEvents: 'none',
-          opacity: exitPhase >= 8 ? 0 : (showFrame ? 1 : 0),
-          transition: 'opacity 0.4s ease-out',
-        }}
-      >{`  ║\n══╝`}</pre>
-
-      {/* Main content */}
-      <main
-        style={{
-          textAlign: 'center',
-          zIndex: 1,
-        }}
-      >
-        {/* Name - pixelated VT323 terminal style */}
-        <h1
+        {/* Titlebar - Uses color scheme */}
+        <div
           style={{
-            fontFamily: WIN_FONT,
-            fontSize: 'clamp(2.5rem, 9vw, 6rem)',
-            fontWeight: 400,
-            letterSpacing: '0.08em',
-            marginBottom: '0.4em',
-            color: COLORS.primary,
-            textTransform: 'lowercase',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            opacity: exitPhase >= 7 ? 0 : (showName ? 1 : 0),
-            transform: exitPhase >= 7 ? 'scale(0.98)' : 'scale(1)',
-            transition: 'opacity 0.25s ease-in, transform 0.3s ease-in',
+            backgroundColor: currentScheme.titlebar,
+            color: currentScheme.titleText,
+            borderBottom: '2px solid #000000',
+            padding: '6px 8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            transition: 'background-color 0.3s ease',
           }}
         >
-          {name || '\u00A0'}
-        </h1>
-
-        {/* Tagline - scramble reveal */}
-        <p
-          style={{
-            fontFamily: WIN_FONT,
-            fontSize: 'clamp(1rem, 2.5vw, 1.4rem)',
-            fontWeight: 400,
-            letterSpacing: '0.3em',
-            color: COLORS.primary,
-            textTransform: 'lowercase',
-            opacity: exitPhase >= 6 ? 0 : (showTagline ? 0.7 : 0),
-            transform: exitPhase >= 6 ? 'scale(0.98)' : 'scale(1)',
-            transition: 'opacity 0.3s ease-in, transform 0.3s ease-in',
-          }}
-        >
-          {taglineScrambled || taglineRevealed || '\u00A0'}
-        </p>
-      </main>
-
-      {/* Bottom nav */}
-      <nav
-        style={{
-          position: 'absolute',
-          bottom: 'clamp(50px, 8vw, 90px)',
-          display: 'flex',
-          gap: 'clamp(1.5rem, 4vw, 3rem)',
-          fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
-          letterSpacing: '0.15em',
-          textTransform: 'lowercase',
-        }}
-      >
-        <span
-          className={showWork && exitPhase < 5 ? 'blink-in' : ''}
-          onMouseEnter={() => exitPhase === 0 && setWorkHovered(true)}
-          onMouseLeave={() => setWorkHovered(false)}
-          style={{
-            cursor: 'pointer',
-            opacity: exitPhase >= 5 ? 0 : (showWork ? 1 : 0),
-            backgroundColor: workHovered ? COLORS.primary : 'transparent',
-            color: workHovered ? COLORS.secondary : COLORS.primary,
-            padding: '0.3em 0.6em',
-            transition: 'background-color 0.1s, color 0.1s',
-          }}
-        >
-          {navScrambled.work || currentText.work}
-          <span
-            className={workHovered ? 'blink' : ''}
-            style={{
-              visibility: workHovered ? 'visible' : 'hidden',
-              display: 'inline-block',
-              width: '0.6em',
-            }}
-          >_</span>
-        </span>
-        <span
-          className={showLab && exitPhase < 4 ? 'blink-in' : ''}
-          onMouseEnter={() => exitPhase === 0 && setLabHovered(true)}
-          onMouseLeave={() => setLabHovered(false)}
-          style={{
-            cursor: 'pointer',
-            opacity: exitPhase >= 4 ? 0 : (showLab ? 1 : 0),
-            backgroundColor: labHovered ? COLORS.primary : 'transparent',
-            color: labHovered ? COLORS.secondary : COLORS.primary,
-            padding: '0.3em 0.6em',
-            transition: 'background-color 0.1s, color 0.1s',
-          }}
-        >
-          {navScrambled.lab || currentText.lab}
-          <span
-            className={labHovered ? 'blink' : ''}
-            style={{
-              visibility: labHovered ? 'visible' : 'hidden',
-              display: 'inline-block',
-              width: '0.6em',
-            }}
-          >_</span>
-        </span>
-        <span
-          onClick={() => setAboutOpen(true)}
-          className={showAbout && exitPhase < 3 ? 'blink-in' : ''}
-          onMouseEnter={() => exitPhase === 0 && setAboutHovered(true)}
-          onMouseLeave={() => setAboutHovered(false)}
-          style={{
-            cursor: 'pointer',
-            opacity: exitPhase >= 3 ? 0 : (showAbout ? 1 : 0),
-            backgroundColor: aboutHovered ? COLORS.primary : 'transparent',
-            color: aboutHovered ? COLORS.secondary : COLORS.primary,
-            padding: '0.3em 0.6em',
-            transition: 'background-color 0.1s, color 0.1s',
-          }}
-        >
-          {navScrambled.about || currentText.about}
-          <span
-            className={aboutHovered ? 'blink' : ''}
-            style={{
-              visibility: aboutHovered ? 'visible' : 'hidden',
-              display: 'inline-block',
-              width: '0.6em',
-            }}
-          >_</span>
-        </span>
-      </nav>
-
-
-      {/* Language switcher - bottom-left, outside frame, vertical (superself style) */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 'clamp(30px, 5vw, 60px)',
-          left: 'clamp(8px, 2vw, 18px)',
-          display: 'flex',
-          flexDirection: 'column-reverse',
-          gap: 'clamp(16px, 4vw, 24px)',
-          fontFamily: WIN_FONT,
-          fontSize: 'clamp(1rem, 2.5vw, 1.15rem)',
-          opacity: exitPhase >= 2 ? 0 : (showLangSwitcher ? 1 : 0),
-          transition: 'opacity 0.2s ease-in',
-          pointerEvents: exitPhase >= 2 ? 'none' : 'auto',
-          zIndex: 50,
-        }}
-      >
-        {(['ES', 'EN', 'JP'] as Language[]).map((lang) => (
-          <div
-            key={lang}
-            onClick={() => handleLanguageChange(lang)}
-            style={{
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              writingMode: 'vertical-lr',
-              transform: 'rotate(180deg)',
-              color: language === lang ? COLORS.primary : `rgba(0, 0, 255, 0.4)`,
-              letterSpacing: '0.04em',
-              transition: 'color 0.25s ease',
-            }}
-          >
-            <span>{language === lang ? '■' : '□'}</span>
-            <span>{lang}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Window icon - simple ASCII style */}
+            <span style={{
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: currentScheme.titleText,
+            }}>
+              [=]
+            </span>
+            <span
+              style={{
+                color: currentScheme.titleText,
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              Flavio Manyari
+            </span>
           </div>
-        ))}
+          <div style={{ display: 'flex', gap: '3px' }}>
+            <ControlButton icon="−" disabled />
+            <ControlButton icon="□" disabled />
+            <ControlButton icon="×" disabled />
+          </div>
+        </div>
+
+        {/* Menu Bar - Uses color scheme */}
+        <div
+          ref={menuRef}
+          style={{
+            backgroundColor: currentScheme.menu,
+            borderBottom: '2px solid #000000',
+            padding: '4px 0',
+            display: 'flex',
+            position: 'relative',
+            transition: 'background-color 0.3s ease',
+          }}
+        >
+          {/* File Menu */}
+          <div style={{ position: 'relative' }}>
+            <div
+              onClick={() => setActiveMenu(activeMenu === 'file' ? null : 'file')}
+              style={{
+                padding: '2px 10px',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '12px',
+                cursor: 'pointer',
+                ...(activeMenu === 'file' ? MSDOS.menuSelected : {}),
+              }}
+            >
+              <span style={{ textDecoration: 'underline' }}>{t.file[0]}</span>{t.file.slice(1)}
+            </div>
+            {activeMenu === 'file' && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, backgroundColor: MSDOS.white, border: '1px solid #000', zIndex: 100 }}>
+                <MenuItem label={t.restore} disabled />
+                <MenuItem label={t.move} disabled />
+                <MenuItem label={t.size} disabled />
+                <MenuItem label={t.minimize} disabled />
+                <MenuItem label={t.maximize} disabled />
+                <MenuSeparator />
+                <MenuItem label={t.close} shortcut="Alt+F4" disabled />
+                <MenuSeparator />
+                <MenuItem label={t.switchTo} shortcut="Ctrl+Esc" disabled />
+              </div>
+            )}
+          </div>
+
+          {/* Options Menu */}
+          <div style={{ position: 'relative' }}>
+            <div
+              onClick={() => {
+                setActiveMenu(activeMenu === 'options' ? null : 'options');
+                setShowLangSubmenu(false);
+              }}
+              style={{
+                padding: '2px 10px',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '12px',
+                cursor: 'pointer',
+                ...(activeMenu === 'options' ? MSDOS.menuSelected : {}),
+              }}
+            >
+              <span style={{ textDecoration: 'underline' }}>{t.options[0]}</span>{t.options.slice(1)}
+            </div>
+            {activeMenu === 'options' && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, backgroundColor: MSDOS.white, border: '1px solid #000', zIndex: 100 }}>
+                <div
+                  onMouseEnter={() => setShowLangSubmenu(true)}
+                  style={{ position: 'relative' }}
+                >
+                  <MenuItem label={t.language} hasSubmenu />
+                  {showLangSubmenu && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '100%',
+                        backgroundColor: MSDOS.white,
+                        border: '1px solid #000',
+                      }}
+                    >
+                      <MenuItem
+                        label={`${language === 'ES' ? '> ' : '  '}Espanol`}
+                        onClick={() => handleLanguageChange('ES')}
+                      />
+                      <MenuItem
+                        label={`${language === 'EN' ? '> ' : '  '}English`}
+                        onClick={() => handleLanguageChange('EN')}
+                      />
+                      <MenuItem
+                        label={`${language === 'JP' ? '> ' : '  '}日本語`}
+                        onClick={() => handleLanguageChange('JP')}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Window Menu */}
+          <div style={{ position: 'relative' }}>
+            <div
+              onClick={() => setActiveMenu(activeMenu === 'window' ? null : 'window')}
+              style={{
+                padding: '2px 10px',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '12px',
+                cursor: 'pointer',
+                ...(activeMenu === 'window' ? MSDOS.menuSelected : {}),
+              }}
+            >
+              <span style={{ textDecoration: 'underline' }}>{t.window[0]}</span>{t.window.slice(1)}
+            </div>
+            {activeMenu === 'window' && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, backgroundColor: MSDOS.white, border: '1px solid #000', zIndex: 100 }}>
+                <MenuItem label={t.tile} />
+                <MenuItem label={t.cascade} />
+              </div>
+            )}
+          </div>
+
+          {/* Help Menu */}
+          <div style={{ position: 'relative' }}>
+            <div
+              onClick={() => setActiveMenu(activeMenu === 'help' ? null : 'help')}
+              style={{
+                padding: '2px 10px',
+                fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                fontSize: '12px',
+                cursor: 'pointer',
+                ...(activeMenu === 'help' ? MSDOS.menuSelected : {}),
+              }}
+            >
+              <span style={{ textDecoration: 'underline' }}>{t.help[0]}</span>{t.help.slice(1)}
+            </div>
+            {activeMenu === 'help' && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, backgroundColor: MSDOS.white, border: '1px solid #000', zIndex: 100 }}>
+                <MenuItem
+                  label={t.aboutMenu}
+                  onClick={() => {
+                    setAboutOpen(true);
+                    setActiveMenu(null);
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Content Area - No sidebars (MS-DOS Executive style) */}
+        <div
+          style={{
+            backgroundColor: MSDOS.white,
+            minHeight: '400px',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden', // Keep app windows inside
+          }}
+        >
+          {/* Main Content - File Listing */}
+          <div
+            style={{
+              flex: 1,
+              padding: '8px 0',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+            }}
+          >
+            {/* FM Logo with rotating wireframe shapes */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 'clamp(12px, 3vw, 24px)',
+              padding: '8px',
+            }}>
+              <RotatingSphere show={showContent} delay={200} />
+              <FmLogo show={showContent} />
+              <RotatingCube show={showContent} delay={400} />
+            </div>
+
+            {/* Desktop Icons - ASCII style */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: 'clamp(16px, 4vw, 40px)',
+                padding: '16px',
+                opacity: showRest ? 1 : 0,
+              }}
+            >
+              <DesktopIcon
+                label="ABOUT"
+                onClick={() => setAboutOpen(true)}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[?]</span>}
+              />
+              <DesktopIcon
+                label="PROJECTS"
+                onClick={() => setActiveSection('projects')}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[ ]</span>}
+              />
+              <DesktopIcon
+                label="LAB"
+                onClick={() => setActiveSection('lab')}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>&lt;/&gt;</span>}
+              />
+              <DesktopIcon
+                label="APPS"
+                onClick={() => setShowAppsGroup(true)}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>:::</span>}
+              />
+              <DesktopIcon
+                label="SUPERSELF"
+                onClick={handleExit}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>S_</span>}
+              />
+              {/* Color scheme button as an icon */}
+              <DesktopIcon
+                label="COLORS"
+                onClick={cycleColorScheme}
+                icon={<span style={{ fontFamily: 'monospace', fontSize: '22px' }}>[@]</span>}
+              />
+            </div>
+
+            {/* App Windows - rendered INSIDE the content area */}
+            {Array.from(windowManager.windows.values()).map((win) => {
+              const AppComponent = APP_COMPONENTS[win.id];
+              if (!AppComponent || !win.isOpen) return null;
+
+              const appSize = APP_SIZES[win.id] || { width: 400, height: 300 };
+
+              return (
+                <Win31Window
+                  key={win.id}
+                  id={win.id}
+                  title={win.title}
+                  isOpen={win.isOpen}
+                  isMinimized={win.isMinimized}
+                  isMaximized={win.isMaximized}
+                  position={win.position}
+                  size={appSize}
+                  zIndex={win.zIndex + 50}
+                  onClose={() => windowManager.closeWindow(win.id)}
+                  onMinimize={() => windowManager.minimizeWindow(win.id)}
+                  onMaximize={() => windowManager.maximizeWindow(win.id)}
+                  onRestore={() => windowManager.restoreWindow(win.id)}
+                  onFocus={() => windowManager.focusWindow(win.id)}
+                  onMove={(pos) => windowManager.moveWindow(win.id, pos)}
+                >
+                  <AppComponent />
+                </Win31Window>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Status Bar - Uses color scheme */}
+        <div
+          style={{
+            backgroundColor: currentScheme.status,
+            color: '#000000',
+            padding: '2px 8px',
+            border: '1px solid #000000',
+            fontFamily: '"MS Sans Serif", Arial, sans-serif',
+            fontSize: '11px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            transition: 'background-color 0.3s ease',
+          }}
+        >
+          <span style={{ fontFamily: 'monospace' }}>A:\PORTFOLIO\</span>
+          {/* Language Dropdown */}
+          <div ref={langDropdownRef} style={{ position: 'relative' }}>
+            <div
+              onClick={() => setShowLangDropdown(!showLangDropdown)}
+              style={{
+                padding: '1px 6px',
+                cursor: 'pointer',
+                backgroundColor: showLangDropdown ? MSDOS.selectionBg : MSDOS.white,
+                color: showLangDropdown ? MSDOS.textInverse : MSDOS.black,
+                border: '1px solid #000',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <span>{language}</span>
+              <span style={{ fontSize: '8px' }}>▼</span>
+            </div>
+            {showLangDropdown && (
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '100%',
+                  right: 0,
+                  marginBottom: '2px',
+                  backgroundColor: MSDOS.white,
+                  border: '1px solid #000',
+                  zIndex: 100,
+                }}
+              >
+                {(['JP', 'EN', 'ES'] as Language[])
+                  .filter((lang) => lang !== language)
+                  .map((lang) => (
+                    <div
+                      key={lang}
+                      onClick={() => handleLanguageChange(lang)}
+                      style={{
+                        padding: '4px 12px',
+                        cursor: 'pointer',
+                        fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                        fontSize: '11px',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = MSDOS.blue;
+                        e.currentTarget.style.color = MSDOS.white;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = MSDOS.white;
+                        e.currentTarget.style.color = MSDOS.black;
+                      }}
+                    >
+                      {lang}
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* About Section Overlay */}
-      <AboutSection
-        isOpen={aboutOpen}
-        onClose={handleAboutClose}
-        language={language}
-      />
+      {/* Shutdown Overlay */}
+      {isShuttingDown && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: '#000080',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: '"MS Sans Serif", Arial, sans-serif',
+              color: '#FFFFFF',
+              fontSize: 'clamp(1.4rem, 4vw, 2rem)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+            }}
+          >
+            {shutdownText}{shutdownDots}<span className="blink">_</span>
+          </div>
+        </div>
+      )}
+
+      {/* About Dialog */}
+      <AboutDialog isOpen={aboutOpen} onClose={handleAboutClose} language={language} colorScheme={currentScheme} />
+
+      {/* Projects Window */}
+      {activeSection === 'projects' && (
+        <PlaceholderWindow
+          title={t.work}
+          onClose={() => setActiveSection(null)}
+          message={t.comingSoon}
+        />
+      )}
+
+      {/* Lab Window */}
+      {activeSection === 'lab' && (
+        <PlaceholderWindow
+          title={t.lab}
+          onClose={() => setActiveSection(null)}
+          message={t.comingSoon}
+        />
+      )}
+
+      {/* Apps Group Window */}
+      {showAppsGroup && (
+        <GroupWindow
+          title={t.apps}
+          onClose={() => setShowAppsGroup(false)}
+          items={[
+            { label: t.clock, icon: '🕐', onClick: () => { openApp('clock', t.clock); setShowAppsGroup(false); } },
+            { label: t.calculator, icon: '🔢', onClick: () => { openApp('calculator', t.calculator); setShowAppsGroup(false); } },
+            { label: t.notepad, icon: '📝', onClick: () => { openApp('notepad', t.notepad); setShowAppsGroup(false); } },
+            { label: t.paint, icon: '🎨', onClick: () => { openApp('paint', t.paint); setShowAppsGroup(false); } },
+            { label: t.solitaire, icon: '🃏', onClick: () => { openApp('solitaire', t.solitaire); setShowAppsGroup(false); } },
+            { label: t.minesweeper, icon: '💣', onClick: () => { openApp('minesweeper', t.minesweeper); setShowAppsGroup(false); } },
+          ]}
+        />
+      )}
+
+      {/* App Windows are now rendered inside the main window content area */}
+
+      {/* Minimized Windows (Win 3.1 style desktop icons at bottom) */}
+      {windowManager.getMinimizedWindows().length > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '20px',
+            display: 'flex',
+            gap: '16px',
+            flexWrap: 'wrap',
+            zIndex: 1000,
+          }}
+        >
+          {windowManager.getMinimizedWindows().map((win) => {
+            // Get icon for each app type
+            const getAppIcon = (id: string): string => {
+              switch (id) {
+                case 'clock': return '🕐';
+                case 'calculator': return '🔢';
+                case 'notepad': return '📝';
+                case 'paint': return '🎨';
+                case 'solitaire': return '🃏';
+                case 'minesweeper': return '💣';
+                default: return '📁';
+              }
+            };
+
+            return (
+              <div
+                key={win.id}
+                onClick={() => windowManager.restoreWindow(win.id)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '64px',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                }}
+              >
+                {/* Icon box - FLAT 1985 style */}
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    backgroundColor: '#C0C0C0',
+                    border: '1px solid #000000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '4px',
+                    fontSize: '18px',
+                  }}
+                >
+                  {getAppIcon(win.id)}
+                </div>
+                {/* Icon label */}
+                <span
+                  style={{
+                    fontFamily: '"MS Sans Serif", Arial, sans-serif',
+                    fontSize: '10px',
+                    color: '#000000',
+                    textAlign: 'center',
+                    maxWidth: '64px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    backgroundColor: '#C0C0C0',
+                    padding: '1px 3px',
+                  }}
+                >
+                  {win.title}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <style jsx global>{`
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+        .blink {
+          animation: blink 0.5s infinite;
+        }
+      `}</style>
     </div>
   );
 }
