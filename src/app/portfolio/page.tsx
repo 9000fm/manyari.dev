@@ -2351,10 +2351,10 @@ export default function PortfolioPage() {
               justifyContent: 'flex-start',
               alignItems: 'center',
               padding: '20px 16px 24px 16px',
-              gap: '12px',
+              gap: '24px',
             }}>
               <FmLogo show={showContent} />
-              <div style={{ transform: 'scale(0.6)', transformOrigin: 'left center' }}>
+              <div style={{ transform: 'scale(0.55)', transformOrigin: 'left center' }}>
                 <RotatingCube show={showContent} delay={0} />
               </div>
             </div>
