@@ -2171,6 +2171,7 @@ export default function PortfolioPage() {
                 fontFamily: '"MS Sans Serif", Arial, sans-serif',
                 fontSize: '12px',
                 cursor: 'pointer',
+                color: '#000000',
                 ...(activeMenu === 'file' ? MSDOS.menuSelected : {}),
               }}
             >
@@ -2203,6 +2204,7 @@ export default function PortfolioPage() {
                 fontFamily: '"MS Sans Serif", Arial, sans-serif',
                 fontSize: '12px',
                 cursor: 'pointer',
+                color: '#000000',
                 ...(activeMenu === 'options' ? MSDOS.menuSelected : {}),
               }}
             >
@@ -2253,6 +2255,7 @@ export default function PortfolioPage() {
                 fontFamily: '"MS Sans Serif", Arial, sans-serif',
                 fontSize: '12px',
                 cursor: 'pointer',
+                color: '#000000',
                 ...(activeMenu === 'window' ? MSDOS.menuSelected : {}),
               }}
             >
@@ -2275,6 +2278,7 @@ export default function PortfolioPage() {
                 fontFamily: '"MS Sans Serif", Arial, sans-serif',
                 fontSize: '12px',
                 cursor: 'pointer',
+                color: '#000000',
                 ...(activeMenu === 'help' ? MSDOS.menuSelected : {}),
               }}
             >
@@ -2315,17 +2319,16 @@ export default function PortfolioPage() {
               position: 'relative',
             }}
           >
-            {/* FM Logo with rotating wireframe shapes */}
+            {/* FM Logo with rotating cube - symmetric layout */}
             <div style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: 'clamp(12px, 3vw, 24px)',
               padding: '8px',
+              gap: 'clamp(16px, 4vw, 32px)',
             }}>
-              <RotatingSphere show={showContent} delay={200} />
               <FmLogo show={showContent} />
-              <RotatingCube show={showContent} delay={400} />
+              <RotatingCube show={showContent} delay={0} />
             </div>
 
             {/* Desktop Icons - ASCII style */}
