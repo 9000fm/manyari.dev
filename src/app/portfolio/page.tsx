@@ -1171,29 +1171,23 @@ function BigAsciiIntro({
         // Cycle colors smoothly
         const colorInterval = setInterval(() => {
           setColorOffset(o => o + 1);
-        }, 100);
+        }, 80); // Faster cycling
         intervals.push(colorInterval);
-      }, allChars.length * charDelay + 800); // Longer pause before rainbow
+      }, allChars.length * charDelay + 600);
       timers.push(rainbowTimer);
 
-      // Complete phase - settle to black, let rainbow breathe
-      const completeTimer = setTimeout(() => {
-        intervals.forEach(i => clearInterval(i));
-        setPhase('complete');
-      }, allChars.length * charDelay + 3500); // Rainbow runs for ~2.7s
-      timers.push(completeTimer);
-
-      // Let it breathe in black before fading
+      // Stay in rainbow longer, then fade while still rainbow (no black phase)
       const fadeTimer = setTimeout(() => {
-        setPhase('fading');
-      }, allChars.length * charDelay + 4500); // 1s pause in black
+        setPhase('fading'); // Rainbow continues during fade
+      }, allChars.length * charDelay + 5000); // Rainbow for ~4.4 seconds
       timers.push(fadeTimer);
 
-      // Notify parent when done
+      // Notify parent when done - clear intervals
       const doneTimer = setTimeout(() => {
+        intervals.forEach(i => clearInterval(i));
         setPhase('done');
         onComplete();
-      }, allChars.length * charDelay + 5800); // Slower fade out
+      }, allChars.length * charDelay + 6500); // 1.5s fade duration
       timers.push(doneTimer);
     }, 300);
     timers.push(startTimer);
@@ -1206,13 +1200,13 @@ function BigAsciiIntro({
 
   if (phase === 'done' || !show) return null;
 
-  // Color based on position - creates wave effect during rainbow phase
+  // Color based on position - creates wave effect during rainbow and fading phases
   const getCharColor = (lineIdx: number, colIdx: number) => {
-    if (phase === 'rainbow') {
+    if (phase === 'rainbow' || phase === 'fading') {
       const idx = (lineIdx * 3 + colIdx + colorOffset) % RAINBOW_COLORS.length;
       return RAINBOW_COLORS[idx];
     }
-    // Black text on white background
+    // Black text during typing
     return '#000000';
   };
 
@@ -1378,7 +1372,7 @@ function RotatingCube({ show, delay = 0 }: { show: boolean; delay?: number }) {
   );
 }
 
-// Rotating wireframe sphere with proper latitude/longitude lines
+// Rotating wireframe sphere - simple parallels rotating sideways
 function RotatingSphere({ show, delay = 0 }: { show: boolean; delay?: number }) {
   const [visible, setVisible] = useState(false);
   const [angle, setAngle] = useState(0);
@@ -1395,7 +1389,7 @@ function RotatingSphere({ show, delay = 0 }: { show: boolean; delay?: number }) 
   useEffect(() => {
     if (!visible) return;
     const interval = setInterval(() => {
-      setAngle(a => (a + 1.5) % 360);
+      setAngle(a => (a + 1) % 360);
     }, 40);
     return () => clearInterval(interval);
   }, [visible]);
@@ -1406,55 +1400,44 @@ function RotatingSphere({ show, delay = 0 }: { show: boolean; delay?: number }) 
   const cx = 50, cy = 50;
   const radius = 38;
 
-  // Generate longitude lines (vertical meridians) that rotate
-  const longitudes: string[] = [];
-  const numLongitudes = 6;
-  for (let i = 0; i < numLongitudes; i++) {
-    const baseAngle = (i * Math.PI) / numLongitudes + rad;
-    const rx = Math.abs(Math.cos(baseAngle)) * radius;
-    if (rx > 2) {
-      // Create ellipse path for longitude
-      const path = `M ${cx - rx} ${cy} A ${rx} ${radius} 0 0 1 ${cx + rx} ${cy} A ${rx} ${radius} 0 0 1 ${cx - rx} ${cy}`;
-      longitudes.push(path);
-    }
-  }
-
-  // Latitude lines (horizontal)
-  const latitudes = [0.3, 0.6, 0.9].map(t => {
-    const y = cy + (t - 0.5) * 2 * radius * 0.9;
-    const latRadius = Math.sqrt(1 - Math.pow((t - 0.5) * 2, 2)) * radius;
-    return { y: cy - radius * (t - 0.5) * 2, rx: latRadius };
-  });
+  // Single rotating vertical meridian (gives the spinning effect)
+  const meridianRx = Math.abs(Math.cos(rad)) * radius;
 
   return (
     <svg width="100" height="100" viewBox="0 0 100 100">
-      {/* Outer circle (equator outline) */}
+      {/* Outer circle */}
       <circle cx={cx} cy={cy} r={radius} fill="none" stroke="rgba(0,0,0,0.5)" strokeWidth="1.5" />
 
-      {/* Latitude lines */}
-      {latitudes.map((lat, i) => (
-        <ellipse
-          key={`lat-${i}`}
-          cx={cx}
-          cy={lat.y}
-          rx={lat.rx}
-          ry={lat.rx * 0.25}
-          fill="none"
-          stroke="rgba(0,0,0,0.35)"
-          strokeWidth="1"
-        />
-      ))}
+      {/* Horizontal parallels (latitude lines) - static */}
+      {[-0.6, -0.3, 0, 0.3, 0.6].map((t, i) => {
+        const y = cy + t * radius;
+        const latRadius = Math.sqrt(1 - t * t) * radius;
+        return (
+          <ellipse
+            key={`lat-${i}`}
+            cx={cx}
+            cy={y}
+            rx={latRadius}
+            ry={latRadius * 0.15}
+            fill="none"
+            stroke="rgba(0,0,0,0.35)"
+            strokeWidth="1"
+          />
+        );
+      })}
 
-      {/* Longitude lines (rotating meridians) */}
-      {longitudes.map((path, i) => (
-        <path
-          key={`long-${i}`}
-          d={path}
+      {/* Single rotating meridian - creates the spinning effect */}
+      {meridianRx > 3 && (
+        <ellipse
+          cx={cx}
+          cy={cy}
+          rx={meridianRx}
+          ry={radius}
           fill="none"
-          stroke="rgba(0,0,0,0.35)"
+          stroke="rgba(0,0,0,0.4)"
           strokeWidth="1"
         />
-      ))}
+      )}
 
       {/* Center equator ellipse */}
       <ellipse cx={cx} cy={cy} rx={radius} ry={radius * 0.25} fill="none" stroke="rgba(0,0,0,0.4)" strokeWidth="1" />
@@ -1831,43 +1814,47 @@ type ColorScheme = {
   background: string;
 };
 
-// Color palettes for random mixing - separated by use case
-const TITLEBAR_COLORS = [
-  '#000080', '#800080', '#008000', '#000000', '#8B0000', '#4B0082',
-  '#008080', '#800000', '#2F4F4F', '#191970', '#483D8B', '#556B2F',
+// MS-DOS Executive inspired color schemes - bold, retro combinations
+// Inspired by: #ffb000 (orange), #ff4200 (red), #7da030 (olive), #ff99cc (pink), #1d1d1b (dark), #f2f2e7 (cream)
+const COLOR_SCHEMES: ColorScheme[] = [
+  // Classic Navy (but rare)
+  { titlebar: '#000080', titleText: '#FFFFFF', menu: '#C0C0C0', status: '#C0C0C0', background: '#1d1d1b' },
+  // Hot Orange
+  { titlebar: '#ff4200', titleText: '#FFFFFF', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Golden
+  { titlebar: '#ffb000', titleText: '#000000', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Olive Green
+  { titlebar: '#7da030', titleText: '#FFFFFF', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Hot Pink
+  { titlebar: '#ff99cc', titleText: '#000000', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Deep Purple
+  { titlebar: '#800080', titleText: '#FFFFFF', menu: '#C0C0C0', status: '#C0C0C0', background: '#1d1d1b' },
+  // Burgundy
+  { titlebar: '#800000', titleText: '#FFFFFF', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Crimson
+  { titlebar: '#DC143C', titleText: '#FFFFFF', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Coral
+  { titlebar: '#FF6347', titleText: '#000000', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Amber
+  { titlebar: '#FFBF00', titleText: '#000000', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Forest
+  { titlebar: '#228B22', titleText: '#FFFFFF', menu: '#f2f2e7', status: '#f2f2e7', background: '#1d1d1b' },
+  // Indigo
+  { titlebar: '#4B0082', titleText: '#FFFFFF', menu: '#C0C0C0', status: '#C0C0C0', background: '#1d1d1b' },
+  // Slate Dark
+  { titlebar: '#1d1d1b', titleText: '#f2f2e7', menu: '#f2f2e7', status: '#f2f2e7', background: '#ffb000' },
+  // Inverted Orange
+  { titlebar: '#1d1d1b', titleText: '#ffb000', menu: '#f2f2e7', status: '#f2f2e7', background: '#ff4200' },
+  // Cream on Pink
+  { titlebar: '#ff99cc', titleText: '#1d1d1b', menu: '#f2f2e7', status: '#f2f2e7', background: '#7da030' },
 ];
 
-const BACKGROUND_COLORS = [
-  '#008080', '#000080', '#800080', '#2F4F4F', '#191970', '#483D8B',
-  '#556B2F', '#4B0082', '#008000', '#800000', '#2E8B57', '#5F9EA0',
-];
-
-const MENU_COLORS = [
-  '#C0C0C0', '#D3D3D3', '#A9A9A9', '#DCDCDC', '#E0E0E0', '#B0B0B0',
-  '#C8C8C8', '#BEBEBE', '#D8D8D8', '#CCCCCC',
-];
-
-// Generate random color scheme with proper contrast
+// Get a random scheme - avoiding the boring ones (navy, teal, grey) as first picks
 function generateRandomScheme(): ColorScheme {
-  const pickTitlebar = () => TITLEBAR_COLORS[Math.floor(Math.random() * TITLEBAR_COLORS.length)];
-  const pickBackground = () => BACKGROUND_COLORS[Math.floor(Math.random() * BACKGROUND_COLORS.length)];
-  const pickMenu = () => MENU_COLORS[Math.floor(Math.random() * MENU_COLORS.length)];
-
-  const titlebar = pickTitlebar();
-  // Choose contrasting text (white or black based on titlebar brightness)
-  const r = parseInt(titlebar.slice(1, 3), 16);
-  const g = parseInt(titlebar.slice(3, 5), 16);
-  const b = parseInt(titlebar.slice(5, 7), 16);
-  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-  const titleText = brightness > 128 ? '#000000' : '#FFFFFF';
-
-  return {
-    titlebar,
-    titleText,
-    menu: pickMenu(),
-    status: pickMenu(),
-    background: pickBackground(),
-  };
+  // Skip index 0 (navy) on first generation to avoid common boring colors
+  const startIndex = 1;
+  const index = startIndex + Math.floor(Math.random() * (COLOR_SCHEMES.length - startIndex));
+  return COLOR_SCHEMES[index];
 }
 
 // Initial default scheme
@@ -1917,7 +1904,12 @@ export default function PortfolioPage() {
   const [shutdownText, setShutdownText] = useState('');
   const [shutdownDots, setShutdownDots] = useState('');
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(DEFAULT_SCHEME);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(() => generateRandomScheme());
+  // Window drag state
+  const [windowPosition, setWindowPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const windowRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -1939,6 +1931,48 @@ export default function PortfolioPage() {
   const openApp = (appId: string, title: string) => {
     windowManager.openWindow(appId, title);
   };
+
+  // Window drag handlers
+  const handleWindowDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!windowRef.current) return;
+    const rect = windowRef.current.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    setDragOffset({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    });
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      setWindowPosition({
+        x: clientX - dragOffset.x,
+        y: clientY - dragOffset.y,
+      });
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragOffset]);
 
   // Status bar text scrambles on language change
   const readyLabel = useScrambleReveal(t.ready, showRest, 30, scrambleKey, 15);
@@ -2054,8 +2088,9 @@ export default function PortfolioPage() {
       {/* Wireframe 3D Scene on desktop background */}
       <WireframeScene show={showWindow && !showBigAscii} />
 
-      {/* Main Window - FLAT 1985 style */}
+      {/* Main Window - FLAT 1985 style - Draggable */}
       <div
+        ref={windowRef}
         style={{
           backgroundColor: MSDOS.white,
           border: '1px solid #000000',
@@ -2063,10 +2098,17 @@ export default function PortfolioPage() {
           maxWidth: '700px',
           opacity: showWindow ? 1 : 0,
           visibility: showWindow ? 'visible' : 'hidden',
+          ...(windowPosition ? {
+            position: 'absolute',
+            left: windowPosition.x,
+            top: windowPosition.y,
+          } : {}),
         }}
       >
-        {/* Titlebar - Uses color scheme */}
+        {/* Titlebar - Uses color scheme - Draggable */}
         <div
+          onMouseDown={handleWindowDragStart}
+          onTouchStart={handleWindowDragStart}
           style={{
             backgroundColor: currentScheme.titlebar,
             color: currentScheme.titleText,
@@ -2076,6 +2118,8 @@ export default function PortfolioPage() {
             justifyContent: 'space-between',
             alignItems: 'center',
             transition: 'background-color 0.3s ease',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            userSelect: 'none',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
