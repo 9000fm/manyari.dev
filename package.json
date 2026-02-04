@@ -1,6 +1,6 @@
 {
-  "name": "superself.online",
-  "version": "0.1.0",
+  "name": "fm-desktop",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
