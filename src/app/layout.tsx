@@ -1,49 +1,52 @@
 import type { Metadata } from "next";
-import { VT323, Space_Mono, IBM_Plex_Mono } from "next/font/google";
+import { Syne, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-// Terminal font - for UI, nav, labels, CLI elements
-const vt323 = VT323({
-  weight: "400",
-  variable: "--font-terminal",
-  subsets: ["latin"],
-});
+/* ── Fonts ── */
 
-// Display font - for hero name, bold headings
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
+const syne = Syne({
+  subsets: ["latin"],
   variable: "--font-display",
-  subsets: ["latin"],
+  display: "swap",
+  weight: ["700", "800"],
 });
 
-// Body font - for readable text, bios, paragraphs
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["300", "400", "500"],
-  variable: "--font-body",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "700"],
+});
+
+/* ── Metadata ── */
 
 export const metadata: Metadata = {
-  title: "superself",
-  description: "...",
+  title: "SUPERSELF STUDIO",
+  description:
+    "Creative studio by Flavio Manyari — frontend development, generative art & creative technology.",
+  metadataBase: new URL("https://studio.superself.online"),
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  viewportFit: 'cover',
-};
+/* ── Layout ── */
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${vt323.variable} ${spaceMono.variable} ${ibmPlexMono.variable} antialiased`}>
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${syne.variable} ${spaceGrotesk.variable} ${spaceMono.variable}`}
+    >
+      <body>{children}</body>
     </html>
   );
 }
