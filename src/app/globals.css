@@ -1,122 +1,18 @@
 @import "tailwindcss";
 
-/* ── CSS Variables ── */
-
-:root {
-  --black: #000000;
-  --white: #ffffff;
-  --off-white: #e8e8e8;
-  --grey: #888888;
-  --dark-grey: #1a1a1a;
-  --accent: #ff4d00;
-
-  --font-display: "Syne", sans-serif;
-  --font-body: "Space Grotesk", sans-serif;
-  --font-mono: "Space Mono", monospace;
-}
-
-/* ── Reset & Base ── */
-
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  background: #fff;
-  color: #111;
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: auto; /* Lenis handles smooth scroll */
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  background: #fff;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--black);
-}
-
-/* ── Fluid Typography ── */
-
-.text-hero {
-  font-family: var(--font-display);
-  font-size: clamp(64px, 14vw, 200px);
-  font-weight: 800;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-.text-marquee {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 10vw, 140px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-.text-section-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 7vw, 96px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-.text-body {
-  font-family: var(--font-body);
-  font-size: clamp(15px, 1.2vw, 18px);
-  line-height: 1.6;
-}
-
-.text-mono {
-  font-family: var(--font-mono);
-  font-size: clamp(11px, 1vw, 13px);
-  line-height: 1.4;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* ── Utility ── */
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* ── Marquee ── */
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  animation: marquee 40s linear infinite;
-  will-change: transform;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-.animate-marquee-slow {
-  display: flex;
-  animation: marquee 15s linear infinite;
-  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
