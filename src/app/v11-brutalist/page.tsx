@@ -12,157 +12,219 @@ export default function BrutalistPage() {
         background: "#fff",
         color: "#000",
         minHeight: "100vh",
-        padding: "16px",
         fontFamily: '"Times New Roman", Times, serif',
-        fontSize: 16,
-        lineHeight: 1.4,
+        fontSize: 17,
+        lineHeight: 1.6,
       }}
     >
-      <p>
-        <Link href="/" style={{ color: "#0000EE" }}>[back to all variants]</Link>
-        {" · "}
-        <a href="#work" style={{ color: "#0000EE" }}>[work]</a>
-        {" · "}
-        <a href="#experience" style={{ color: "#0000EE" }}>[experience]</a>
-        {" · "}
-        <a href="#tools" style={{ color: "#0000EE" }}>[tools]</a>
-        {" · "}
-        <a href="#about" style={{ color: "#0000EE" }}>[about]</a>
-        {" · "}
-        <a href="#contact" style={{ color: "#0000EE" }}>[contact]</a>
-      </p>
+      <style>{`
+        .brutWrap { max-width: 64ch; margin: 0 auto; padding: 32px 16px 64px; }
+        .brutWrap h1, .brutWrap h2 {
+          font-variant: small-caps;
+          letter-spacing: 0.04em;
+          font-weight: normal;
+        }
+        .brutWrap h1 { font-size: 42px; margin: 24px 0 4px; }
+        .brutWrap h2 { font-size: 24px; margin: 32px 0 12px; }
+        .brutAbout p::first-letter {
+          float: left;
+          font-size: 4em;
+          line-height: 0.85;
+          padding: 6px 8px 0 0;
+          font-weight: bold;
+        }
+        .brutAst {
+          text-align: center;
+          margin: 32px 0;
+          letter-spacing: 1em;
+          color: #888;
+          font-size: 14px;
+        }
+        .brutAst::before { content: "* * *"; }
+        .brutWrap hr { display: none; }
+        .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
+        .brutPullquote {
+          border-left: 3px solid #000;
+          margin: 24px 0;
+          padding: 4px 0 4px 20px;
+          font-style: italic;
+          font-size: 19px;
+        }
+        .brutPagenum { text-align: center; color: #555; margin-top: 48px; font-size: 14px; letter-spacing: 0.3em; }
+        .brutTable { border-collapse: collapse; width: 100%; font-size: 15px; }
+        .brutTable th, .brutTable td { padding: 10px 8px; vertical-align: top; }
+        .brutTable th { border-bottom: 1px solid #000; text-align: left; font-variant: small-caps; letter-spacing: 0.03em; }
+        .brutTable tr { border-bottom: 1px dotted #888; }
+        .brutMarq {
+          border-top: 1px solid #000;
+          border-bottom: 1px solid #000;
+          padding: 6px 0;
+          margin: 16px 0 24px;
+          font-size: 15px;
+        }
+        .brutNav { font-size: 14px; color: #555; margin-bottom: 16px; }
+        .brutNav a { color: #0000EE; }
+      `}</style>
 
-      {/* literal marquee — peak brutalism */}
-      <p style={{ border: "1px solid #000", padding: "4px 8px", margin: "8px 0" }}>
-        {/* deprecated HTML element, used here on purpose */}
-        {(() => {
-          const Marquee = "marquee" as unknown as React.ElementType;
-          return <Marquee scrollamount={4}>{SERVICES.join("  •  ")}  •  {ME.available}  •  {ME.email}  •</Marquee>;
-        })()}
-      </p>
+      <div className="brutWrap">
+        <p className="brutNav">
+          <Link href="/" style={{ color: "#0000EE" }}>[back to all variants]</Link>
+          {" · "}
+          <a href="#about" style={{ color: "#0000EE" }}>[about]</a>
+          {" · "}
+          <a href="#work" style={{ color: "#0000EE" }}>[work]</a>
+          {" · "}
+          <a href="#experience" style={{ color: "#0000EE" }}>[experience]</a>
+          {" · "}
+          <a href="#tools" style={{ color: "#0000EE" }}>[tools]</a>
+          {" · "}
+          <a href="#contact" style={{ color: "#0000EE" }}>[contact]</a>
+        </p>
 
-      <h1 style={{ fontSize: 32, margin: "16px 0 0" }}>{ME.name}</h1>
-      <p style={{ margin: "4px 0 16px" }}>
-        <em>{ME.role}.</em> {ME.location}.<br />
-        Email: <a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a><br />
-        Phone: {ME.phone}<br />
-        Status: <strong>{ME.available}</strong>
-      </p>
+        {/* literal marquee — peak brutalism */}
+        <div className="brutMarq">
+          {(() => {
+            const Marquee = "marquee" as unknown as React.ElementType;
+            return <Marquee scrollamount={4}>{SERVICES.join("  •  ")}  •  {ME.available}  •  {ME.email}  •</Marquee>;
+          })()}
+        </div>
 
-      <hr />
+        <h1>{ME.name}</h1>
+        <p style={{ margin: "0 0 4px", fontStyle: "italic" }}>{ME.role}.</p>
+        <p style={{ margin: 0, color: "#444", fontSize: 15 }}>
+          {ME.location} · <a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a> · {ME.phone}
+          <br />
+          Status: <strong>{ME.available}</strong>
+        </p>
 
-      <h2 id="about" style={{ fontSize: 22, margin: "16px 0 8px" }}>About</h2>
-      <p style={{ maxWidth: "65ch", margin: 0 }}>{ME.about}</p>
+        <hr />
+        <p className="brutAst" />
 
-      <hr style={{ marginTop: 16 }} />
+        <section id="about" className="brutAbout">
+          <h2>About</h2>
+          <p>{ME.about}</p>
+          <blockquote className="brutPullquote">
+            I treat code as a craft and brand work as architecture.
+          </blockquote>
+        </section>
 
-      <h2 id="work" style={{ fontSize: 22, margin: "16px 0 8px" }}>Selected Work</h2>
-      <ol style={{ margin: 0, paddingLeft: 24 }}>
-        {PROJECTS.map((p) => (
-          <li key={p.slug} style={{ marginBottom: 12 }}>
-            {p.url ? (
-              <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: "#0000EE", fontWeight: "bold" }}>
-                {p.title}
-              </a>
-            ) : (
-              <strong>{p.title}</strong>
-            )}
-            {" — "}
-            <em>{p.role}</em>
-            {" ("}
-            {p.year}
-            {")"}
-            <br />
-            <span style={{ fontSize: 14 }}>{p.blurb}</span>
-          </li>
-        ))}
-      </ol>
+        <hr />
+        <p className="brutAst" />
 
-      <hr style={{ marginTop: 16 }} />
-
-      <h2 id="experience" style={{ fontSize: 22, margin: "16px 0 8px" }}>Experience</h2>
-      <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: 900, fontSize: 14 }}>
-        <thead>
-          <tr>
-            <th align="left" style={{ borderBottom: "1px solid #000", padding: "4px 8px 4px 0" }}>Period</th>
-            <th align="left" style={{ borderBottom: "1px solid #000", padding: "4px 8px" }}>Title</th>
-            <th align="left" style={{ borderBottom: "1px solid #000", padding: "4px 8px" }}>Where</th>
-          </tr>
-        </thead>
-        <tbody>
-          {EXPERIENCE.map((j, i) => (
-            <tr key={i} style={{ borderBottom: "1px dotted #888" }}>
-              <td style={{ padding: "8px 8px 8px 0", verticalAlign: "top" }}>{j.period}</td>
-              <td style={{ padding: "8px", verticalAlign: "top" }}>
-                <strong>{j.title}</strong> — {j.company}
+        <section id="work">
+          <h2>Selected Work</h2>
+          <ol style={{ margin: 0, paddingLeft: 24 }}>
+            {PROJECTS.map((p, i) => (
+              <li key={p.slug} style={{ marginBottom: 18 }}>
+                {p.url ? (
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: "#0000EE", fontWeight: "bold" }}>
+                    {p.title}
+                  </a>
+                ) : (
+                  <strong>{p.title}</strong>
+                )}
+                <span className="brutFootnote">[{i + 1}]</span>
+                {" — "}
+                <em>{p.role}</em>
+                {" ("}
+                {p.year}
+                {")"}
                 <br />
-                <span style={{ fontSize: 13 }}>{j.blurb}</span>
-              </td>
-              <td style={{ padding: "8px", verticalAlign: "top", fontSize: 13 }}>{j.location}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <span style={{ fontSize: 15, color: "#222" }}>{p.blurb}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-      <hr style={{ marginTop: 16 }} />
+        <hr />
+        <p className="brutAst" />
 
-      <h2 id="tools" style={{ fontSize: 22, margin: "16px 0 8px" }}>Tools</h2>
-      <dl style={{ margin: 0 }}>
-        {SKILLS.map((g) => (
-          <div key={g.label} style={{ marginBottom: 8 }}>
-            <dt style={{ display: "inline", fontWeight: "bold" }}>{g.label}:</dt>
-            <dd style={{ display: "inline", margin: 0, marginLeft: 6 }}>
-              {g.items.join(", ")}.
-            </dd>
-          </div>
-        ))}
-      </dl>
+        <section id="experience">
+          <h2>Experience</h2>
+          <table className="brutTable">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Title</th>
+                <th>Where</th>
+              </tr>
+            </thead>
+            <tbody>
+              {EXPERIENCE.map((j, i) => (
+                <tr key={i}>
+                  <td>{j.period}</td>
+                  <td>
+                    <strong>{j.title}</strong> — {j.company}
+                    <br />
+                    <span style={{ fontSize: 14, color: "#333" }}>{j.blurb}</span>
+                  </td>
+                  <td style={{ fontSize: 13, color: "#555" }}>{j.location}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
 
-      <hr style={{ marginTop: 16 }} />
+        <hr />
+        <p className="brutAst" />
 
-      <h2 style={{ fontSize: 22, margin: "16px 0 8px" }}>Education</h2>
-      <ul style={{ margin: 0, paddingLeft: 24 }}>
-        {EDUCATION.map((e) => (
-          <li key={e.title} style={{ marginBottom: 8 }}>
-            <strong>{e.title}</strong> — {e.school} ({e.period}).<br />
-            <span style={{ fontSize: 14 }}>{e.detail}</span>
-          </li>
-        ))}
-      </ul>
+        <section id="tools">
+          <h2>Tools</h2>
+          <dl style={{ margin: 0 }}>
+            {SKILLS.map((g) => (
+              <div key={g.label} style={{ marginBottom: 12 }}>
+                <dt style={{ display: "inline", fontWeight: "bold", fontVariant: "small-caps", letterSpacing: "0.04em" }}>{g.label}:</dt>
+                <dd style={{ display: "inline", margin: 0, marginLeft: 6 }}>
+                  {g.items.join(", ")}.
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
-      <h2 style={{ fontSize: 22, margin: "16px 0 8px" }}>Languages</h2>
-      <ul style={{ margin: 0, paddingLeft: 24 }}>
-        {LANGUAGES.map((l) => (
-          <li key={l.lang}>{l.lang} — {l.level}</li>
-        ))}
-      </ul>
+        <hr />
+        <p className="brutAst" />
 
-      <hr style={{ marginTop: 16 }} />
+        <section>
+          <h2>Education</h2>
+          <ul style={{ margin: 0, paddingLeft: 24 }}>
+            {EDUCATION.map((e) => (
+              <li key={e.title} style={{ marginBottom: 12 }}>
+                <strong>{e.title}</strong> — {e.school} ({e.period}).<br />
+                <span style={{ fontSize: 15, color: "#333" }}>{e.detail}</span>
+              </li>
+            ))}
+          </ul>
 
-      <h2 id="contact" style={{ fontSize: 22, margin: "16px 0 8px" }}>Links</h2>
-      <ul style={{ margin: 0, paddingLeft: 24 }}>
-        <li><a href={ME.socials.github} style={{ color: "#0000EE" }}>GitHub</a></li>
-        <li><a href={ME.socials.linkedin} style={{ color: "#0000EE" }}>LinkedIn</a></li>
-        <li><a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>Email</a></li>
-        <li>Phone: {ME.phone}</li>
-      </ul>
+          <h2>Languages</h2>
+          <ul style={{ margin: 0, paddingLeft: 24 }}>
+            {LANGUAGES.map((l) => (
+              <li key={l.lang}>{l.lang} — {l.level}</li>
+            ))}
+          </ul>
+        </section>
 
-      <hr style={{ marginTop: 16 }} />
+        <hr />
+        <p className="brutAst" />
 
-      <h2 style={{ fontSize: 22, margin: "16px 0 8px" }}>What&rsquo;s new</h2>
-      <ul style={{ margin: 0, paddingLeft: 24, fontSize: 14 }}>
-        <li>{updated} — Added experience, skills, and education sections.</li>
-        <li>2026-05-04 — Site rebuilt; removed scaffolding.</li>
-      </ul>
+        <section id="contact">
+          <h2>Contact</h2>
+          <ul style={{ margin: 0, paddingLeft: 24 }}>
+            <li><a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a></li>
+            <li>Phone: {ME.phone}</li>
+            <li><a href={ME.socials.github} style={{ color: "#0000EE" }}>GitHub</a></li>
+            <li><a href={ME.socials.linkedin} style={{ color: "#0000EE" }}>LinkedIn</a></li>
+          </ul>
+        </section>
 
-      <hr style={{ marginTop: 16 }} />
+        <hr />
+        <p className="brutAst" />
 
-      <p style={{ fontSize: 12, color: "#444", marginTop: 16 }}>
-        Last modified: {updated}.
-        No cookies. No tracking. No frameworks visible.
-        {" "}
-        <a href="#top" style={{ color: "#0000EE" }}>[top]</a>
-      </p>
+        <p style={{ fontSize: 13, color: "#555", textAlign: "center" }}>
+          Last modified: {updated}. No cookies. No tracking. No frameworks visible.
+        </p>
+        <p className="brutPagenum">— 1 —</p>
+      </div>
     </main>
   );
 }

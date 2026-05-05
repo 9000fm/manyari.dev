@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available for contract — 2025",
   about:
-    "Web developer and graphic designer with 4+ years building brands, websites, and visual systems for clients across three continents. Background in music production and generative art — I treat code as a craft and brand work as architecture.",
+    "Web developer and graphic designer with 4+ years taking projects end-to-end — brand, design, code, deploy — for clients across three continents. Background in music production and generative art. I treat code as a craft and brand work as architecture.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -25,40 +25,40 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "digeart",
+    title: "Digeart",
+    year: 2023,
+    role: "End-to-end · Brand identity · Web · Deploy",
+    url: "https://digeart.vercel.app",
+    tag: "brand",
+    blurb: "Solo build for an independent art project — brand identity, logo, palette, type system, web build, and deploy.",
+  },
+  {
     slug: "ecolution",
     title: "Ecolution Industries",
     year: 2024,
-    role: "WordPress redesign · Technical SEO · DNS",
+    role: "End-to-end · WordPress · SEO · DNS · Email infra",
     url: "https://ecolution.com.au",
     tag: "client",
-    blurb: "Full WordPress redesign for an Australian renewable-energy contractor. Restructured site architecture, implemented technical SEO, and resolved corporate email deliverability via SPF/DKIM/DMARC.",
+    blurb: "Full redesign of an Australian renewable-energy contractor's site. Restructured architecture, implemented technical SEO, resolved corporate email deliverability (SPF/DKIM/DMARC), and managed DNS/SSL/hosting end-to-end.",
   },
   {
     slug: "superself",
     title: "Superself.online",
     year: 2024,
-    role: "Next.js 16 · Brand identity · Generative ASCII",
+    role: "End-to-end · Brand · Next.js · Generative · Deploy",
     url: "https://superself.online",
     tag: "self",
-    blurb: "Multilingual music label site (ES/EN/JP) with i18n routing, generative ASCII visuals, and full brand design — vector logo, palette, type system, brand manual. Lighthouse 100/100.",
+    blurb: "Multilingual music label site (ES/EN/JP) — solo build from concept to deploy. Brand identity, vector logo, palette, type system, brand manual, i18n routing, and generative ASCII visuals. Lighthouse 100/100.",
   },
   {
     slug: "micaela",
     title: "Micaela Lucia's Portfolio",
     year: 2024,
-    role: "Next.js 16 · Sanity CMS · Framer Motion",
-    url: null,
+    role: "End-to-end · Next.js · Sanity CMS · Motion · Deploy",
+    url: "https://portafolio-micaela.vercel.app",
     tag: "client",
-    blurb: "Professional portfolio with headless CMS and animated page transitions. Lighthouse 99/100.",
-  },
-  {
-    slug: "digeart",
-    title: "Digeart",
-    year: 2023,
-    role: "Visual identity",
-    url: null,
-    tag: "brand",
-    blurb: "Brand identity for an independent art project — logo, palette, type system, applications.",
+    blurb: "Solo build of a professional portfolio with headless CMS and animated page transitions. Architecture to deploy. Lighthouse 99/100.",
   },
 ];
 
@@ -104,7 +104,7 @@ export const EXPERIENCE: Job[] = [
 export type SkillGroup = { label: string; items: string[] };
 
 export const SKILLS: SkillGroup[] = [
-  { label: "Design",          items: ["Adobe Illustrator", "Photoshop", "Premiere", "After Effects", "Canva", "Brand Identity", "UI/UX"] },
+  { label: "Design",          items: ["Adobe Suite", "Canva", "Brand Identity", "UI/UX"] },
   { label: "Frontend",        items: ["JavaScript", "TypeScript", "React 19", "Next.js 16", "HTML5/CSS3", "Tailwind CSS 4"] },
   { label: "Creative Coding", items: ["p5.js", "Framer Motion", "TouchDesigner", "Blender", "Generative Art"] },
   { label: "Tools",           items: ["Git", "Vercel", "WordPress", "Linux/EC2", "Claude / Cursor"] },
@@ -142,7 +142,6 @@ export const LANGUAGES = [
 export const VARIANTS = [
   { slug: "v01-swiss",     n: "01", name: "Swiss Editorial",    vibe: "Grotesk + grid + hairline rules" },
   { slug: "v05-macos7",    n: "02", name: "Mac OS 7",           vibe: "Pixel chrome, 1-bit, dotted patterns" },
-  { slug: "v07-y2k",       n: "03", name: "Y2K Chrome",         vibe: "Chrome gradient, electric blue" },
-  { slug: "v09-bauhaus",   n: "04", name: "Bauhaus",            vibe: "Primary shapes, geometric sans" },
-  { slug: "v11-brutalist", n: "05", name: "Brutalist Raw HTML", vibe: "Times + blue underlined links" },
+  { slug: "v09-bauhaus",   n: "03", name: "Bauhaus",            vibe: "Primary shapes, geometric sans" },
+  { slug: "v11-brutalist", n: "04", name: "Brutalist Raw HTML", vibe: "Times + blue underlined links" },
 ] as const;
