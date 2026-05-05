@@ -22,19 +22,61 @@ export default function BauhausPage() {
         color: INK,
         minHeight: "100vh",
         padding: "32px 6vw 64px",
+        overflowX: "hidden",
       }}
     >
       <style>{`
-        @keyframes bhSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-        .bhSpin { animation: bhSpin 22s linear infinite; transform-origin: center; }
+        /* HERO ANIMATION — orchestrated entrance */
+        @keyframes bhRoll {
+          0%   { transform: translateX(-60vw) rotate(0); opacity: 0; }
+          70%  { transform: translateX(0) rotate(720deg); opacity: 1; }
+          82%  { transform: translateX(0) rotate(720deg) scale(1.18); }
+          100% { transform: translateX(0) rotate(720deg) scale(1); opacity: 1; }
+        }
+        @keyframes bhDrop {
+          0%   { transform: translateY(-40vh); opacity: 0; }
+          70%  { transform: translateY(0); opacity: 1; }
+          82%  { transform: translateY(-12px); }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bhWipe {
+          0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+          100% { clip-path: inset(0 0 0 0); opacity: 1; }
+        }
+        @keyframes bhRule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        @keyframes bhType {
+          from { clip-path: inset(0 100% 0 0); }
+          to   { clip-path: inset(0 0 0 0); }
+        }
+        @keyframes bhFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        .bhCircle    { animation: bhRoll 1.4s cubic-bezier(.2,.8,.2,1) both; }
+        .bhTriangle  { animation: bhDrop 1.2s cubic-bezier(.2,1.6,.4,1) .2s both; }
+        .bhSquare    { animation: bhWipe .9s cubic-bezier(.2,.8,.2,1) .5s both; }
+        .bhRule      { animation: bhRule 1s cubic-bezier(.2,.8,.2,1) .8s both; transform-origin: left center; }
+        .bhAvail     { animation: bhFade .6s ease 1.6s both; }
+        .bhName      { animation: bhType 1.4s cubic-bezier(.2,.8,.2,1) 1.2s both; }
+        .bhRole      { animation: bhFade .7s ease 2.2s both; }
+
+        /* AUTO ROTATE on circle after entrance */
+        @keyframes bhSpin { from { transform: rotate(720deg); } to { transform: rotate(1080deg); } }
+        .bhSpinAfter { animation: bhSpin 22s linear infinite 1.4s; transform-origin: center; }
+
+        /* MARQUEE — slow */
         @keyframes bhMarq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .bhMarq { display: inline-flex; gap: 48px; animation: bhMarq 28s linear infinite; will-change: transform; }
+        .bhMarq { display: inline-flex; gap: 48px; animation: bhMarq 60s linear infinite; will-change: transform; }
+
+        /* PROJECT ROWS hover */
         .bhRow { transition: background .2s ease, transform .2s ease; }
         .bhRow:hover { transform: translateX(8px); }
         .bhRow:hover .bhShape { transform: rotate(45deg) scale(1.1); }
         .bhShape { transition: transform .25s ease; transform-origin: center; display: inline-block; }
         .bhBlock { transition: transform .3s ease; }
         .bhBlock:hover { transform: rotate(-3deg) scale(1.04); }
+
+        /* QUICK BIO stat blocks */
+        .bhStat { padding: 18px 16px; display: flex; flex-direction: column; gap: 4px; transition: transform .25s ease; }
+        .bhStat:hover { transform: translateY(-4px); }
       `}</style>
 
       <Link href="/" style={{ fontSize: 12, color: INK, textDecoration: "underline" }}>
@@ -42,21 +84,18 @@ export default function BauhausPage() {
       </Link>
 
       {/* HERO */}
-      <header
-        style={{
-          marginTop: "6vh",
-          marginBottom: "8vh",
-        }}
-      >
+      <header style={{ marginTop: "6vh", marginBottom: "8vh" }}>
         <div style={{ display: "flex", gap: 24, marginBottom: 32, alignItems: "center" }}>
-          <div className="bhSpin" style={{ width: 56, height: 56, borderRadius: "50%", background: RED }} />
-          <div className="bhBlock" style={{ width: 0, height: 0, borderLeft: "28px solid transparent", borderRight: "28px solid transparent", borderBottom: `56px solid ${BLUE}` }} />
-          <div className="bhBlock" style={{ width: 56, height: 56, background: YELLOW }} />
-          <div style={{ flex: 1, height: 4, background: INK }} />
-          <span style={{ fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: RED }}>● {ME.available}</span>
+          <div className="bhCircle" style={{ width: 56, height: 56, borderRadius: "50%", background: RED, position: "relative" }}>
+            <span className="bhSpinAfter" style={{ display: "block", width: "100%", height: "100%", borderRadius: "50%", background: "linear-gradient(0deg, transparent 49%, rgba(0,0,0,0.18) 49%, rgba(0,0,0,0.18) 51%, transparent 51%)" }} />
+          </div>
+          <div className="bhTriangle" style={{ width: 0, height: 0, borderLeft: "28px solid transparent", borderRight: "28px solid transparent", borderBottom: `56px solid ${BLUE}` }} />
+          <div className="bhSquare" style={{ width: 56, height: 56, background: YELLOW }} />
+          <div className="bhRule" style={{ flex: 1, height: 4, background: INK }} />
+          <span className="bhAvail" style={{ fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: RED }}>● {ME.available}</span>
         </div>
         <h1
-          className={fontArchivoBlack.className}
+          className={`${fontArchivoBlack.className} bhName`}
           style={{
             fontSize: "clamp(56px, 13vw, 200px)",
             margin: 0,
@@ -68,7 +107,7 @@ export default function BauhausPage() {
           Flavio<br />
           <span style={{ color: RED }}>Manyari.</span>
         </h1>
-        <p style={{ fontSize: "clamp(16px, 1.8vw, 24px)", margin: "32px 0 0", maxWidth: 720 }}>
+        <p className="bhRole" style={{ fontSize: "clamp(16px, 1.8vw, 24px)", margin: "32px 0 0", maxWidth: 720 }}>
           {ME.role} <span style={{ background: YELLOW, padding: "0 6px" }}>{ME.location}</span>
         </p>
       </header>
@@ -81,7 +120,7 @@ export default function BauhausPage() {
           marginLeft: "-6vw",
           marginRight: "-6vw",
           padding: "16px 0",
-          marginBottom: "8vh",
+          marginBottom: "6vh",
           overflow: "hidden",
           borderTop: `8px solid ${RED}`,
           borderBottom: `8px solid ${YELLOW}`,
@@ -94,6 +133,28 @@ export default function BauhausPage() {
               <span>{s}</span>
             </span>
           )))}
+        </div>
+      </section>
+
+      {/* QUICK BIO BRIDGE */}
+      <section style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 12, marginBottom: "8vh", alignItems: "stretch" }}>
+        <div className="bhStat" style={{ background: "#fff", border: `2px solid ${INK}` }}>
+          <p className={fontArchivoBlack.className} style={{ fontSize: 12, margin: 0, color: RED, letterSpacing: "0.06em", textTransform: "uppercase" }}>● Quick bio</p>
+          <p style={{ fontSize: "clamp(14px, 1.4vw, 18px)", margin: 0, lineHeight: 1.4, fontWeight: 500 }}>
+            Web developer & graphic designer. Lima → world. Building brands and websites end-to-end since 2020.
+          </p>
+        </div>
+        <div className="bhStat" style={{ background: RED, color: "#fff" }}>
+          <span className={fontArchivoBlack.className} style={{ fontSize: "clamp(36px, 5vw, 56px)", lineHeight: 1, letterSpacing: "-0.04em" }}>4+</span>
+          <span style={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>years</span>
+        </div>
+        <div className="bhStat" style={{ background: BLUE, color: "#fff" }}>
+          <span className={fontArchivoBlack.className} style={{ fontSize: "clamp(36px, 5vw, 56px)", lineHeight: 1, letterSpacing: "-0.04em" }}>3</span>
+          <span style={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>continents</span>
+        </div>
+        <div className="bhStat" style={{ background: YELLOW, color: INK }}>
+          <span className={fontArchivoBlack.className} style={{ fontSize: "clamp(36px, 5vw, 56px)", lineHeight: 1, letterSpacing: "-0.04em" }}>100/100</span>
+          <span style={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>Lighthouse</span>
         </div>
       </section>
 
