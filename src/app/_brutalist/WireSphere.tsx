@@ -211,18 +211,22 @@ export default function WireSphere({
     let raf = 0;
     let dir = -1; // spin direction (starts clockwise); flips on double-tap
     let vel = dir * speed; // signed angular velocity per frame
-    let tween: { from: number; to: number; start: number; dur: number } | null = null;
+    let tween: { from: number; to: number; start: number } | null = null;
     let cooldownUntil = 0;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // buttery reverse: coast down to a stop, hold a beat, then ease up the other way
+    const DECEL = 1900;
+    const HOLD = 400;
+    const ACCEL = 1900;
 
-    // Double-tap (mouse or touch): ease the spin to a stop, then send it the
+    // Double-tap (mouse or touch): glide the spin to a stop, then send it the
     // other way. 8s cooldown so it can't be spammed. Respects reduced motion.
     const reverse = () => {
       const now = performance.now();
       if (reduce || now < cooldownUntil) return;
       cooldownUntil = now + 8000;
       dir = -dir;
-      tween = { from: vel, to: dir * speed, start: now, dur: 2200 };
+      tween = { from: vel, to: dir * speed, start: now };
     };
     let lastTap = 0;
     const onPointerUp = () => {
@@ -238,11 +242,16 @@ export default function WireSphere({
 
     const frame = (t?: number) => {
       if (tween) {
-        const p = Math.min(1, ((t ?? performance.now()) - tween.start) / tween.dur);
-        // easeInOutCubic - passes through 0 velocity at the midpoint (the stop)
-        const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-        vel = tween.from + (tween.to - tween.from) * e;
-        if (p >= 1) {
+        const e = (t ?? performance.now()) - tween.start;
+        if (e < DECEL) {
+          const q = e / DECEL; // coast down - eases gently as it nears the stop
+          vel = tween.from * Math.pow(1 - q, 3);
+        } else if (e < DECEL + HOLD) {
+          vel = 0; // the stop
+        } else if (e < DECEL + HOLD + ACCEL) {
+          const q = (e - DECEL - HOLD) / ACCEL; // ease up the other way
+          vel = tween.to * (q * q * q);
+        } else {
           vel = tween.to;
           tween = null;
         }
