@@ -144,6 +144,8 @@ export const SERVICES = [
   "SEO",
   "Hosting, DNS & Deployment",
   "Brand & Visual Identity",
+  "Creative Coding & Generative Visuals",
+  "Web Apps & Custom Features",
 ] as const;
 
 // Short tags for the top ticker - keep it simple / scannable.
