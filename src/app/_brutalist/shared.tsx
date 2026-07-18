@@ -266,9 +266,8 @@ export function Sections(): ReactElement {
             {" · "}
             <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             {" · "}
-            <a href="#">Portfolio {"↗︎"}</a>
+            <a href="/cv" target="_blank" rel="noopener noreferrer">Download CV {"↗︎"}</a>
           </li>
-          <li style={{ color: "#555", fontSize: "var(--t-micro)" }}>Full CV on request.</li>
         </ul>
       </section>
 
