@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web developer and graphic designer with 4+ years taking projects end-to-end — brand, design, code, deploy — for clients across three continents. Background in music production and generative art. I treat code as a craft and brand work as architecture.",
+    "Web developer and graphic designer with 4+ years taking projects end-to-end — brand, design, code, deploy — for clients across three continents. Background in music production and generative art.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
