@@ -31,7 +31,7 @@ const LAYOUT_CSS = `
   @media (max-width: 899px) {
     .side h1 { font-size: 35px; }
     .content { font-size: 18px; }
-    .identSphere canvas { width: 138px !important; height: 138px !important; }
+    .identSphere canvas { width: 168px !important; height: 168px !important; }
     .side .snav { order: -1; margin-bottom: 6px; }
     .side .contentsLabel { display: none; }
     .sideToc { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 4px 0 14px; border-bottom: 1px solid #000; padding-bottom: 12px; }

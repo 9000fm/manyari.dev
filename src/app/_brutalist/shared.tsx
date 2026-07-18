@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER } from "@/content";
+import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW } from "@/content";
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -29,6 +29,7 @@ export const SHARED_CSS = `
   .brutMarqTrack { display: inline-flex; white-space: nowrap; animation: brutScroll 75s linear infinite; }
   .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
   .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
+  .brutMarqSep { margin: 0 14px; color: #444; }
   @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
 
@@ -39,6 +40,7 @@ export const SHARED_CSS = `
   .brutSvcNum { color: #999; margin-right: 12px; font-variant-numeric: tabular-nums; }
 
   /* tools */
+  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: 16px; color: #222; max-width: 60ch; }
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
   .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 14px; margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
@@ -137,6 +139,7 @@ export function Sections(): ReactElement {
 
       <section id="tools">
         <h2>Tools</h2>
+        <p className="brutWorkflow">{WORKFLOW}</p>
         <div className="brutTools">
           {SKILLS.map((g) => (
             <div key={g.label}>
@@ -170,7 +173,7 @@ export function Sections(): ReactElement {
             {" · "}
             <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             {" · "}
-            <a href="#">Portfolio ↗</a>
+            <a href="#">Portfolio {"↗︎"}</a>
           </li>
           <li style={{ color: "#555", fontSize: 14 }}>Full CV on request.</li>
         </ul>
