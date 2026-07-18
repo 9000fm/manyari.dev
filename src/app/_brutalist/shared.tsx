@@ -65,9 +65,6 @@ export function Sections(): ReactElement {
       <section id="about" className="brutAbout">
         <h2>About</h2>
         <p>{ME.about}</p>
-        <blockquote className="brutPullquote">
-          I treat code as a craft and brand work as architecture.
-        </blockquote>
       </section>
 
       <p className="brutAst" />
