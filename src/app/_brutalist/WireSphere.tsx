@@ -126,7 +126,7 @@ export default function WireSphere({
   size = 160,
   tilt = 0.5, // polar-axis incline (radians) - Wikipedia-style view from above
   lean = -14, // CSS roll in degrees - the Wikipedia globe's leftward lean
-  speed = 0.00276,
+  speed = 0.00243,
 }: {
   size?: number;
   tilt?: number;
