@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Marquee, Sections, NAV_SECTIONS, BLUE } from "../_brutalist/shared";
+import WireSphere from "../_brutalist/WireSphere";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
@@ -43,13 +44,20 @@ export default function BrutalistWide() {
 
         <Marquee />
 
-        <h1>{ME.name}</h1>
-        <p style={{ margin: "0 0 4px", fontStyle: "italic" }}>{ME.role}.</p>
-        <p style={{ margin: 0, color: "#444", fontSize: 15 }}>
-          {ME.location} · <a href={`mailto:${ME.email}`}>{ME.email}</a> · {ME.phone}
-          <br />
-          Status: <strong>{ME.available}</strong>
-        </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+          <div style={{ minWidth: 280, flex: "1 1 340px" }}>
+            <h1>{ME.name}</h1>
+            <p style={{ margin: "0 0 4px", fontStyle: "italic" }}>{ME.role}.</p>
+            <p style={{ margin: 0, color: "#444", fontSize: 15 }}>
+              {ME.location} · <a href={`mailto:${ME.email}`}>{ME.email}</a> · {ME.phone}
+              <br />
+              Status: <strong>{ME.available}</strong>
+            </p>
+          </div>
+          <div style={{ flexShrink: 0 }}>
+            <WireSphere size={180} />
+          </div>
+        </div>
 
         <p className="brutAst" />
 
