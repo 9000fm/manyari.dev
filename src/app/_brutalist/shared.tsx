@@ -17,6 +17,9 @@ export const SHARED_CSS = `
   .brutAboutRow { display: flex; align-items: flex-start; }
   .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
   .brutAboutText { margin: 0; }
+  .brutWork { list-style: none; }
+  .brutWork > li { position: relative; }
+  .brutWork > li::before { content: "—"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 14px; }
   .brutAst::before { content: "* * *"; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
@@ -109,7 +112,7 @@ export function Sections(): ReactElement {
 
       <section id="work">
         <h2>Selected Work</h2>
-        <ol style={{ margin: 0, paddingLeft: 24 }}>
+        <ol className="brutWork" style={{ margin: 0, paddingLeft: 24 }}>
           {PROJECTS.map((p, i) => (
             <li key={p.slug} style={{ marginBottom: 18 }}>
               {p.url ? (
