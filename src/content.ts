@@ -86,7 +86,7 @@ export const EXPERIENCE: Job[] = [
     company: "Independent",
     location: "Peru",
     period: "2020 — Present",
-    blurb: "Sites built end to end - superself.online, Micaela Lucía's portfolio, client brand and print work - plus DNS, SSL, and hosting setup.",
+    blurb: "Websites built end to end for a range of clients - brand, design, code, and deployment, plus the infrastructure behind them (DNS, SSL, hosting, SEO).",
   },
   {
     title: "Web Designer · Shopify",

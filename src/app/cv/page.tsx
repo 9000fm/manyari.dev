@@ -15,7 +15,7 @@ const EXPERIENCE = [
     role: "Freelance Web Developer & Designer",
     org: "Independent · Lima (Remote)",
     dates: "2023 - Present",
-    blurb: "Sites built end to end - superself.online, Micaela Lucía, client brand and the infrastructure behind them (DNS, SSL, hosting, technical SEO).",
+    blurb: "Websites built end to end for a range of clients - brand, design, code, and deployment, plus the infrastructure behind them (DNS, SSL, hosting, technical SEO).",
   },
   {
     role: "Freelance Graphic Designer",
