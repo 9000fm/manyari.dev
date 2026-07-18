@@ -8,7 +8,7 @@
  */
 
 const SUMMARY =
-  "Web design and development, end to end - from identity to deployment. 4+ years across e-commerce, editorial portfolios, and independent products, with a creative-coding edge (WebGL, generative visuals).";
+  "Web design and development, end to end - from identity to deployment. I build distinctive sites across e-commerce, editorial portfolios, and independent products, with a creative-coding edge (WebGL, generative visuals). I use AI-assisted workflows to prototype fast while keeping design, architecture, and the final build under my control.";
 
 const EXPERIENCE = [
   {
@@ -44,7 +44,8 @@ const SKILLS: [string, string][] = [
   ["Creative Code", "p5.js, WebGL, Framer Motion, Generative Art"],
   ["Design", "Adobe Suite, Figma, Brand Identity, UI/UX"],
   ["E-commerce & CMS", "Shopify / Liquid, PayPal, Sanity, Supabase, WordPress"],
-  ["Infra & SEO", "Vercel, DNS / SSL / Hosting, Technical SEO"],
+  ["Infra & Tools", "Vercel, DNS / SSL / Hosting, Technical SEO, Git"],
+  ["Workflow", "AI-augmented development (Claude, Cursor)"],
 ];
 
 const EDUCATION: [string, string][] = [
