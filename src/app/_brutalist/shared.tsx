@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW } from "@/content";
+import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW, EXPERIENCE, EDUCATION } from "@/content";
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -66,6 +66,21 @@ export const SHARED_CSS = `
   .brutRefs li { padding-left: 22px; text-indent: -22px; }
   .brutRefs a { word-break: break-word; }
   .brutRefNum { color: #999; margin-right: 5px; }
+
+  /* experience / education - CV two-column: company + dates left, role + blurb right */
+  .brutExp { list-style: none; padding: 0; margin: 0; }
+  .brutExp > li { display: grid; grid-template-columns: 190px 1fr; gap: 26px; margin: 0 0 22px; }
+  .brutExp > li:last-child { margin-bottom: 0; }
+  .brutExpMeta strong { display: block; font-weight: bold; }
+  .brutExpMeta span { display: block; color: #555; font-size: var(--t-small); margin-top: 2px; }
+  .brutExpBody { min-width: 0; }
+  .brutExpRole { display: block; font-weight: bold; font-size: var(--t-lead); margin-bottom: 3px; }
+  .brutExpBody p { margin: 0; font-size: var(--t-small); opacity: 0.9; }
+  @media (max-width: 620px) {
+    .brutExp > li { grid-template-columns: 1fr; gap: 3px; margin-bottom: 20px; }
+    .brutExpMeta { margin-bottom: 4px; }
+    .brutExpMeta span { display: inline; margin-right: 12px; }
+  }
 `;
 
 /** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */
@@ -95,6 +110,8 @@ export function Marquee(): ReactElement {
 export const NAV_SECTIONS = [
   { id: "about", label: "about" },
   { id: "work", label: "work" },
+  { id: "experience", label: "experience" },
+  { id: "education", label: "education" },
   { id: "services", label: "services" },
   { id: "tools", label: "tools" },
   { id: "contact", label: "contact" },
@@ -153,6 +170,47 @@ export function Sections(): ReactElement {
               </li>
             );
           })}
+        </ol>
+      </section>
+
+      <p className="brutAst" />
+
+      <section id="experience">
+        <h2>Experience</h2>
+        <ol className="brutExp">
+          {EXPERIENCE.map((job) => (
+            <li key={job.company + job.period}>
+              <div className="brutExpMeta">
+                <strong>{job.company}</strong>
+                <span>{job.period}</span>
+                {job.location ? <span>{job.location}</span> : null}
+              </div>
+              <div className="brutExpBody">
+                <span className="brutExpRole">{job.title}</span>
+                <p>{job.blurb}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <p className="brutAst" />
+
+      <section id="education">
+        <h2>Education</h2>
+        <ol className="brutExp">
+          {EDUCATION.map((ed) => (
+            <li key={ed.school}>
+              <div className="brutExpMeta">
+                <strong>{ed.school}</strong>
+                <span>{ed.period}</span>
+              </div>
+              <div className="brutExpBody">
+                <span className="brutExpRole">{ed.title}</span>
+                {ed.detail ? <p>{ed.detail}</p> : null}
+              </div>
+            </li>
+          ))}
         </ol>
       </section>
 
