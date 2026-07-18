@@ -123,7 +123,7 @@ export function Sections(): ReactElement {
                 <strong>{p.title}</strong>
               )}
               <span className="brutFootnote">[{i + 1}]</span>
-              {" — "}
+              {" - "}
               <em>{p.role}</em>
               {" ("}
               {p.year}
