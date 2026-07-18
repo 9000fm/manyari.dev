@@ -22,7 +22,7 @@ export const SHARED_CSS = `
   .brutWork > li::before { content: "—"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 14px; }
   .brutAst::before { content: "* * *"; }
-  .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
+  .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; font-family: "Courier New", Courier, monospace; }
   .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
   .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
   .brutFooter { margin-top: 48px; }
@@ -48,10 +48,10 @@ export const SHARED_CSS = `
   .brutServices { list-style: none; padding: 0; margin: 0; column-count: 2; column-gap: 44px; }
   @media (max-width: 620px) { .brutServices { column-count: 1; } }
   .brutServices li { margin: 0 0 9px; break-inside: avoid; }
-  .brutSvcNum { color: #999; margin-right: 12px; font-variant-numeric: tabular-nums; }
+  .brutSvcNum { color: #999; margin-right: 12px; font-variant-numeric: tabular-nums; font-family: "Courier New", Courier, monospace; }
 
   /* tools */
-  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: 16px; color: #222; max-width: 60ch; }
+  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: 17px; color: #222; }
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
   .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 14px; margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
@@ -61,7 +61,7 @@ export const SHARED_CSS = `
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
   .brutRefs { font-size: 13px; color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
   .brutRefs a { word-break: break-word; }
-  .brutRefNum { color: #999; margin-right: 5px; }
+  .brutRefNum { color: #999; margin-right: 5px; font-family: "Courier New", Courier, monospace; }
 `;
 
 /** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */

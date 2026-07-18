@@ -32,7 +32,7 @@ const LAYOUT_CSS = `
   .content .inner { max-width: none; }
 
   /* static top line (replaced the scrolling ticker) - non-moving, document-like */
-  .topline { text-align: center; font-size: 14px; color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
+  .topline { text-align: center; font-size: 13px; color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; font-family: "Courier New", Courier, monospace; }
   .topline a { color: #0645ad; }
 
   /* welcome banner - a defined block, WP main-page style; dismissible */
@@ -42,7 +42,7 @@ const LAYOUT_CSS = `
   .welcomeX:hover { color: #000; }
 
   /* numbered Contents [hide] box */
-  .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 14px; }
+  .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 13px; font-family: "Courier New", Courier, monospace; }
   .wikiToc summary { cursor: pointer; font-weight: bold; list-style: none; user-select: none; }
   .wikiToc summary::-webkit-details-marker { display: none; }
   .wikiToc summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: 13px; }
