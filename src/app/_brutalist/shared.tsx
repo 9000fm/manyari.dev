@@ -26,7 +26,9 @@ export const SHARED_CSS = `
     border-left: 3px solid currentColor; margin: 24px 0; padding: 4px 0 4px 20px;
     font-style: italic; font-size: 19px;
   }
-  .brutPagenum { text-align: center; color: #555; margin-top: 48px; font-size: 14px; letter-spacing: 0.3em; }
+  .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
+  .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
+  @keyframes brutBlink { 50% { opacity: 0; } }
   .brutTable { border-collapse: collapse; width: 100%; font-size: 15px; }
   .brutTable th, .brutTable td { padding: 10px 8px; vertical-align: top; }
   .brutTable th { border-bottom: 1px solid currentColor; text-align: left; font-variant: small-caps; letter-spacing: 0.03em; }
@@ -185,7 +187,9 @@ export function Sections(): ReactElement {
       <p style={{ fontSize: 13, color: "#555", textAlign: "center" }}>
         Last modified: {updated}. No cookies. No tracking. No frameworks visible.
       </p>
-      <p className="brutPagenum">— 1 —</p>
+      <p className="brutColophon">
+        © Flavio Manyari 2026<span className="brutCursor" />
+      </p>
     </>
   );
 }
