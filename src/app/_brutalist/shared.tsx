@@ -10,9 +10,11 @@ import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW } from "@/c
 export const BLUE = "#0000EE";
 
 export const SHARED_CSS = `
+  /* Type scale - the ONLY sizes allowed. Everything maps to one of these. */
+  :root { --t-name: 28px; --t-head: 24px; --t-lead: 19px; --t-body: 18px; --t-small: 16px; --t-micro: 13px; }
   .brut a { color: ${BLUE}; }
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
-  .brut h2 { font-size: 24px; margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
+  .brut h2 { font-size: var(--t-head); margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
   .brutAboutRow { display: flex; align-items: flex-start; }
   .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
@@ -20,26 +22,26 @@ export const SHARED_CSS = `
   .brutWork { list-style: none; }
   .brutWork > li { position: relative; }
   .brutWork > li::before { content: "—"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
-  .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 13px; }
+  .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: var(--t-micro); }
   .brutAst::before { content: "* * *"; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
-  .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
+  .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: var(--t-small); color: #000; }
   .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
   .brutFooter { margin-top: 40px; border-top: 3px double #9aa0a8; padding-top: 22px; }
   .brutFootCols { display: flex; gap: clamp(36px, 8vw, 72px); margin-bottom: 22px; }
-  .brutFootLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 13px; color: #555; margin-bottom: 8px; }
+  .brutFootLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); color: #555; margin-bottom: 8px; }
   .brutFootCols ul { list-style: none; padding: 0; margin: 0; }
-  .brutFootCols li { padding: 2px 0; font-size: 13px; }
+  .brutFootCols li { padding: 2px 0; font-size: var(--t-micro); }
   .brutFootBottom { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-top: 1px solid #000; padding-top: 12px; }
-  .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: 13px; color: #000; }
-  .brutTopLink { font-size: 13px; }
+  .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: var(--t-micro); color: #000; }
+  .brutTopLink { font-size: var(--t-micro); }
   @keyframes brutBlink { 50% { opacity: 0; } }
 
   /* infinite seamless ticker */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
   .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 105s linear infinite; }
   .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
-  .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
+  .brutMarqTrack span { flex-shrink: 0; font-size: var(--t-small); }
   .brutMarqSep { margin: 0 10px; color: #444; letter-spacing: 0; }
   @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
@@ -51,16 +53,16 @@ export const SHARED_CSS = `
   .brutSvcNum { color: #999; margin-right: 12px; font-variant-numeric: tabular-nums; }
 
   /* tools */
-  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: 17px; color: #222; }
+  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: var(--t-lead); color: #222; }
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
-  .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 13px; margin-bottom: 1px; }
+  .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
-  .brutLangs { margin-top: 22px; font-size: 15px; color: #333; }
+  .brutLangs { margin-top: 22px; font-size: var(--t-small); color: #333; }
 
   /* contact */
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
-  .brutRefsLabel { margin: 26px 0 6px; font-variant: small-caps; letter-spacing: 0.07em; font-weight: bold; font-size: 13px; color: #666; }
-  .brutRefs { font-size: 13px; color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
+  .brutRefsLabel { margin: 26px 0 6px; font-variant: small-caps; letter-spacing: 0.07em; font-weight: bold; font-size: var(--t-micro); color: #666; }
+  .brutRefs { font-size: var(--t-micro); color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
   .brutRefs li { padding-left: 22px; text-indent: -22px; }
   .brutRefs a { word-break: break-word; }
   .brutRefNum { color: #999; margin-right: 5px; }
@@ -131,7 +133,7 @@ export function Sections(): ReactElement {
               {p.year}
               {")"}
               <br />
-              <span style={{ fontSize: 15, opacity: 0.85 }}>{p.blurb}</span>
+              <span style={{ fontSize: "var(--t-small)", opacity: 0.85 }}>{p.blurb}</span>
             </li>
           ))}
         </ol>
@@ -190,7 +192,7 @@ export function Sections(): ReactElement {
 
       <section id="contact">
         <h2>Contact</h2>
-        <p style={{ marginTop: 0, fontSize: 21, fontStyle: "italic" }}>Let&apos;s build something.</p>
+        <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }}>Let&apos;s build something.</p>
         <p style={{ margin: "0 0 4px" }}>
           Based in {ME.location}. Available for freelance or full-time.
         </p>
@@ -208,7 +210,7 @@ export function Sections(): ReactElement {
             {" · "}
             <a href="#">Portfolio {"↗︎"}</a>
           </li>
-          <li style={{ color: "#555", fontSize: 14 }}>Full CV on request.</li>
+          <li style={{ color: "#555", fontSize: "var(--t-micro)" }}>Full CV on request.</li>
         </ul>
       </section>
 
