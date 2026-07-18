@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
-import Ticker from "../_brutalist/Ticker";
 import WireSphere from "../_brutalist/WireSphere";
 import MobileNav from "../_brutalist/MobileNav";
+import WelcomeBanner from "../_brutalist/WelcomeBanner";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
 // Classic Monobook palette: dark desk, grey page frame, white article box.
-const GREY_PAGE = "#1a1a1a";   // desk background (dark, behind the page frame)
+const GREY_PAGE = "#232220";   // desk background (warm charcoal, behind the page frame)
 const BLUE_LINE = "#a7d7f9";   // Monobook light-blue border
 const GREY_PANEL = "#f6f7f9";  // light grey panels (ticker, toc)
 
@@ -31,12 +31,15 @@ const LAYOUT_CSS = `
   .content { min-width: 0; background: #fff; border: 1px solid ${BLUE_LINE}; padding: 18px 30px 40px; }
   .content .inner { max-width: none; }
 
-  /* ticker = grey top strip */
-  .brutMarq { background: ${GREY_PANEL}; border-color: ${BLUE_LINE}; padding-left: 12px; padding-right: 12px; }
+  /* static top line (replaced the scrolling ticker) - non-moving, document-like */
+  .topline { text-align: center; font-size: 14px; color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
+  .topline a { color: #0645ad; }
 
-  /* welcome banner - a defined block, WP main-page style */
-  .welcome { text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 16px 26px; margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: #111; }
+  /* welcome banner - a defined block, WP main-page style; dismissible */
+  .welcome { position: relative; text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 16px 34px; margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: #111; }
   .welcome b { font-weight: bold; }
+  .welcomeX { position: absolute; top: 4px; right: 7px; background: none; border: none; font-size: 20px; line-height: 1; color: #999; cursor: pointer; padding: 2px 7px; }
+  .welcomeX:hover { color: #000; }
 
   /* numbered Contents [hide] box */
   .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 14px; }
@@ -67,9 +70,9 @@ const LAYOUT_CSS = `
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .welcome { font-size: 17px; padding: 14px 16px; }
 
-    .mnav { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 9px 16px; }
-    .mnavFM { font-weight: bold; font-size: 20px; letter-spacing: 0.06em; text-decoration: none; color: #000; }
-    .mnavBurger { background: none; border: 1px solid #999; width: 40px; height: 34px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; padding: 0 9px; cursor: pointer; }
+    .mnav { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; }
+    .mnav .mnavFM { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 36px; background: #000; color: #fff; font-weight: bold; font-size: 19px; letter-spacing: 0.03em; text-decoration: none; box-sizing: border-box; }
+    .mnavBurger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; width: 42px; height: 36px; background: none; border: 1px solid #999; padding: 0 9px; cursor: pointer; box-sizing: border-box; }
     .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
     .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); display: flex; flex-direction: column; }
     .mnavMenu a { padding: 13px 18px; border-top: 1px solid #eee; text-decoration: none; color: #0645ad; font-size: 17px; }
@@ -95,7 +98,13 @@ export default function BrutalistSidebar() {
       <MobileNav />
 
       <div className="wrap">
-        <Ticker />
+        <div className="topline">
+          <span>{ME.role}</span>
+          {" · "}
+          <a href="#contact">Available for work</a>
+          {" · "}
+          <span>{ME.location}</span>
+        </div>
 
         <div className="grid">
           <aside className="side">
@@ -132,10 +141,7 @@ export default function BrutalistSidebar() {
 
           <div className="content">
             <div className="inner">
-              <p className="welcome">
-                <b>Hello and welcome.</b> This is where I keep my work, the tools I use,
-                and how to reach me. Take a look around.
-              </p>
+              <WelcomeBanner />
               <Sections />
             </div>
           </div>
