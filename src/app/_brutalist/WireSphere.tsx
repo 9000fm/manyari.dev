@@ -209,9 +209,44 @@ export default function WireSphere({
 
     let spin = 0;
     let raf = 0;
+    let dir = -1; // spin direction (starts clockwise); flips on double-tap
+    let vel = dir * speed; // signed angular velocity per frame
+    let tween: { from: number; to: number; start: number; dur: number } | null = null;
+    let cooldownUntil = 0;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const frame = () => {
+    // Double-tap (mouse or touch): ease the spin to a stop, then send it the
+    // other way. 8s cooldown so it can't be spammed. Respects reduced motion.
+    const reverse = () => {
+      const now = performance.now();
+      if (reduce || now < cooldownUntil) return;
+      cooldownUntil = now + 8000;
+      dir = -dir;
+      tween = { from: vel, to: dir * speed, start: now, dur: 2200 };
+    };
+    let lastTap = 0;
+    const onPointerUp = () => {
+      const now = performance.now();
+      if (now - lastTap < 320) {
+        reverse();
+        lastTap = 0;
+      } else {
+        lastTap = now;
+      }
+    };
+    canvas.addEventListener("pointerup", onPointerUp);
+
+    const frame = (t?: number) => {
+      if (tween) {
+        const p = Math.min(1, ((t ?? performance.now()) - tween.start) / tween.dur);
+        // easeInOutCubic - passes through 0 velocity at the midpoint (the stop)
+        const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+        vel = tween.from + (tween.to - tween.from) * e;
+        if (p >= 1) {
+          vel = tween.to;
+          tween = null;
+        }
+      }
       const cs = Math.cos(spin);
       const sn = Math.sin(spin);
       const M = new Float32Array([
@@ -260,13 +295,14 @@ export default function WireSphere({
       gl.drawArrays(gl.LINES, 0, limb.length / 3);
 
       if (!reduce) {
-        spin += speed;
+        spin += vel;
         raf = requestAnimationFrame(frame);
       }
     };
     frame();
 
     return () => {
+      canvas.removeEventListener("pointerup", onPointerUp);
       cancelAnimationFrame(raf);
       gl.deleteBuffer(sphereBuf);
       gl.deleteBuffer(limbBuf);
@@ -282,7 +318,7 @@ export default function WireSphere({
     <canvas
       ref={ref}
       aria-hidden="true"
-      style={{ width: size, height: size, display: "block", transform: `rotate(${lean}deg)` }}
+      style={{ width: size, height: size, display: "block", cursor: "pointer", transform: `rotate(${lean}deg)`, touchAction: "manipulation" }}
     />
   );
 }
