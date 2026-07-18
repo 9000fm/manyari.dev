@@ -7,8 +7,10 @@ import { PROJECTS, type Project } from "@/content";
  *
  * DESKTOP: hover a project row -> a bordered preview grows in and TRAILS the
  * cursor (eased, side-locked so it never flips mid-hover); shrinks out on leave.
- * MOBILE: tap a row -> the preview grows in centered over a backdrop; tap the
- * preview to open the site, tap the backdrop to close.
+ * MOBILE: tap a row's TEXT -> the preview grows in centered over a backdrop;
+ * tap the card or backdrop to dismiss. Tapping the blue TITLE link navigates
+ * to the site (the browser's own leave-site step). While hidden the card must
+ * NOT capture taps, or it silently blocks the nav / Contents at screen centre.
  *
  * SCAFFOLD STAGE: rows without an asset show a "▶ preview" placeholder. To go
  * live, drop a GIF / clip / screenshot into /public/previews/<slug>.(gif|mp4|webp)
@@ -57,24 +59,20 @@ export default function WorkHover() {
 
     const cleanups: Array<() => void> = [];
 
-    // ---------- MOBILE: tap to open a centered preview ----------
+    // ---------- MOBILE: tap the row TEXT to peek; the blue title link navigates ----------
     if (!fine) {
-      let openSlug: string | null = null;
-      closeRef.current = () => {
-        openSlug = null;
-        setShown(false);
-      };
+      closeRef.current = () => setShown(false);
       for (const [li, proj] of byLi) {
-        const a = li.querySelector("a");
-        if (!a) continue;
         const onClick = (e: Event) => {
-          e.preventDefault(); // first tap previews instead of navigating
-          openSlug = proj.slug;
+          // tapping the blue title (or any link) leaves the site - let it be
+          if ((e.target as HTMLElement | null)?.closest?.("a")) return;
+          // tapping the text opens the preview
+          e.preventDefault();
           setActive(proj);
           setShown(true);
         };
-        a.addEventListener("click", onClick);
-        cleanups.push(() => a.removeEventListener("click", onClick));
+        li.addEventListener("click", onClick);
+        cleanups.push(() => li.removeEventListener("click", onClick));
       }
       return () => cleanups.forEach((c) => c());
     }
@@ -173,11 +171,9 @@ export default function WorkHover() {
 
   const preview = active ? PREVIEWS[active.slug] : undefined;
 
-  const openActive = () => {
-    if (touch && active?.url) {
-      window.open(active.url, "_blank", "noopener,noreferrer");
-      closeRef.current();
-    }
+  // on mobile the peek is dismiss-only; navigation happens via the blue title
+  const onCardTap = () => {
+    if (touch) closeRef.current();
   };
 
   return (
@@ -190,7 +186,7 @@ export default function WorkHover() {
         ref={cardRef}
         className={`workHoverCard${shown ? " on" : ""}${touch ? " centered" : ""}`}
         aria-hidden="true"
-        onClick={openActive}
+        onClick={onCardTap}
       >
         <div className="workHoverInner">
           <div className="workHoverMedia">
@@ -223,8 +219,11 @@ const CSS = `
   }
   .workHoverCard.centered {
     left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(86vw, 440px); pointer-events: auto; cursor: pointer;
+    width: min(86vw, 440px);
   }
+  /* only capture taps while the peek is actually visible - otherwise the
+     hidden fixed card silently blocks taps at screen centre (nav / TOC) */
+  .workHoverCard.centered.on { pointer-events: auto; cursor: pointer; }
   .workHoverInner {
     border: 1px solid #7c828b; box-shadow: 0 16px 44px rgba(0,0,0,0.45);
     background: #232220; overflow: hidden;
