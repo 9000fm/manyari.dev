@@ -266,7 +266,7 @@ export function Sections(): ReactElement {
             {" · "}
             <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             {" · "}
-            <a href="/cv" target="_blank" rel="noopener noreferrer">Download CV {"↗︎"}</a>
+            <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer">Download CV {"↗︎"}</a>
           </li>
         </ul>
       </section>
