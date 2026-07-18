@@ -4,7 +4,7 @@ export const ME = {
   location: "Lima, PE",
   email: "flavio@superself.online",
   phone: "+51 990 028 077",
-  available: "Available for contract — 2025",
+  available: "Available for contract — 2026",
   about:
     "Web developer and graphic designer with 4+ years taking projects end-to-end — brand, design, code, deploy — for clients across three continents. Background in music production and generative art. I treat code as a craft and brand work as architecture.",
   socials: {
@@ -75,7 +75,7 @@ export const EXPERIENCE: Job[] = [
     title: "Web Developer & IT Consultant",
     company: "Ecolution Industries Pty Ltd",
     location: "Sunshine Coast, QLD, Australia (Remote)",
-    period: "May 2024 — Present",
+    period: "May 2024 — 2026",
     blurb: "Led the full redesign of ecolution.com.au on WordPress. Implemented technical SEO and structured metadata. Configured SPF/DKIM/DMARC. Managed DNS migration, SSL, hosting infrastructure.",
   },
   {
@@ -140,8 +140,19 @@ export const LANGUAGES = [
 ] as const;
 
 export const VARIANTS = [
-  { slug: "v01-swiss",     n: "01", name: "Swiss Editorial",    vibe: "Grotesk + grid + hairline rules" },
-  { slug: "v05-macos7",    n: "02", name: "Mac OS 7",           vibe: "Pixel chrome, 1-bit, dotted patterns" },
-  { slug: "v09-bauhaus",   n: "03", name: "Bauhaus",            vibe: "Primary shapes, geometric sans" },
-  { slug: "v11-brutalist", n: "04", name: "Brutalist Raw HTML", vibe: "Times + blue underlined links" },
+  { slug: "v11a-sidebar",   n: "A",  name: "Brutalist · Sidebar",  vibe: "Wikipedia left TOC (recommended)" },
+  { slug: "v11b-wide",      n: "B",  name: "Brutalist · Wide",     vibe: "Zoomed single column" },
+  { slug: "v11c-split",     n: "C",  name: "Brutalist · Split",    vibe: "Identity left, content right" },
+  { slug: "v01-swiss",      n: "01", name: "Swiss Editorial",     vibe: "Grotesk + grid + hairline rules" },
+  { slug: "v02-warm70s",    n: "02", name: "Warm 70s",            vibe: "Cream/rust, chunky display serif" },
+  { slug: "v03-newspaper",  n: "03", name: "Newspaper",           vibe: "NYT-style broadsheet, masthead" },
+  { slug: "v04-win95",      n: "04", name: "Windows 95",          vibe: "Teal desktop chrome, taskbar" },
+  { slug: "v05-macos7",     n: "05", name: "Mac OS 7",            vibe: "Pixel chrome, 1-bit, dotted patterns" },
+  { slug: "v06-terminal",   n: "06", name: "Terminal CRT",        vibe: "Green on black, blinking cursor" },
+  { slug: "v07-y2k",        n: "07", name: "Y2K Chrome",          vibe: "Chrome gradient, electric blue" },
+  { slug: "v08-riso",       n: "08", name: "Riso Zine",           vibe: "Pink + blue, off-register, halftone" },
+  { slug: "v09-bauhaus",    n: "09", name: "Bauhaus",             vibe: "Primary shapes, geometric sans" },
+  { slug: "v10-midcentury", n: "10", name: "Mid-Century Atomic",  vibe: "Mustard/teal, star dividers" },
+  { slug: "v11-brutalist",  n: "11", name: "Brutalist Raw HTML",  vibe: "Times + blue underlined links" },
+  { slug: "v12-cassette",   n: "12", name: "Cassette Futurism",   vibe: "Amber on black, ASCII frames" },
 ] as const;
