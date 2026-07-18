@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web developer and designer who takes projects end to end - brand, design, build, and launch. I help brands and online shops sell more, from first sketch to live site. 4+ years, clients across three continents.",
+    "Web developer and designer who takes projects end to end - brand, design, build, and launch. I help brands and online shops sell more, from first sketch to live site.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -152,6 +152,16 @@ export const SERVICES = [
   "Content-managed Sites (CMS)",
   "Technical SEO",
   "Hosting, DNS & Deployment",
+] as const;
+
+// Short tags for the top ticker - keep it simple / scannable.
+export const TICKER = [
+  "Brand Identity",
+  "Web Design",
+  "E-commerce",
+  "CMS",
+  "Technical SEO",
+  "Hosting",
 ] as const;
 
 export const LANGUAGES = [

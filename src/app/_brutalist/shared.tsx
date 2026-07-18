@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES } from "@/content";
+import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER } from "@/content";
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -51,7 +51,7 @@ export const SHARED_CSS = `
 
 /** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */
 export function Marquee(): ReactElement {
-  const line = [...SERVICES, ME.available, ME.email].join("  •  ") + "  •  ";
+  const line = [...TICKER, ME.available, ME.email].join("  •  ") + "  •  ";
   const half = line.repeat(4); // repeat so even ultra-wide screens stay filled
   return (
     <div className="brutMarq" aria-hidden="true">
@@ -143,7 +143,8 @@ export function Sections(): ReactElement {
 
       <section id="contact">
         <h2>Contact</h2>
-        <p style={{ marginTop: 0 }}>
+        <p style={{ marginTop: 0, fontSize: 21, fontStyle: "italic" }}>Let&apos;s build something.</p>
+        <p style={{ margin: "0 0 4px" }}>
           Based in {ME.location}. Available for freelance or full-time.
         </p>
         <ul className="brutContact">
