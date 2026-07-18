@@ -36,9 +36,9 @@ const LAYOUT_CSS = `
   .topline a { color: #0645ad; }
 
   /* welcome banner - a defined block, WP main-page style; dismissible */
-  .welcome { position: relative; text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 16px 34px; margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: #111; }
+  .welcome { position: relative; text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 22px 42px 18px; margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: #111; }
   .welcome b { font-weight: bold; }
-  .welcomeX { position: absolute; top: 4px; right: 7px; background: none; border: none; font-size: 20px; line-height: 1; color: #999; cursor: pointer; padding: 2px 7px; }
+  .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #999; cursor: pointer; padding: 2px 7px; }
   .welcomeX:hover { color: #000; }
 
   /* numbered Contents [hide] box */
@@ -68,14 +68,18 @@ const LAYOUT_CSS = `
     .content { padding: 16px 16px 36px; font-size: 18px; }
     .side h1 { font-size: 35px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
-    .welcome { font-size: 17px; padding: 14px 16px; }
+    .welcome { font-size: 17px; padding: 20px 34px 14px; }
 
-    .mnav { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; }
+    .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-100%); transition: transform 0.28s ease; }
+    .mnav.mnavShown { transform: translateY(0); }
     .mnav .mnavFM { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 36px; background: #000; color: #fff; font-weight: bold; font-size: 19px; letter-spacing: 0.03em; text-decoration: none; box-sizing: border-box; }
     .mnavBurger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; width: 42px; height: 36px; background: none; border: 1px solid #999; padding: 0 9px; cursor: pointer; box-sizing: border-box; }
     .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
-    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); display: flex; flex-direction: column; }
-    .mnavMenu a { padding: 13px 18px; border-top: 1px solid #eee; text-decoration: none; color: #0645ad; font-size: 17px; }
+    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: ${GREY_PANEL}; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); padding: 12px 18px 16px; font-family: "Courier New", Courier, monospace; font-size: 15px; }
+    .mnavMenuLabel { display: block; font-weight: bold; margin-bottom: 8px; }
+    .mnavMenu ol { list-style: decimal outside; margin: 0; padding-left: 26px; }
+    .mnavMenu li { padding: 6px 0; }
+    .mnavMenu a { color: #0645ad; text-decoration: none; }
   }
 `;
 
