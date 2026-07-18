@@ -144,7 +144,7 @@ export function Sections(): ReactElement {
       <section id="contact">
         <h2>Contact</h2>
         <p style={{ marginTop: 0 }}>
-          Based in {ME.location}. Available for freelance or full-time - let&apos;s build something that sells.
+          Based in {ME.location}. Available for freelance or full-time.
         </p>
         <ul className="brutContact">
           <li>
