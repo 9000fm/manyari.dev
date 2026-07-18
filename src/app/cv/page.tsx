@@ -8,14 +8,14 @@
  */
 
 const SUMMARY =
-  "Web design and development, end to end - from identity to deployment. I build distinctive sites across e-commerce, editorial portfolios, and independent products, with a creative-coding edge (WebGL, generative visuals). I use AI-assisted workflows to prototype fast while keeping design, architecture, and the final build under my control.";
+  "Web design and development, end to end. I've delivered projects for clients across North America, Europe, and Latin America - e-commerce, editorial, apparel, and music - collaborating with remote, multidisciplinary teams. A creative-coding edge (WebGL, generative visuals) and AI-assisted workflows keep the work fast, with design, architecture, and the final build under my control.";
 
 const EXPERIENCE = [
   {
     role: "Freelance Web Developer & Designer",
     org: "Independent · Lima (Remote)",
     dates: "2023 - Present",
-    blurb: "Websites built end to end for a range of clients - brand, design, code, and deployment, plus the infrastructure behind them (DNS, SSL, hosting, technical SEO).",
+    blurb: "Websites built end to end for international clients - brand, design, code, and deployment, plus the infrastructure behind them (DNS, SSL, hosting, technical SEO).",
   },
   {
     role: "Freelance Graphic Designer",
