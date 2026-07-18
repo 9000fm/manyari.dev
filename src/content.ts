@@ -100,7 +100,7 @@ export type SkillGroup = { label: string; items: string[] };
 
 // One line under the Tools heading - frames AI as an advantage under skilled control.
 export const WORKFLOW =
-  "I move fast from concept to production - design, architecture, and final code are always mine.";
+  "I move fast from concept to production, staying hands-on through design, architecture, and the final code.";
 
 export const SKILLS: SkillGroup[] = [
   { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
