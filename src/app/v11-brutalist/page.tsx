@@ -92,7 +92,7 @@ export default function BrutalistPage() {
         <h1>{ME.name}</h1>
         <p style={{ margin: "0 0 4px", fontStyle: "italic" }}>{ME.role}.</p>
         <p style={{ margin: 0, color: "#444", fontSize: 15 }}>
-          {ME.location} · <a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a> · {ME.phone}
+          {ME.location} · <a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a>
           <br />
           Status: <strong>{ME.available}</strong>
         </p>
@@ -211,7 +211,6 @@ export default function BrutalistPage() {
           <h2>Contact</h2>
           <ul style={{ margin: 0, paddingLeft: 24 }}>
             <li><a href={`mailto:${ME.email}`} style={{ color: "#0000EE" }}>{ME.email}</a></li>
-            <li>Phone: {ME.phone}</li>
             <li><a href={ME.socials.github} style={{ color: "#0000EE" }}>GitHub</a></li>
             <li><a href={ME.socials.linkedin} style={{ color: "#0000EE" }}>LinkedIn</a></li>
           </ul>

@@ -343,7 +343,6 @@ export default function SwissPage() {
         <div style={{ marginTop: 24, display: "flex", gap: 24, fontSize: 14, flexWrap: "wrap" }}>
           <a href={ME.socials.github} style={{ color: "#0a0a0a" }}>GitHub ↗</a>
           <a href={ME.socials.linkedin} style={{ color: "#0a0a0a" }}>LinkedIn ↗</a>
-          <span style={{ color: "#888" }}>{ME.phone}</span>
         </div>
       </section>
     </main>

@@ -49,7 +49,7 @@ export default function BrutalistWide() {
             <h1>{ME.name}</h1>
             <p style={{ margin: "0 0 4px", fontStyle: "italic" }}>{ME.role}.</p>
             <p style={{ margin: 0, color: "#444", fontSize: 15 }}>
-              {ME.location} · <a href={`mailto:${ME.email}`}>{ME.email}</a> · {ME.phone}
+              {ME.location} · <a href={`mailto:${ME.email}`}>{ME.email}</a>
               <br />
               Status: <strong>{ME.available}</strong>
             </p>

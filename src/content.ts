@@ -3,10 +3,9 @@ export const ME = {
   role: "Freelance Designer & Developer",
   location: "Lima, PE",
   email: "flavio@manyari.dev",
-  phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web design and development, end to end. I've delivered projects for clients across North America, Europe, and Latin America - in e-commerce, editorial, apparel, and music - collaborating with remote, multidisciplinary teams.",
+    "Web design and development, end to end - brand, interface, code, and deployment. I've shipped stores, portfolios, and platforms for clients in the US, Europe, and Latin America.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -86,21 +85,14 @@ export const EXPERIENCE: Job[] = [
     company: "Independent",
     location: "Peru",
     period: "2020 — Present",
-    blurb: "Websites built end to end for international clients - brand, design, code, deployment, and the infrastructure behind them (DNS, SSL, hosting, SEO) - working with remote, multidisciplinary teams.",
-  },
-  {
-    title: "Web Designer · Shopify",
-    company: "Silverback Stripes",
-    location: "United States",
-    period: "2026",
-    blurb: "Storefront redesign for a combat-sports apparel brand - rebuilt the homepage, navigation, and key brand pages.",
+    blurb: "Websites built end to end for international clients - brand, design, code, deployment, and the infrastructure behind them (DNS, SSL, hosting, SEO) - working with remote, multidisciplinary teams. Early projects for local clients before expanding internationally.",
   },
   {
     title: "Community Manager",
     company: "T&IL Cleaning Services",
     location: "United States",
     period: "2021 — 2023",
-    blurb: "Content, social, and video for a US brand - improved audience retention and streamlined content workflows.",
+    blurb: "Content and social for a US brand.",
   },
 ];
 
@@ -108,7 +100,7 @@ export type SkillGroup = { label: string; items: string[] };
 
 // One line under the Tools heading - frames AI as an advantage under skilled control.
 export const WORKFLOW =
-  "I use modern development and AI-assisted workflows to prototype quickly, while keeping design, architecture, and final implementation under direct control.";
+  "I move fast from concept to production - design, architecture, and final code are always mine.";
 
 export const SKILLS: SkillGroup[] = [
   { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
@@ -140,12 +132,10 @@ export const EDUCATION = [
 export const SERVICES = [
   "Website Design & Build",
   "Online Stores & E-commerce",
-  "Content-managed Sites (CMS)",
-  "SEO",
-  "Hosting, DNS & Deployment",
-  "Brand & Visual Identity",
-  "Creative Coding & Generative Visuals",
   "Web Apps & Custom Features",
+  "Brand & Visual Identity",
+  "Content-managed Sites (CMS)",
+  "SEO & Performance",
 ] as const;
 
 // Short tags for the top ticker - keep it simple / scannable.

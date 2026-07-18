@@ -320,7 +320,6 @@ export default function BauhausPage() {
         <div style={{ marginTop: 24, fontSize: 14, display: "flex", gap: 16, flexWrap: "wrap" }}>
           <a href={ME.socials.github} style={{ color: YELLOW }}>github</a>
           <a href={ME.socials.linkedin} style={{ color: YELLOW }}>linkedin</a>
-          <span style={{ color: "#888" }}>{ME.phone}</span>
         </div>
       </section>
     </main>

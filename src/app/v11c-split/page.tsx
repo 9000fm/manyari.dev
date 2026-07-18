@@ -50,8 +50,6 @@ export default function BrutalistSplit() {
             <br />
             <a href={`mailto:${ME.email}`}>{ME.email}</a>
             <br />
-            {ME.phone}
-            <br />
             Status: <strong>{ME.available}</strong>
           </p>
 
