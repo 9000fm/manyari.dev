@@ -62,15 +62,6 @@ export const PROJECTS: Project[] = [
     blurb: "Portfolio for a photographer and filmmaker - editorial layout, animated transitions, and a client-managed CMS. Designed, built, and deployed end to end.",
   },
   {
-    slug: "brisol",
-    title: "Brisol",
-    year: 2026,
-    role: "Redesign · WordPress",
-    url: "https://brisol.pe",
-    tag: "client",
-    blurb: "Redesign of a Peruvian solar-energy company's corporate site, rebuilt with a working lead-capture funnel.",
-  },
-  {
     slug: "digeart",
     title: "Digeart",
     year: 2026,
@@ -91,32 +82,25 @@ export type Job = {
 
 export const EXPERIENCE: Job[] = [
   {
-    title: "Web Developer & IT Consultant",
-    company: "Ecolution Industries Pty Ltd",
-    location: "Sunshine Coast, QLD, Australia (Remote)",
-    period: "May 2024 — 2026",
-    blurb: "Led the full redesign of ecolution.com.au on WordPress. Implemented technical SEO and structured metadata. Configured SPF/DKIM/DMARC. Managed DNS migration, SSL, hosting infrastructure.",
-  },
-  {
     title: "Freelance Web Developer & Designer",
     company: "Independent",
-    location: "Lima, PE",
-    period: "Dec 2023 — Present",
-    blurb: "Built superself.online (Next.js 16, p5.js, full brand identity) and Micaela Lucia's Portfolio (Next.js + Sanity + Framer Motion). Created graphic materials for clients — logos, brand manuals, social assets.",
+    location: "Peru",
+    period: "2020 — Present",
+    blurb: "Sites built end to end - superself.online, Micaela Lucía's portfolio, client brand and print work - plus DNS, SSL, and hosting setup.",
   },
   {
-    title: "Freelance Graphic Designer",
-    company: "Independent",
-    location: "Lima, PE",
-    period: "Nov 2020 — Dec 2023",
-    blurb: "Designed printed materials for a medical-sector company. Created event flyers and promotional materials for Lima's electronic music scene. Brand identities for small businesses.",
+    title: "Web Designer · Shopify",
+    company: "Silverback Stripes",
+    location: "United States",
+    period: "2026",
+    blurb: "Storefront redesign for a combat-sports apparel brand - rebuilt the homepage, navigation, and key brand pages.",
   },
   {
     title: "Community Manager",
-    company: "T&IL Cleaning Services LLC",
-    location: "Baltimore, MD (Remote)",
-    period: "Dec 2021 — Oct 2023",
-    blurb: "Created and managed content for Instagram, Facebook, TikTok. Coordinated client communications. Produced and edited social-media video.",
+    company: "T&IL Cleaning Services",
+    location: "United States",
+    period: "2021 — 2023",
+    blurb: "Content, social, and video for a US brand - improved audience retention and streamlined content workflows.",
   },
 ];
 
@@ -135,18 +119,21 @@ export const SKILLS: SkillGroup[] = [
   { label: "Infra & SEO",   items: ["Vercel", "DNS / SSL / Hosting", "Technical SEO"] },
 ];
 
+// He did not finish either UPC career (Industrial Engineering to 6th cycle,
+// Music Production to 8th), so no degree is claimed - framed as "studies".
+// The Skillnest bootcamp is the one completed, certified credential -> first.
 export const EDUCATION = [
   {
-    title: "Music Production",
-    school: "Universidad Peruana de Ciencias Aplicadas (UPC)",
-    period: "2018 — 2023",
-    detail: "Synthesis, sound design, electronic composition, DAWs (Ableton, Logic, Pro Tools).",
+    title: "Full Stack Python Developer",
+    school: "Skillnest (ex Coding Dojo Latam)",
+    period: "2023",
+    detail: "Certified. HTML, CSS, JavaScript, Python, Flask, Django, MySQL.",
   },
   {
-    title: "Full Stack Python Developer Bootcamp",
-    school: "Skillnest (ex Coding Dojo Latam)",
-    period: "Feb — Jun 2023",
-    detail: "HTML, CSS, JavaScript, Python, Flask, Django, MySQL. Final project: full-stack ecommerce.",
+    title: "University studies — Engineering & Music Production",
+    school: "Universidad Peruana de Ciencias Aplicadas (UPC)",
+    period: "2018 — 2023",
+    detail: "",
   },
 ] as const;
 

@@ -28,7 +28,6 @@ const PREVIEWS: Record<string, Preview> = {
   silverback: { type: "image", src: "/previews/silverback.gif" },
   superself:  { type: "image", src: "/previews/superself.gif" },
   micaela:    { type: "image", src: "/previews/micaela.gif" },
-  brisol:     { type: "image", src: "/previews/brisol.gif" },
   digeart:    { type: "image", src: "/previews/digeart.gif" },
 };
 
