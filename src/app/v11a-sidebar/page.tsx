@@ -3,42 +3,76 @@ import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
 import Ticker from "../_brutalist/Ticker";
 import WireSphere from "../_brutalist/WireSphere";
+import MobileNav from "../_brutalist/MobileNav";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
+// Classic Monobook palette: dark desk, grey page frame, white article box.
+const GREY_PAGE = "#1a1a1a";   // desk background (dark, behind the page frame)
+const BLUE_LINE = "#a7d7f9";   // Monobook light-blue border
+const GREY_PANEL = "#f6f7f9";  // light grey panels (ticker, toc)
+
 const LAYOUT_CSS = `
-  .brut { padding: 34px 30px; box-sizing: border-box; }
-  .wrap { max-width: 1160px; margin: 0 auto; padding: 30px 48px 72px; background: #fff; box-shadow: 0 0 46px rgba(0,0,0,0.5); }
-  .grid { display: grid; gap: 40px; grid-template-columns: 1fr; margin-top: 8px; }
-  .side { display: flex; flex-direction: column; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  .brut { padding: 28px 26px; box-sizing: border-box; }
+  /* the page frame - a defined window/PDF edge so the ticker ends at the page limit */
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0; background: #e9ebef; border: 1px solid #7c828b; box-shadow: 0 8px 40px rgba(0,0,0,0.55); }
+  .grid { display: grid; gap: 32px; grid-template-columns: 1fr; margin: 0; padding: 14px 26px 44px; }
+
+  .side { display: flex; flex-direction: column; padding-top: 2px; }
   .side h1 { font-size: 27px; line-height: 0.98; margin: 0; }
   .identRow { display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .identText { min-width: 0; }
   .identSphere { flex-shrink: 0; }
-  .sideToc { list-style: none; padding: 0; margin: 16px 0; }
-  .sideToc li { padding: 3px 0; }
   .sideMeta { color: #444; font-size: 14px; margin: 6px 0 0; }
-  .content { min-width: 0; }
-  .content .inner { max-width: 68ch; }
+
+  /* content = the white "article" box with the Monobook blue border */
+  .content { min-width: 0; background: #fff; border: 1px solid ${BLUE_LINE}; padding: 18px 30px 40px; }
+  .content .inner { max-width: none; }
+
+  /* ticker = grey top strip */
+  .brutMarq { background: ${GREY_PANEL}; border-color: ${BLUE_LINE}; padding-left: 12px; padding-right: 12px; }
+
+  /* welcome banner - a defined block, WP main-page style */
+  .welcome { text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 16px 26px; margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: #111; }
+  .welcome b { font-weight: bold; }
+
+  /* numbered Contents [hide] box */
+  .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 14px; }
+  .wikiToc summary { cursor: pointer; font-weight: bold; list-style: none; user-select: none; }
+  .wikiToc summary::-webkit-details-marker { display: none; }
+  .wikiToc summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: 13px; }
+  .wikiToc:not([open]) summary::after { content: " [show]"; }
+  .wikiToc ol { list-style: decimal outside; margin: 8px 0 0; padding-left: 26px; }
+  .wikiToc li { display: list-item; padding: 2px 0; }
+
+  /* mobile sticky header (FM + burger) - hidden on desktop */
+  .mnav { display: none; }
+
   @media (min-width: 900px) {
-    .grid { grid-template-columns: 288px 1fr; }
-    .side {
-      position: sticky; top: 20px; align-self: start;
-      border-right: 1px solid #000; padding-right: 24px;
-      max-height: calc(100vh - 40px); overflow: auto;
-    }
-    .identRow { flex-direction: column-reverse; align-items: flex-start; justify-content: flex-start; gap: 14px; }
+    .grid { grid-template-columns: 264px 1fr; }
+    .side { position: sticky; top: 18px; align-self: start; padding-left: 14px; padding-right: 18px; max-height: calc(100vh - 36px); overflow: auto; }
+    .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
+    .identSphere { align-self: center; }
+    .identText { padding-left: 2px; }
+    .wikiToc { margin-left: 0; }
   }
   @media (max-width: 899px) {
-    .brut { padding: 8px; }
-    .wrap { padding: 20px 18px 56px; box-shadow: 0 0 22px rgba(0,0,0,0.5); }
+    .brut { padding: 0 0 8px; }
+    .wrap { border-left: none; border-right: none; }
+    .grid { padding: 12px 14px 40px; }
+    .content { padding: 16px 16px 36px; font-size: 18px; }
     .side h1 { font-size: 35px; }
-    .content { font-size: 18px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
-    .side .snav { order: -1; margin-bottom: 6px; }
-    .side .contentsLabel { display: none; }
-    .sideToc { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 4px 0 14px; border-bottom: 1px solid #000; padding-bottom: 12px; }
-    .sideToc li { padding: 0; }
+    .welcome { font-size: 17px; padding: 14px 16px; }
+
+    .mnav { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 9px 16px; }
+    .mnavFM { font-weight: bold; font-size: 20px; letter-spacing: 0.06em; text-decoration: none; color: #000; }
+    .mnavBurger { background: none; border: 1px solid #999; width: 40px; height: 34px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; padding: 0 9px; cursor: pointer; }
+    .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
+    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); display: flex; flex-direction: column; }
+    .mnavMenu a { padding: 13px 18px; border-top: 1px solid #eee; text-decoration: none; color: #0645ad; font-size: 17px; }
   }
 `;
 
@@ -48,7 +82,7 @@ export default function BrutalistSidebar() {
       id="top"
       className="brut"
       style={{
-        background: "#171717",
+        background: GREY_PAGE,
         color: "#000",
         minHeight: "100vh",
         fontFamily: '"Times New Roman", Times, serif',
@@ -58,55 +92,50 @@ export default function BrutalistSidebar() {
     >
       <style>{SHARED_CSS + LAYOUT_CSS}</style>
 
+      <MobileNav />
+
       <div className="wrap">
         <Ticker />
 
         <div className="grid">
           <aside className="side">
-            <div className="ident">
-              <div className="identRow">
-                <div className="identText">
-                  <h1>
-                    {ME.name.split(" ").map((w, i) => (
-                      <span key={i} style={{ display: "block" }}>
-                        {w}
-                      </span>
-                    ))}
-                  </h1>
-                  <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: 15 }}>{ME.role}.</p>
-                  <p className="sideMeta">
-                    <a href={`mailto:${ME.email}`}>{ME.email}</a>
-                    <br />
-                    {ME.phone}
-                    <br />
-                    Status: <strong>{ME.available}</strong>
-                  </p>
-                </div>
-                <div className="identSphere">
-                  <WireSphere size={176} />
-                </div>
+            <div className="identRow">
+              <div className="identText">
+                <h1>
+                  {ME.name.split(" ").map((w, i) => (
+                    <span key={i} style={{ display: "block" }}>{w}</span>
+                  ))}
+                </h1>
+                <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: 15 }}>{ME.role}.</p>
+                <p className="sideMeta">
+                  <a href={`mailto:${ME.email}`}>{ME.email}</a>
+                  <br />
+                  {ME.phone}
+                  <br />
+                  Status: <strong>{ME.available}</strong>
+                </p>
+              </div>
+              <div className="identSphere">
+                <WireSphere size={176} />
               </div>
             </div>
 
-            <nav className="snav">
-              <p
-                className="contentsLabel"
-                style={{ fontVariant: "small-caps", letterSpacing: "0.06em", margin: "18px 0 4px", color: "#555", fontSize: 13 }}
-              >
-                Contents
-              </p>
-              <ul className="sideToc">
+            <details className="wikiToc" open>
+              <summary>Contents</summary>
+              <ol>
                 {NAV_SECTIONS.map((s) => (
-                  <li key={s.id}>
-                    <a href={`#${s.id}`}>{s.label}</a>
-                  </li>
+                  <li key={s.id}><a href={`#${s.id}`}>{s.label}</a></li>
                 ))}
-              </ul>
-            </nav>
+              </ol>
+            </details>
           </aside>
 
           <div className="content">
             <div className="inner">
+              <p className="welcome">
+                <b>Hello and welcome.</b> This is where I keep my work, the tools I use,
+                and how to reach me. Take a look around.
+              </p>
               <Sections />
             </div>
           </div>

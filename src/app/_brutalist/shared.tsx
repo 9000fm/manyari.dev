@@ -37,7 +37,7 @@ export const SHARED_CSS = `
 
   /* infinite seamless ticker */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
-  .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 75s linear infinite; }
+  .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 105s linear infinite; }
   .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
   .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
   .brutMarqSep { margin: 0 10px; color: #444; letter-spacing: 0; }
@@ -137,6 +137,27 @@ export function Sections(): ReactElement {
 
       <p className="brutAst" />
 
+      <section id="references">
+        <h2>References</h2>
+        <ol className="brutRefs">
+          {PROJECTS.map((p, i) => {
+            const kind = p.tag === "self" ? "Own brand" : p.tag === "personal" ? "Personal project" : "Client work";
+            return (
+              <li key={p.slug}>
+                <span className="brutRefNum">{i + 1}.</span>
+                {p.title} ({p.year}). {kind}.{" "}
+                <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
+                  {(p.url ?? "").replace(/^https?:\/\//, "")}
+                </a>
+                .
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <p className="brutAst" />
+
       <section id="services">
         <h2>Services</h2>
         <ol className="brutServices">
@@ -191,27 +212,6 @@ export function Sections(): ReactElement {
           </li>
           <li style={{ color: "#555", fontSize: 14 }}>Full CV on request.</li>
         </ul>
-      </section>
-
-      <p className="brutAst" />
-
-      <section id="references">
-        <h2>References</h2>
-        <ol className="brutRefs">
-          {PROJECTS.map((p, i) => {
-            const kind = p.tag === "self" ? "Own brand" : p.tag === "personal" ? "Personal project" : "Client work";
-            return (
-              <li key={p.slug}>
-                <span className="brutRefNum">{i + 1}.</span>
-                {p.title} ({p.year}). {kind}.{" "}
-                <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
-                  {(p.url ?? "").replace(/^https?:\/\//, "")}
-                </a>
-                .
-              </li>
-            );
-          })}
-        </ol>
       </section>
 
       <p className="brutAst" />
