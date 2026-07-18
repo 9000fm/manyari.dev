@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web design and development, end to end. I build distinctive sites from identity to deployment - across e-commerce, editorial portfolios, and independent products.",
+    "Web design and development, end to end. I build distinctive sites from identity to deployment for e-commerce, editorial portfolios, and independent products.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",

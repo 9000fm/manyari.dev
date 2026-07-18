@@ -4,6 +4,7 @@ import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
 import WireSphere from "../_brutalist/WireSphere";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
+import WorkHover from "../_brutalist/WorkHover";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
@@ -63,6 +64,8 @@ const LAYOUT_CSS = `
     .wikiToc { margin-left: 0; }
   }
   @media (max-width: 899px) {
+    /* land section headings below the fixed mobile navbar, not under it */
+    section[id], #top { scroll-margin-top: 64px; }
     .brut { padding: 0 0 8px; }
     .wrap { border-left: none; border-right: none; }
     .grid { padding: 12px 22px 40px; }
@@ -131,7 +134,7 @@ export default function BrutalistSidebar() {
                 </p>
               </div>
               <div className="identSphere">
-                <WireSphere size={176} />
+                <WireSphere size={215} />
               </div>
             </div>
 
@@ -153,6 +156,8 @@ export default function BrutalistSidebar() {
           </div>
         </div>
       </div>
+
+      <WorkHover />
     </main>
   );
 }
