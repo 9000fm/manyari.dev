@@ -68,8 +68,6 @@ export default function BrutalistSidebar() {
                   </h1>
                   <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: 15 }}>{ME.role}.</p>
                   <p className="sideMeta">
-                    {ME.location}
-                    <br />
                     <a href={`mailto:${ME.email}`}>{ME.email}</a>
                     <br />
                     {ME.phone}
