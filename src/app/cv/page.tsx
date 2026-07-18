@@ -1,169 +1,256 @@
 "use client";
-import { ME, EXPERIENCE, EDUCATION, SKILLS, PROJECTS, LANGUAGES } from "@/content";
 
 /**
- * Print-ready CV in the site's Monobook/Times aesthetic. Linked from Contact
- * as "Download CV". A4-optimised: the toolbar is hidden in print, so Save as
- * PDF (or the Download button) produces a clean one/two-page document. Content
- * is pulled from content.ts, so the CV stays in sync with the site.
+ * Print-ready CV, matching Flavio's established resume style (clean navy
+ * sans-serif, single column, section bands, bulleted experience, a projects
+ * table) - not the site's Monobook look. A4, fills the page. Generated to a
+ * PDF (public/Flavio-Manyari-CV.pdf) via scripts; the download link points at
+ * that file. Content is CV-specific (fuller than the public site).
  */
+
+const SUMMARY =
+  "Web developer and graphic designer with 4+ years of experience in frontend development, visual identity design, and web infrastructure management. Complementary training in audiovisual design and music production. Comfortable working with remote, multidisciplinary teams, technical analysis, and problem-solving.";
+
+const EXPERIENCE = [
+  {
+    title: "Web Developer & IT Consultant",
+    org: "Ecolution Industries Pty Ltd, Sunshine Coast, QLD, Australia (Remote)",
+    note: "Australian renewable energy and electrical contracting company.",
+    dates: "May 2024 - Present",
+    points: [
+      "Led the full redesign of ecolution.com.au on WordPress - restructured site architecture, content hierarchy, and visual consistency.",
+      "Implemented technical SEO, structured metadata, and lazy loading, improving Core Web Vitals.",
+      "Configured SPF, DKIM, and DMARC records, resolving corporate email deliverability issues.",
+      "Managed DNS migration, SSL provisioning, and hosting infrastructure.",
+    ],
+  },
+  {
+    title: "Freelance Web Developer & Designer",
+    org: "Independent, Lima (Remote)",
+    note: "",
+    dates: "Dec 2023 - Present",
+    points: [
+      "Designed and developed superself.online, a multilingual music-label site (ES/EN/JP) with i18n routing - Next.js 16, React 19, TypeScript, p5.js, Tailwind 4. Built the full brand identity and generative ASCII animations; deployed on Vercel.",
+      "Built Micaela Lucía's photography portfolio with Next.js 16, TypeScript, Sanity CMS, and Framer Motion animated transitions.",
+      "Created graphic materials for clients: logos, brand manuals, digital banners, and social assets (Illustrator, Photoshop, Canva).",
+      "Configured and troubleshot infrastructure: DNS, SSL, hosting, email deliverability, and CMS platforms.",
+    ],
+  },
+  {
+    title: "Freelance Graphic Designer",
+    org: "Independent, Lima",
+    note: "",
+    dates: "Nov 2020 - Dec 2023",
+    points: [
+      "Designed printed materials for a medical-sector company: brochures, forms, corporate agendas, and institutional documents.",
+      "Created event flyers and promotional materials for Lima's electronic-music scene.",
+      "Developed brand identities for small businesses and personal projects.",
+    ],
+  },
+  {
+    title: "Community Manager",
+    org: "T&IL Cleaning Services LLC, Baltimore, Maryland (Remote)",
+    note: "Residential and commercial cleaning company.",
+    dates: "Dec 2021 - Oct 2023",
+    points: [
+      "Created and managed content for Instagram, Facebook, and TikTok.",
+      "Coordinated client communications, scheduling, and engagement strategies.",
+      "Produced and edited video content for social-media campaigns.",
+    ],
+  },
+];
+
+const PROJECTS = [
+  ["superself.online", "Next.js, TypeScript, p5.js, Tailwind", "Multilingual music-label site in 3 languages (ES/EN/JP) with i18n routing, generative ASCII visuals, and full brand design. Lighthouse 100/100."],
+  ["Tony Decay", "Next.js, Supabase, PayPal", "Limited-edition print store - brand, shop, and a live inventory counter, built end to end."],
+  ["Micaela Lucía", "Next.js, TypeScript, Sanity CMS, Framer Motion", "Photographer & filmmaker portfolio - editorial layout, animated transitions, and a client-managed CMS. Lighthouse 99/100."],
+  ["Silverback Stripes", "Shopify, Liquid", "Storefront redesign for a combat-sports apparel brand - homepage, navigation, and key brand pages."],
+  ["digeart", "Next.js, Supabase", "Hand-curated discovery app for underground electronic music - genre filters and YouTube playback."],
+];
+
+const SKILLS: [string, string][] = [
+  ["Design", "Adobe Illustrator, Photoshop, Premiere, After Effects, Canva, Brand Identity, UI/UX"],
+  ["Frontend", "JavaScript, TypeScript, React 19, Next.js 16, HTML5/CSS3, Tailwind CSS 4"],
+  ["Creative Coding", "p5.js, WebGL, Framer Motion, TouchDesigner, Blender, Generative Art"],
+  ["E-commerce & CMS", "Shopify / Liquid, PayPal, Sanity, Supabase, WordPress"],
+  ["Infra & Tools", "Git, Vercel, Linux/EC2, DNS / SSL / Hosting, Technical SEO, AI-augmented development (Claude, Cursor)"],
+];
+
+const EDUCATION = [
+  {
+    title: "Full Stack Python Developer",
+    school: "Skillnest (ex Coding Dojo Latam)",
+    dates: "2023",
+    detail: "HTML, CSS, JavaScript, Python, Flask, Django, MySQL. Final project: full-stack e-commerce.",
+  },
+  {
+    title: "University Studies - Industrial Engineering & Music Production",
+    school: "Universidad Peruana de Ciencias Aplicadas (UPC)",
+    dates: "2018 - 2023",
+    detail: "Coursework across two programs; analytical and creative foundation.",
+  },
+];
+
 export default function CV() {
-  const clean = (u: string | null) => (u ?? "").replace(/^https?:\/\//, "");
   return (
     <main className="cv">
       <style>{CSS}</style>
-
       <div className="cvBar">
         <button onClick={() => window.print()}>&#8595; Download PDF</button>
         <a href="/">&#8592; back to site</a>
       </div>
 
-      <article className="cvSheet">
-        <header className="cvHead">
-          <h1>{ME.name}</h1>
-          <p className="cvRole">{ME.role}</p>
-          <p className="cvContact">
-            <a href={`mailto:${ME.email}`}>{ME.email}</a>
-            {" · "}{ME.phone}{" · "}{ME.location}
-            <br />
-            <a href={ME.socials.github}>{clean(ME.socials.github)}</a>
-            {" · "}
-            <a href={ME.socials.linkedin}>linkedin</a>
-            {" · "}
-            <a href="https://manyari.dev">manyari.dev</a>
+      <article className="sheet">
+        <header className="head">
+          <h1>Flavio Alejandro Manyari Zamalloa</h1>
+          <p className="contact">
+            Lima, PE <span>·</span> <a href="mailto:flavio@manyari.dev">flavio@manyari.dev</a>{" "}
+            <span>·</span> +51 990 028 077 <span>·</span>{" "}
+            <a href="https://www.linkedin.com/in/flavio-manyari-bab9a9215/">LinkedIn</a>{" "}
+            <span>·</span> <a href="https://github.com/9000fm">GitHub</a>{" "}
+            <span>·</span> <a href="https://manyari.dev">manyari.dev</a>
           </p>
-          <p className="cvSummary">
-            Web design and development, end to end - from identity to deployment.
-            4+ years across e-commerce, editorial portfolios, and independent
-            products, with a creative-coding edge (WebGL, generative visuals).
-          </p>
+          <p className="summary">{SUMMARY}</p>
         </header>
 
-        <div className="cvGrid">
-          <div className="cvMain">
-            <section>
-              <h2>Experience</h2>
-              {EXPERIENCE.map((job) => (
-                <div className="cvItem" key={job.company + job.period}>
-                  <div className="cvMeta">
-                    <strong>{job.company}</strong>
-                    <span>{job.period}</span>
-                    {job.location ? <span>{job.location}</span> : null}
-                  </div>
-                  <div className="cvBody">
-                    <span className="cvTitle">{job.title}</span>
-                    <p>{job.blurb}</p>
-                  </div>
-                </div>
-              ))}
-            </section>
-
-            <section>
-              <h2>Selected Work</h2>
-              <ul className="cvWork">
-                {PROJECTS.map((p) => (
-                  <li key={p.slug}>
-                    <a href={p.url ?? "#"}>{p.title}</a> - <em>{p.role}</em> ({p.year})
-                    <br />
-                    <span>{p.blurb}</span>
-                  </li>
+        <section>
+          <h2>Experience</h2>
+          {EXPERIENCE.map((j) => (
+            <div className="job" key={j.title + j.dates}>
+              <div className="jobTop">
+                <span className="jobTitle">{j.title}</span>
+                <span className="jobDates">{j.dates}</span>
+              </div>
+              <div className="jobOrg">{j.org}</div>
+              {j.note ? <div className="jobNote">{j.note}</div> : null}
+              <ul>
+                {j.points.map((p, i) => (
+                  <li key={i}>{p}</li>
                 ))}
               </ul>
-            </section>
-          </div>
+            </div>
+          ))}
+        </section>
 
-          <aside className="cvSide">
-            <section>
-              <h2>Skills</h2>
-              {SKILLS.map((g) => (
-                <div className="cvSkill" key={g.label}>
-                  <span className="cvSkillLabel">{g.label}</span>
-                  <span>{g.items.join(", ")}</span>
-                </div>
+        <section>
+          <h2>Selected Projects</h2>
+          <table className="proj">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Stack</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PROJECTS.map((p) => (
+                <tr key={p[0]}>
+                  <td className="pName">{p[0]}</td>
+                  <td className="pStack">{p[1]}</td>
+                  <td>{p[2]}</td>
+                </tr>
               ))}
-            </section>
+            </tbody>
+          </table>
+        </section>
 
-            <section>
-              <h2>Education</h2>
-              {EDUCATION.map((ed) => (
-                <div className="cvEd" key={ed.school}>
-                  <strong>{ed.title}</strong>
-                  <span>{ed.school} · {ed.period}</span>
-                  {ed.detail ? <span className="cvEdDetail">{ed.detail}</span> : null}
-                </div>
-              ))}
-            </section>
+        <section>
+          <h2>Skills</h2>
+          <ul className="skills">
+            {SKILLS.map(([label, items]) => (
+              <li key={label}>
+                <strong>{label}:</strong> {items}.
+              </li>
+            ))}
+          </ul>
+        </section>
 
-            <section>
-              <h2>Languages</h2>
-              <p className="cvLangs">
-                {LANGUAGES.map((l) => `${l.lang} (${l.level})`).join(", ")}.
-              </p>
-            </section>
-          </aside>
-        </div>
+        <section>
+          <h2>Education</h2>
+          {EDUCATION.map((e) => (
+            <div className="edu" key={e.title}>
+              <div className="jobTop">
+                <span className="jobTitle">{e.title}</span>
+                <span className="jobDates">{e.dates}</span>
+              </div>
+              <div className="jobOrg">{e.school}</div>
+              <ul>
+                <li>{e.detail}</li>
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section>
+          <h2>Additional Information</h2>
+          <ul className="skills">
+            <li><strong>Languages:</strong> Spanish (native), English (fluent).</li>
+            <li><strong>Music Production:</strong> Ableton Live, Logic Pro, Pro Tools.</li>
+            <li><strong>Interests:</strong> Artificial intelligence, generative art, football, cooking.</li>
+          </ul>
+        </section>
       </article>
     </main>
   );
 }
 
 const CSS = `
-  :root { --c-name: 30px; --c-h2: 15px; --c-body: 12px; --c-small: 11px; --c-micro: 10px; }
-  .cv { background: #232220; min-height: 100vh; padding: 24px 16px 60px;
-        font-family: "Times New Roman", Times, serif; color: #000; }
-  .cvBar { max-width: 820px; margin: 0 auto 16px; display: flex; gap: 14px; align-items: center; }
-  .cvBar button, .cvBar a { font-family: inherit; font-size: 13px; color: #a7d7f9;
-        background: none; border: 1px solid #55606c; padding: 6px 12px; cursor: pointer;
-        text-decoration: none; }
-  .cvBar button:hover, .cvBar a:hover { color: #fff; border-color: #a7d7f9; }
+  .cv { --navy: #1f4e79; --blue: #2b6cb0; --ink: #222; --grey: #666; --band: #eef1f4;
+        background: #4a4a4a; min-height: 100vh; padding: 24px 16px 60px;
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: var(--ink); }
+  .cvBar { max-width: 820px; margin: 0 auto 16px; display: flex; gap: 14px; }
+  .cvBar button, .cvBar a { font: 13px "Segoe UI", Arial, sans-serif; color: #dbe6f2;
+        background: none; border: 1px solid #6b7683; padding: 6px 12px; cursor: pointer; text-decoration: none; }
+  .cvBar button:hover, .cvBar a:hover { color: #fff; border-color: #dbe6f2; }
 
-  .cvSheet { max-width: 820px; margin: 0 auto; background: #fff; border: 1px solid #a7d7f9;
-        padding: 40px 44px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
-  .cvHead h1 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal;
-        font-size: var(--c-name); line-height: 1; margin: 0; }
-  .cvRole { font-style: italic; font-size: var(--c-body); color: #333; margin: 4px 0 0; }
-  .cvContact { font-size: var(--c-small); color: #444; margin: 8px 0 0; line-height: 1.5; }
-  .cvContact a { color: #0645ad; }
-  .cvSummary { font-size: var(--c-body); line-height: 1.5; margin: 12px 0 0;
-        border-top: 1px solid #ccc; padding-top: 12px; }
+  .sheet { max-width: 820px; margin: 0 auto; background: #fff; padding: 46px 52px 40px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+  .head { text-align: center; border-bottom: 1px solid #cfd6de; padding-bottom: 14px; }
+  .head h1 { margin: 0; font-size: 25px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--navy); }
+  .contact { margin: 9px 0 0; font-size: 11.5px; color: var(--grey); letter-spacing: 0.01em; }
+  .contact a { color: var(--blue); text-decoration: none; }
+  .contact span { color: #b7bfc9; margin: 0 2px; }
+  .summary { text-align: justify; font-size: 11.5px; line-height: 1.55; color: #333; margin: 14px 0 0; }
 
-  .cvGrid { display: grid; grid-template-columns: 1fr 250px; gap: 34px; margin-top: 20px; }
-  .cv h2 { font-variant: small-caps; letter-spacing: 0.05em; font-weight: normal;
-        font-size: var(--c-h2); border-bottom: 1px solid #000; padding-bottom: 3px;
-        margin: 0 0 10px; }
-  .cv section { margin-bottom: 18px; break-inside: avoid; }
+  .cv section { margin-top: 20px; }
+  .cv h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--navy); background: var(--band); border-left: 4px solid var(--navy);
+        padding: 6px 10px; margin: 0 0 12px; }
 
-  .cvItem { display: grid; grid-template-columns: 120px 1fr; gap: 14px; margin-bottom: 12px;
-        break-inside: avoid; }
-  .cvMeta strong { display: block; font-size: var(--c-body); }
-  .cvMeta span { display: block; color: #555; font-size: var(--c-micro); margin-top: 1px; }
-  .cvTitle { display: block; font-weight: bold; font-size: var(--c-body); }
-  .cvBody p { margin: 2px 0 0; font-size: var(--c-small); color: #222; line-height: 1.45; }
+  .job, .edu { margin-bottom: 13px; break-inside: avoid; }
+  .jobTop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .jobTitle { font-size: 12.5px; font-weight: 700; color: #1a1a1a; }
+  .jobDates { font-size: 11px; color: var(--grey); white-space: nowrap; }
+  .jobOrg { font-size: 11.5px; color: #333; margin-top: 1px; }
+  .jobNote { font-size: 11px; color: var(--grey); font-style: italic; margin-top: 1px; }
+  .job ul, .edu ul, .skills { margin: 5px 0 0; padding-left: 18px; }
+  .job li, .edu li, .skills li { font-size: 11.3px; line-height: 1.5; color: #2a2a2a;
+        margin-bottom: 2px; break-inside: avoid; }
+  .job li::marker, .edu li::marker, .skills li::marker { color: var(--blue); }
+  .skills { padding-left: 18px; }
+  .skills strong { color: #1a1a1a; }
 
-  .cvWork { list-style: none; padding: 0; margin: 0; }
-  .cvWork li { margin-bottom: 8px; font-size: var(--c-small); line-height: 1.45; break-inside: avoid; }
-  .cvWork a { color: #0645ad; font-weight: bold; }
-  .cvWork span { color: #444; }
-
-  .cvSkill { margin-bottom: 8px; font-size: var(--c-small); }
-  .cvSkillLabel { display: block; font-variant: small-caps; letter-spacing: 0.05em;
-        font-weight: bold; font-size: var(--c-micro); color: #555; }
-  .cvSkill span:last-child { color: #222; }
-  .cvEd { margin-bottom: 10px; font-size: var(--c-small); }
-  .cvEd strong { display: block; }
-  .cvEd span { display: block; color: #555; font-size: var(--c-micro); }
-  .cvEdDetail { margin-top: 1px; }
-  .cvLangs { font-size: var(--c-small); color: #333; margin: 0; }
+  .proj { width: 100%; border-collapse: collapse; font-size: 11.2px; }
+  .proj th { text-align: left; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--grey); border-bottom: 1.5px solid var(--navy); padding: 0 10px 5px 0; }
+  .proj td { vertical-align: top; padding: 7px 10px 7px 0; border-bottom: 1px solid #e4e8ed; line-height: 1.45; }
+  .proj tr:last-child td { border-bottom: none; }
+  .pName { font-weight: 700; color: var(--blue); white-space: nowrap; }
+  .pStack { color: var(--grey); width: 27%; }
 
   @media print {
-    @page { size: A4; margin: 12mm; }
+    @page { size: A4; margin: 13mm 14mm; }
     .cv { background: #fff; padding: 0; }
     .cvBar { display: none; }
-    .cvSheet { max-width: none; border: none; box-shadow: none; padding: 0; }
-    a { color: #000 !important; text-decoration: none; }
+    .sheet { max-width: none; box-shadow: none; padding: 0; }
+    a { color: var(--blue) !important; }
   }
   @media (max-width: 680px) {
-    .cvGrid { grid-template-columns: 1fr; gap: 20px; }
-    .cvSheet { padding: 26px 22px; }
+    .sheet { padding: 26px 22px; }
+    .proj, .proj thead, .proj tbody, .proj tr, .proj td, .proj th { display: block; }
+    .proj th { display: none; }
+    .proj td { border: none; padding: 1px 0; }
+    .pName { margin-top: 8px; }
   }
 `;
