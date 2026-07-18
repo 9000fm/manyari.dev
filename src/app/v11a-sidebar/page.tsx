@@ -5,6 +5,7 @@ import WireSphere from "../_brutalist/WireSphere";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHover from "../_brutalist/WorkHover";
+import SmoothScroll from "../_brutalist/SmoothScroll";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
@@ -105,6 +106,7 @@ export default function BrutalistSidebar() {
       <style>{SHARED_CSS + LAYOUT_CSS}</style>
 
       <MobileNav />
+      <SmoothScroll />
 
       <div className="wrap">
         <div className="topline">
