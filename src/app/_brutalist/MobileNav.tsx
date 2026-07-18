@@ -1,13 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NAV_SECTIONS } from "./shared";
 
-// Sticky mobile-only top bar: FM mark + burger that toggles the section nav.
-// Hidden on desktop (the sidebar Contents box handles nav there).
+// Mobile-only header. Hidden at the top of the page; slides in smoothly once
+// you scroll past the identity block. The burger opens the same numbered
+// Contents list used in the sidebar (one consistent nav).
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const past = window.scrollY > 200;
+      setShown(past);
+      if (!past) setOpen(false);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="mnav">
+    <div className={`mnav${shown || open ? " mnavShown" : ""}`}>
       <a href="#top" className="mnavFM" onClick={() => setOpen(false)}>FM</a>
       <button
         className="mnavBurger"
@@ -20,13 +34,16 @@ export default function MobileNav() {
         <span />
       </button>
       {open && (
-        <nav className="mnavMenu">
-          {NAV_SECTIONS.map((s) => (
-            <a key={s.id} href={`#${s.id}`} onClick={() => setOpen(false)}>
-              {s.label}
-            </a>
-          ))}
-        </nav>
+        <div className="mnavMenu">
+          <span className="mnavMenuLabel">Contents</span>
+          <ol>
+            {NAV_SECTIONS.map((s) => (
+              <li key={s.id}>
+                <a href={`#${s.id}`} onClick={() => setOpen(false)}>{s.label}</a>
+              </li>
+            ))}
+          </ol>
+        </div>
       )}
     </div>
   );

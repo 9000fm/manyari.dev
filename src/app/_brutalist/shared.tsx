@@ -20,19 +20,19 @@ export const SHARED_CSS = `
   .brutWork { list-style: none; }
   .brutWork > li { position: relative; }
   .brutWork > li::before { content: "—"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
-  .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 14px; }
+  .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 13px; }
   .brutAst::before { content: "* * *"; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; font-family: "Courier New", Courier, monospace; }
   .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
   .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
-  .brutFooter { margin-top: 48px; }
+  .brutFooter { margin-top: 40px; border-top: 3px double #9aa0a8; padding-top: 22px; }
   .brutFootCols { display: flex; gap: clamp(36px, 8vw, 72px); margin-bottom: 22px; }
   .brutFootLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 13px; color: #555; margin-bottom: 8px; }
   .brutFootCols ul { list-style: none; padding: 0; margin: 0; }
-  .brutFootCols li { padding: 2px 0; font-size: 14px; }
+  .brutFootCols li { padding: 2px 0; font-size: 13px; }
   .brutFootBottom { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-top: 1px solid #000; padding-top: 12px; }
-  .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
-  .brutTopLink { font-size: 14px; }
+  .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: 13px; color: #000; }
+  .brutTopLink { font-size: 13px; }
   @keyframes brutBlink { 50% { opacity: 0; } }
 
   /* infinite seamless ticker */
@@ -53,13 +53,15 @@ export const SHARED_CSS = `
   /* tools */
   .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: 17px; color: #222; }
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
-  .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 14px; margin-bottom: 1px; }
+  .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 13px; margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
   .brutLangs { margin-top: 22px; font-size: 15px; color: #333; }
 
   /* contact */
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
+  .brutRefsLabel { margin: 26px 0 6px; font-variant: small-caps; letter-spacing: 0.07em; font-weight: bold; font-size: 13px; color: #666; }
   .brutRefs { font-size: 13px; color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
+  .brutRefs li { padding-left: 22px; text-indent: -22px; }
   .brutRefs a { word-break: break-word; }
   .brutRefNum { color: #999; margin-right: 5px; font-family: "Courier New", Courier, monospace; }
 `;
@@ -133,12 +135,8 @@ export function Sections(): ReactElement {
             </li>
           ))}
         </ol>
-      </section>
 
-      <p className="brutAst" />
-
-      <section id="references">
-        <h2>References</h2>
+        <p className="brutRefsLabel">References</p>
         <ol className="brutRefs">
           {PROJECTS.map((p, i) => {
             const kind = p.tag === "self" ? "Own brand" : p.tag === "personal" ? "Personal project" : "Client work";
