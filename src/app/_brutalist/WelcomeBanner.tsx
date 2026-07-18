@@ -21,7 +21,8 @@ export default function WelcomeBanner() {
         ×
       </button>
       <b>Hello and welcome.</b> This is where I keep my work, the tools I use,
-      and how to reach me. Take a look around.
+      and how to{" "}
+      <span style={{ whiteSpace: "nowrap" }}>reach me.</span> Take a look around.
     </div>
   );
 }
