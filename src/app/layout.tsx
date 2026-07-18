@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   // and breaks in-page anchor jumps on mobile)
   other: { google: "notranslate" },
   openGraph: {
-    title: "Flavio Manyari — index of /",
+    title: "flavio manyari - designer & developer",
     description: "Web developer and designer. Projects end to end - brand, design, code, deploy.",
     url: "https://manyari.dev",
     siteName: "Flavio Manyari",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Flavio Manyari — index of /",
+    title: "flavio manyari - designer & developer",
     description: "Web developer and designer. Projects end to end - brand, design, code, deploy.",
   },
 };

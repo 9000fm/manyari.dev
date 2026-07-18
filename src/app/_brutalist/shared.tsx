@@ -50,7 +50,7 @@ export const SHARED_CSS = `
   .brutServices { list-style: none; padding: 0; margin: 0; column-count: 2; column-gap: 44px; }
   @media (max-width: 620px) { .brutServices { column-count: 1; } }
   .brutServices li { margin: 0 0 9px; break-inside: avoid; }
-  .brutSvcNum { color: #999; margin-right: 12px; font-variant-numeric: tabular-nums; }
+  .brutSvcNum { color: #6f6f6f; margin-right: 12px; font-variant-numeric: tabular-nums; }
 
   /* tools */
   .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: var(--t-lead); color: #222; }
@@ -65,7 +65,7 @@ export const SHARED_CSS = `
   .brutRefs { font-size: var(--t-micro); color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
   .brutRefs li { padding-left: 22px; text-indent: -22px; }
   .brutRefs a { word-break: break-word; }
-  .brutRefNum { color: #999; margin-right: 5px; }
+  .brutRefNum { color: #6f6f6f; margin-right: 5px; }
 
   /* experience / education - CV two-column: company + dates left, role + blurb right */
   .brutExp { list-style: none; padding: 0; margin: 0; }
@@ -258,7 +258,6 @@ export function Sections(): ReactElement {
           <li>
             <a href={`mailto:${ME.email}`}>{ME.email}</a>
           </li>
-          <li>Phone: {ME.phone}</li>
           <li>
             <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
             {" · "}

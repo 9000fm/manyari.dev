@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
-import WireSphere from "../_brutalist/WireSphere";
+import WireSphereLazy from "../_brutalist/WireSphereLazy";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
-import WorkHover from "../_brutalist/WorkHover";
+import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
 import SmoothScroll from "../_brutalist/SmoothScroll";
 
-export const metadata: Metadata = { title: `${ME.name} — index of /` };
+export const metadata: Metadata = { title: "flavio manyari - designer & developer" };
 
 // Classic Monobook palette: dark desk, grey page frame, white article box.
 const GREY_PAGE = "#232220";   // desk background (warm charcoal, behind the page frame)
@@ -41,7 +41,7 @@ const LAYOUT_CSS = `
   /* welcome banner - a defined block, WP main-page style; dismissible */
   .welcome { position: relative; text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 22px 42px 18px; margin: 0 0 28px; font-size: var(--t-lead); line-height: 1.55; color: #111; }
   .welcome b { font-weight: bold; }
-  .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #999; cursor: pointer; padding: 2px 7px; }
+  .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #6f6f6f; cursor: pointer; padding: 2px 7px; }
   .welcomeX:hover { color: #000; }
 
   /* numbered Contents [hide] box */
@@ -130,13 +130,11 @@ export default function BrutalistSidebar() {
                 <p className="sideMeta">
                   <a href={`mailto:${ME.email}`}>{ME.email}</a>
                   <br />
-                  {ME.phone}
-                  <br />
                   Status: <strong>{ME.available}</strong>
                 </p>
               </div>
               <div className="identSphere">
-                <WireSphere size={215} />
+                <WireSphereLazy size={215} />
               </div>
             </div>
 
@@ -159,7 +157,7 @@ export default function BrutalistSidebar() {
         </div>
       </div>
 
-      <WorkHover />
+      <WorkHoverLazy />
     </main>
   );
 }
