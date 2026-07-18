@@ -14,6 +14,7 @@ export const SHARED_CSS = `
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
   .brut h2 { font-size: 24px; margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
+  .brut h2::before { content: "§"; color: #bcbcbc; font-weight: normal; font-size: 0.66em; margin-right: 9px; vertical-align: 0.1em; }
   .brutAboutRow { display: flex; align-items: flex-start; }
   .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
   .brutAboutText { margin: 0; }
@@ -34,10 +35,10 @@ export const SHARED_CSS = `
 
   /* infinite seamless ticker */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
-  .brutMarqTrack { display: inline-flex; white-space: nowrap; animation: brutScroll 75s linear infinite; }
+  .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 75s linear infinite; }
   .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
   .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
-  .brutMarqSep { margin: 0 14px; color: #444; }
+  .brutMarqSep { margin: 0 10px; color: #444; letter-spacing: 0; }
   @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
 
@@ -200,7 +201,7 @@ export function Sections(): ReactElement {
             return (
               <li key={p.slug}>
                 <span className="brutRefNum">{i + 1}.</span>
-                {p.title} ({p.year}). {kind}. Retrieved 18 Jul 2026, from{" "}
+                {p.title} ({p.year}). {kind}.{" "}
                 <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
                   {(p.url ?? "").replace(/^https?:\/\//, "")}
                 </a>

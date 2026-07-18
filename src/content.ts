@@ -46,7 +46,7 @@ export const PROJECTS: Project[] = [
   {
     slug: "superself",
     title: "Superself.online",
-    year: 2026,
+    year: 2025,
     role: "End-to-end · Brand · Next.js · WebGL · Deploy",
     url: "https://superself.online",
     tag: "self",
