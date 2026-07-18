@@ -27,6 +27,7 @@ export const SHARED_CSS = `
   /* infinite seamless ticker */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
   .brutMarqTrack { display: inline-flex; white-space: nowrap; animation: brutScroll 75s linear infinite; }
+  .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
   .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
   @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
@@ -45,19 +46,29 @@ export const SHARED_CSS = `
 
   /* contact */
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
-  .brutRefs { font-size: 13px; color: #555; padding-left: 22px; margin: 0; line-height: 1.7; }
+  .brutRefs { font-size: 13px; color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
   .brutRefs a { word-break: break-word; }
+  .brutRefNum { color: #999; margin-right: 5px; }
 `;
 
 /** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */
 export function Marquee(): ReactElement {
-  const line = [...TICKER, ME.available, ME.email].join("  •  ") + "  •  ";
-  const half = line.repeat(4); // repeat so even ultra-wide screens stay filled
+  const tags = [ME.role, ...TICKER];
+  const unit = (rk: string) => (
+    <span key={rk}>
+      {tags.map((t, i) => (
+        <span key={i}>{t}{"  •  "}</span>
+      ))}
+      <a href="#contact">Available now</a>
+      {"  •  "}
+    </span>
+  );
+  // 8 identical units; translateX(-50%) moves 4 => seamless loop. Pauses on hover so the link is clickable.
   return (
-    <div className="brutMarq" aria-hidden="true">
+    <div className="brutMarq">
       <div className="brutMarqTrack">
-        <span>{half}</span>
-        <span>{half}</span>
+        {[0, 1, 2, 3].map((n) => unit(`a${n}`))}
+        {[0, 1, 2, 3].map((n) => unit(`b${n}`))}
       </div>
     </div>
   );
@@ -170,14 +181,19 @@ export function Sections(): ReactElement {
       <section id="references">
         <h2>References</h2>
         <ol className="brutRefs">
-          {PROJECTS.map((p) => (
-            <li key={p.slug}>
-              {p.title} -{" "}
-              <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
-                {(p.url ?? "").replace(/^https?:\/\//, "")}
-              </a>
-            </li>
-          ))}
+          {PROJECTS.map((p, i) => {
+            const kind = p.tag === "self" ? "Own brand" : p.tag === "personal" ? "Personal project" : "Client work";
+            return (
+              <li key={p.slug}>
+                <span className="brutRefNum">{i + 1}.</span>
+                {p.title} ({p.year}). {kind}. Retrieved 18 Jul 2026, from{" "}
+                <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
+                  {(p.url ?? "").replace(/^https?:\/\//, "")}
+                </a>
+                .
+              </li>
+            );
+          })}
         </ol>
       </section>
 
