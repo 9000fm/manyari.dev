@@ -12,16 +12,16 @@ const SUMMARY =
 
 const EXPERIENCE = [
   {
-    role: "Web Developer & IT Consultant",
-    org: "Ecolution Industries · Australia (Remote)",
-    dates: "2024 - Present",
-    blurb: "Full redesign on WordPress; technical SEO, structured metadata, DNS/SSL, email deliverability, and hosting infrastructure.",
-  },
-  {
     role: "Freelance Web Developer & Designer",
     org: "Independent · Lima (Remote)",
-    dates: "2020 - Present",
-    blurb: "Sites built end to end - superself.online, Micaela Lucía, client brand, print, and the infrastructure behind them.",
+    dates: "2023 - Present",
+    blurb: "Sites built end to end - superself.online, Micaela Lucía, client brand and the infrastructure behind them (DNS, SSL, hosting, technical SEO).",
+  },
+  {
+    role: "Freelance Graphic Designer",
+    org: "Independent · Lima",
+    dates: "2020 - 2023",
+    blurb: "Print materials for a medical-sector company; event flyers for Lima's electronic-music scene; brand identities for small businesses.",
   },
   {
     role: "Community Manager",
