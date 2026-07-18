@@ -14,14 +14,22 @@ export const SHARED_CSS = `
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
   .brut h2 { font-size: 24px; margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
-  .brutAbout p::first-letter {
-    float: left; font-size: 4em; line-height: 0.85; padding: 6px 8px 0 0; font-weight: bold;
-  }
+  .brutAboutRow { display: flex; align-items: flex-start; }
+  .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
+  .brutAboutText { margin: 0; }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: 14px; }
   .brutAst::before { content: "* * *"; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
   .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
   .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
+  .brutFooter { margin-top: 48px; }
+  .brutFootCols { display: flex; gap: clamp(36px, 8vw, 72px); margin-bottom: 22px; }
+  .brutFootLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: 13px; color: #555; margin-bottom: 8px; }
+  .brutFootCols ul { list-style: none; padding: 0; margin: 0; }
+  .brutFootCols li { padding: 2px 0; font-size: 14px; }
+  .brutFootBottom { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-top: 1px solid #000; padding-top: 12px; }
+  .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: 15px; color: #000; }
+  .brutTopLink { font-size: 14px; }
   @keyframes brutBlink { 50% { opacity: 0; } }
 
   /* infinite seamless ticker */
@@ -91,7 +99,10 @@ export function Sections(): ReactElement {
     <>
       <section id="about" className="brutAbout">
         <h2>About</h2>
-        <p>{ME.about}</p>
+        <div className="brutAboutRow">
+          <span className="brutDropCap">{ME.about.charAt(0)}</span>
+          <p className="brutAboutText">{ME.about.slice(1)}</p>
+        </div>
       </section>
 
       <p className="brutAst" />
@@ -202,9 +213,40 @@ export function Sections(): ReactElement {
 
       <p className="brutAst" />
 
-      <p className="brutColophon">
-        © Flavio Manyari 2026<span className="brutCursor" />
-      </p>
+      <footer className="brutFooter">
+        <div className="brutFootCols">
+          <div>
+            <span className="brutFootLabel">Index</span>
+            <ul>
+              {NAV_SECTIONS.map((s) => (
+                <li key={s.id}>
+                  <a href={`#${s.id}`}>{s.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <span className="brutFootLabel">Contact</span>
+            <ul>
+              <li>
+                <a href={`mailto:${ME.email}`}>{ME.email}</a>
+              </li>
+              <li>
+                <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                {" · "}
+                <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+              </li>
+              <li>
+                <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="brutFootBottom">
+          <span className="brutFootCopy">© Flavio Manyari 2026<span className="brutCursor" /></span>
+          <a href="#top" className="brutTopLink">Back to top ↑</a>
+        </div>
+      </footer>
     </>
   );
 }

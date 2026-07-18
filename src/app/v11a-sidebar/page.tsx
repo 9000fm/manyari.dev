@@ -20,7 +20,7 @@ const LAYOUT_CSS = `
   .content { min-width: 0; }
   .content .inner { max-width: 68ch; }
   @media (min-width: 900px) {
-    .grid { grid-template-columns: 232px 1fr; }
+    .grid { grid-template-columns: 288px 1fr; }
     .side {
       position: sticky; top: 20px; align-self: start;
       border-right: 1px solid #000; padding-right: 24px;
@@ -42,6 +42,7 @@ const LAYOUT_CSS = `
 export default function BrutalistSidebar() {
   return (
     <main
+      id="top"
       className="brut"
       style={{
         background: "#fff",
