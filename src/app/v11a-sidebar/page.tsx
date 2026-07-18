@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ME } from "@/content";
-import { SHARED_CSS, Marquee, Sections, NAV_SECTIONS } from "../_brutalist/shared";
+import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
+import Ticker from "../_brutalist/Ticker";
 import WireSphere from "../_brutalist/WireSphere";
 
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
@@ -29,6 +30,8 @@ const LAYOUT_CSS = `
   }
   @media (max-width: 899px) {
     .side h1 { font-size: 35px; }
+    .content { font-size: 18px; }
+    .identSphere canvas { width: 138px !important; height: 138px !important; }
     .side .snav { order: -1; margin-bottom: 6px; }
     .side .contentsLabel { display: none; }
     .sideToc { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 4px 0 14px; border-bottom: 1px solid #000; padding-bottom: 12px; }
@@ -52,7 +55,7 @@ export default function BrutalistSidebar() {
       <style>{SHARED_CSS + LAYOUT_CSS}</style>
 
       <div className="wrap">
-        <Marquee />
+        <Ticker />
 
         <div className="grid">
           <aside className="side">
@@ -76,7 +79,7 @@ export default function BrutalistSidebar() {
                   </p>
                 </div>
                 <div className="identSphere">
-                  <WireSphere size={146} />
+                  <WireSphere size={176} />
                 </div>
               </div>
             </div>

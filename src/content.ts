@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web developer and designer who takes projects end to end - brand, design, build, and launch. I help brands and online shops sell more, from first sketch to live site.",
+    "Web developer and designer. I take projects end to end - brand, design, code, deploy - for brands, agencies, and businesses.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -32,7 +32,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Brand · Next.js · Supabase · PayPal",
     url: "https://tonydecay.com",
     tag: "client",
-    blurb: "Limited-edition print store for illustrator Tony Decay - full brand plus a full-stack Next.js shop with live inventory and PayPal checkout.",
+    blurb: "Limited-edition print store for illustrator Tony Decay - brand, shop, and a live inventory counter, built end to end.",
   },
   {
     slug: "silverback",
@@ -41,7 +41,7 @@ export const PROJECTS: Project[] = [
     role: "Site redesign · Shopify · Liquid",
     url: "https://silverbackstripes.com",
     tag: "client",
-    blurb: "Shopify storefront redesign for a combat-sports apparel brand - rebuilt homepage, navigation, and brand pages on the Dawn/Liquid theme.",
+    blurb: "Storefront redesign for a combat-sports apparel brand - rebuilt the homepage, navigation, and key brand pages.",
   },
   {
     slug: "superself",
@@ -50,7 +50,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Brand · Next.js · WebGL · Deploy",
     url: "https://superself.online",
     tag: "self",
-    blurb: "A Windows-95-style desktop site for an electronic music label - WebGL visuals, generative particles, a live shoutbox, and a shop. Built end to end.",
+    blurb: "A Windows-95-style desktop site for an electronic music label - generative visuals, a live shoutbox, and a shop. Built end to end.",
   },
   {
     slug: "micaela",
@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Next.js · Sanity CMS · Deploy",
     url: "https://micaelalucia.com",
     tag: "client",
-    blurb: "Portfolio for a Lima photographer and filmmaker - Next.js with a Sanity CMS she updates herself. Architecture to deploy.",
+    blurb: "Portfolio for a Lima photographer and filmmaker - a site she can update herself, built and deployed end to end.",
   },
   {
     slug: "brisol",
@@ -68,7 +68,7 @@ export const PROJECTS: Project[] = [
     role: "Redesign · WordPress",
     url: "https://brisol.pe",
     tag: "client",
-    blurb: "Corporate website design and redesign for a Peruvian solar-energy company - rebuilt on WordPress with a lead-capture funnel.",
+    blurb: "Redesign of a Peruvian solar-energy company's corporate site, rebuilt with a working lead-capture funnel.",
   },
   {
     slug: "digeart",
@@ -77,7 +77,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Next.js · Supabase · Deploy",
     url: "https://digeart.online",
     tag: "personal",
-    blurb: "Personal project - a hand-curated discovery app for underground electronic music, with genre filters, YouTube playback, and saved likes.",
+    blurb: "Personal project - a hand-curated discovery app for underground electronic music, with genre filters and YouTube playback.",
   },
 ];
 
@@ -150,7 +150,7 @@ export const SERVICES = [
   "Website Design & Build",
   "Online Stores & E-commerce",
   "Content-managed Sites (CMS)",
-  "Technical SEO",
+  "SEO",
   "Hosting, DNS & Deployment",
 ] as const;
 
@@ -160,7 +160,7 @@ export const TICKER = [
   "Web Design",
   "E-commerce",
   "CMS",
-  "Technical SEO",
+  "SEO",
   "Hosting",
 ] as const;
 
