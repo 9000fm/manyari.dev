@@ -7,7 +7,8 @@ import WireSphere from "../_brutalist/WireSphere";
 export const metadata: Metadata = { title: `${ME.name} — index of /` };
 
 const LAYOUT_CSS = `
-  .wrap { max-width: 1160px; margin: 0 auto; padding: 20px 20px 64px; }
+  .brut { padding: 34px 30px; box-sizing: border-box; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 30px 48px 72px; background: #fff; box-shadow: 0 0 46px rgba(0,0,0,0.5); }
   .grid { display: grid; gap: 40px; grid-template-columns: 1fr; margin-top: 8px; }
   .side { display: flex; flex-direction: column; }
   .side h1 { font-size: 27px; line-height: 0.98; margin: 0; }
@@ -29,6 +30,8 @@ const LAYOUT_CSS = `
     .identRow { flex-direction: column-reverse; align-items: flex-start; justify-content: flex-start; gap: 14px; }
   }
   @media (max-width: 899px) {
+    .brut { padding: 8px; }
+    .wrap { padding: 20px 18px 56px; box-shadow: 0 0 22px rgba(0,0,0,0.5); }
     .side h1 { font-size: 35px; }
     .content { font-size: 18px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
@@ -45,7 +48,7 @@ export default function BrutalistSidebar() {
       id="top"
       className="brut"
       style={{
-        background: "#fff",
+        background: "#171717",
         color: "#000",
         minHeight: "100vh",
         fontFamily: '"Times New Roman", Times, serif',
