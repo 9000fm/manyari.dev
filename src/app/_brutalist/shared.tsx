@@ -14,7 +14,6 @@ export const SHARED_CSS = `
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
   .brut h2 { font-size: 24px; margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
-  .brut h2::before { content: "§"; color: #bcbcbc; font-weight: normal; font-size: 0.66em; margin-right: 9px; vertical-align: 0.1em; }
   .brutAboutRow { display: flex; align-items: flex-start; }
   .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
   .brutAboutText { margin: 0; }
