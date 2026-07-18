@@ -13,7 +13,7 @@ const BLUE_LINE = "#a7d7f9";   // Monobook light-blue border
 const GREY_PANEL = "#f6f7f9";  // light grey panels (ticker, toc)
 
 const LAYOUT_CSS = `
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; touch-action: manipulation; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   .brut { padding: 28px 26px; box-sizing: border-box; }
   /* the page frame - a defined window/PDF edge so the ticker ends at the page limit */
@@ -68,6 +68,7 @@ const LAYOUT_CSS = `
     .content { padding: 16px 22px 36px; font-size: 18px; }
     .side h1 { font-size: 35px; }
     .identRow { align-items: center; }
+    .identText { padding-left: 8px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .welcome { font-size: 17px; padding: 20px 34px 14px; }
 
