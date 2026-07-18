@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useEffect } from "react";
 import { COASTLINE } from "./coastline";
+import { LANDGRID } from "./landgrid";
 
 /**
  * GPU-rendered rotating wireframe globe. Raw WebGL, no libraries.
@@ -106,6 +107,21 @@ function buildCoast() {
   return new Float32Array(v);
 }
 
+// Finer land-only graticule (see landgrid.ts), projected to sphere segments.
+function buildLandGrid() {
+  const v: number[] = [];
+  const P = (latDeg: number, lonDeg: number): [number, number, number] => {
+    const lat = (latDeg * Math.PI) / 180;
+    const lon = (lonDeg * Math.PI) / 180;
+    return [Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon)];
+  };
+  for (let i = 0; i + 3 < LANDGRID.length; i += 4) {
+    v.push(...P(LANDGRID[i + 1], LANDGRID[i]));
+    v.push(...P(LANDGRID[i + 3], LANDGRID[i + 2]));
+  }
+  return new Float32Array(v);
+}
+
 export default function WireSphere({
   size = 160,
   tilt = 0.5, // polar-axis incline (radians) - Wikipedia-style view from above
@@ -140,6 +156,7 @@ export default function WireSphere({
     const limb = buildLimb();
     const disc = buildDisc();
     const coast = buildCoast();
+    const land = buildLandGrid();
     const mk = (data: Float32Array) => {
       const b = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, b);
@@ -150,6 +167,7 @@ export default function WireSphere({
     const limbBuf = mk(limb);
     const discBuf = mk(disc);
     const coastBuf = mk(coast);
+    const landBuf = mk(land);
 
     const a_pos = gl.getAttribLocation(prog, "a_pos");
     gl.enableVertexAttribArray(a_pos);
@@ -201,6 +219,11 @@ export default function WireSphere({
       bind(sphereBuf);
       gl.drawArrays(gl.LINES, 0, sphere.length / 3);
 
+      // 2a. finer land-only graticule, medium grey
+      gl.uniform1f(u_white, 0.52);
+      bind(landBuf);
+      gl.drawArrays(gl.LINES, 0, land.length / 3);
+
       // 2b. coastlines (front-facing only), black
       gl.uniform1f(u_white, 0);
       bind(coastBuf);
@@ -225,6 +248,7 @@ export default function WireSphere({
       gl.deleteBuffer(limbBuf);
       gl.deleteBuffer(discBuf);
       gl.deleteBuffer(coastBuf);
+      gl.deleteBuffer(landBuf);
       gl.deleteProgram(prog);
     };
   }, [size, tilt, speed]);

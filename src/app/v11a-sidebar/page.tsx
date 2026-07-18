@@ -25,14 +25,15 @@ const LAYOUT_CSS = `
   .identRow { display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .identText { min-width: 0; }
   .identSphere { flex-shrink: 0; }
-  .sideMeta { color: #444; font-size: 14px; margin: 6px 0 0; }
+  .sideMeta { color: #444; font-size: 15px; margin: 6px 0 0; }
+  .sideMeta a { text-decoration: underline; }
 
   /* content = the white "article" box with the Monobook blue border */
   .content { min-width: 0; background: #fff; border: 1px solid ${BLUE_LINE}; padding: 18px 30px 40px; }
   .content .inner { max-width: none; }
 
   /* static top line (replaced the scrolling ticker) - non-moving, document-like */
-  .topline { text-align: center; font-size: 13px; color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; font-family: ui-monospace, "Cascadia Mono", "Consolas", "Menlo", "DejaVu Sans Mono", monospace; }
+  .topline { text-align: center; font-size: 13px; color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
   .topline a { color: #0645ad; }
 
   /* welcome banner - a defined block, WP main-page style; dismissible */
@@ -42,7 +43,7 @@ const LAYOUT_CSS = `
   .welcomeX:hover { color: #000; }
 
   /* numbered Contents [hide] box */
-  .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 13px; font-family: ui-monospace, "Cascadia Mono", "Consolas", "Menlo", "DejaVu Sans Mono", monospace; }
+  .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: 13px; }
   .wikiToc summary { cursor: pointer; font-weight: bold; list-style: none; user-select: none; }
   .wikiToc summary::-webkit-details-marker { display: none; }
   .wikiToc summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: 13px; }
@@ -77,7 +78,7 @@ const LAYOUT_CSS = `
     .mnav .mnavFM { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 36px; background: #000; color: #fff; font-weight: bold; font-size: 19px; letter-spacing: 0.03em; text-decoration: none; box-sizing: border-box; }
     .mnavBurger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; width: 42px; height: 36px; background: none; border: 1px solid #999; padding: 0 9px; cursor: pointer; box-sizing: border-box; }
     .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
-    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: ${GREY_PANEL}; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); padding: 12px 18px 16px; font-family: ui-monospace, "Cascadia Mono", "Consolas", "Menlo", "DejaVu Sans Mono", monospace; font-size: 15px; }
+    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: ${GREY_PANEL}; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); padding: 12px 18px 16px; font-size: 15px; }
     .mnavMenuLabel { display: block; font-weight: bold; margin-bottom: 8px; }
     .mnavMenu ol { list-style: decimal outside; margin: 0; padding-left: 26px; }
     .mnavMenu li { padding: 6px 0; }
