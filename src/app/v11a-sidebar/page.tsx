@@ -70,8 +70,8 @@ const LAYOUT_CSS = `
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .welcome { font-size: 17px; padding: 20px 34px 14px; }
 
-    .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-100%); transition: transform 0.28s ease; }
-    .mnav.mnavShown { transform: translateY(0); }
+    .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-101%); transition: transform 0.28s ease; will-change: transform; pointer-events: none; }
+    .mnav.mnavShown { transform: translateY(0); pointer-events: auto; }
     .mnav .mnavFM { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 36px; background: #000; color: #fff; font-weight: bold; font-size: 19px; letter-spacing: 0.03em; text-decoration: none; box-sizing: border-box; }
     .mnavBurger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; width: 42px; height: 36px; background: none; border: 1px solid #999; padding: 0 9px; cursor: pointer; box-sizing: border-box; }
     .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
