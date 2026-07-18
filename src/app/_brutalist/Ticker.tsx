@@ -19,7 +19,7 @@ export default function Ticker(): ReactElement {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const anim = track.animate(
       [{ transform: "translateX(0)" }, { transform: "translateX(-50%)" }],
-      { duration: 75000, iterations: Infinity, easing: "linear" },
+      { duration: 105000, iterations: Infinity, easing: "linear" },
     );
     animRef.current = anim;
     return () => {

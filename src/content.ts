@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web developer and designer. I take projects end to end - brand, design, code, deploy - for brands, agencies, and businesses.",
+    "I design and build distinctive websites, from identity to deployment. Selected work across e-commerce, editorial portfolios, and independent digital products.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -122,9 +122,9 @@ export const EXPERIENCE: Job[] = [
 
 export type SkillGroup = { label: string; items: string[] };
 
-// One line under the Tools heading - AI-augmented / productivity, no "solo".
+// One line under the Tools heading - frames AI as an advantage under skilled control.
 export const WORKFLOW =
-  "AI-augmented workflow - I build fast and deliver complete, from design to deploy.";
+  "I use modern development and AI-assisted workflows to prototype quickly, while keeping design, architecture, and final implementation under direct control.";
 
 export const SKILLS: SkillGroup[] = [
   { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
