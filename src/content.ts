@@ -50,7 +50,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Brand · Next.js · WebGL · Deploy",
     url: "https://superself.online",
     tag: "self",
-    blurb: "A Windows-95-style desktop site for an electronic music label - generative visuals, a live shoutbox, and a shop. Built end to end.",
+    blurb: "Site and brand for an electronic music label - a playful desktop-style interface, generative visuals, a live shoutbox, and a shop. Built end to end, in three languages.",
   },
   {
     slug: "micaela",
@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Next.js · Sanity CMS · Deploy",
     url: "https://micaelalucia.com",
     tag: "client",
-    blurb: "Portfolio for a Lima photographer and filmmaker - a site she can update herself, built and deployed end to end.",
+    blurb: "Portfolio for a photographer and filmmaker - editorial layout, animated transitions, and a client-managed CMS. Designed, built, and deployed end to end.",
   },
   {
     slug: "brisol",
@@ -122,12 +122,17 @@ export const EXPERIENCE: Job[] = [
 
 export type SkillGroup = { label: string; items: string[] };
 
+// One line under the Tools heading - AI-augmented / productivity, no "solo".
+export const WORKFLOW =
+  "AI-augmented workflow - I build fast and deliver complete, from design to deploy.";
+
 export const SKILLS: SkillGroup[] = [
-  { label: "Design",        items: ["Adobe Suite", "Figma"] },
-  { label: "Web",           items: ["Next.js / React", "WordPress"] },
+  { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
+  { label: "Frontend",      items: ["Next.js / React", "TypeScript", "Tailwind"] },
+  { label: "Creative Code", items: ["p5.js", "WebGL", "Framer Motion", "Generative Art"] },
   { label: "E-commerce",    items: ["Shopify / Liquid", "PayPal"] },
-  { label: "CMS & Backend", items: ["Sanity", "Supabase"] },
-  { label: "Deploy",        items: ["Vercel"] },
+  { label: "CMS & Backend", items: ["Sanity", "Supabase", "WordPress"] },
+  { label: "Infra & SEO",   items: ["Vercel", "DNS / SSL / Hosting", "Technical SEO"] },
 ];
 
 export const EDUCATION = [
@@ -146,22 +151,22 @@ export const EDUCATION = [
 ] as const;
 
 export const SERVICES = [
-  "Brand & Visual Identity",
   "Website Design & Build",
   "Online Stores & E-commerce",
   "Content-managed Sites (CMS)",
   "SEO",
   "Hosting, DNS & Deployment",
+  "Brand & Visual Identity",
 ] as const;
 
 // Short tags for the top ticker - keep it simple / scannable.
 export const TICKER = [
-  "Brand Identity",
   "Web Design",
   "E-commerce",
   "CMS",
   "SEO",
   "Hosting",
+  "Brand Identity",
 ] as const;
 
 export const LANGUAGES = [

@@ -49,10 +49,10 @@ export default function Ticker(): ReactElement {
   const unit = (rk: string) => (
     <span key={rk}>
       {tags.map((t, i) => (
-        <span key={i}>{t}{"  •  "}</span>
+        <span key={i}>{t}<span className="brutMarqSep">•</span></span>
       ))}
       <a href="#contact">Available now</a>
-      {"  •  "}
+      <span className="brutMarqSep">•</span>
     </span>
   );
 
