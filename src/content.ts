@@ -6,7 +6,7 @@ export const ME = {
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "I help brands and online shops sell more - end to end, from brand and design to code and launch. 4+ years, clients across three continents. One person, from concept to live.",
+    "Web developer and designer who takes projects end to end - brand, design, build, and launch. I help brands and online shops sell more, from first sketch to live site. 4+ years, clients across three continents.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -123,10 +123,11 @@ export const EXPERIENCE: Job[] = [
 export type SkillGroup = { label: string; items: string[] };
 
 export const SKILLS: SkillGroup[] = [
-  { label: "Design",           items: ["Brand Identity", "UI/UX", "Adobe Suite"] },
-  { label: "Development",      items: ["React", "Next.js", "TypeScript", "JavaScript", "HTML / CSS", "Tailwind"] },
-  { label: "E-commerce & CMS", items: ["Shopify", "Liquid", "WordPress", "Sanity"] },
-  { label: "Infrastructure",   items: ["Git", "Vercel", "Linux / EC2", "Technical SEO"] },
+  { label: "Design",        items: ["Adobe Suite", "Figma"] },
+  { label: "Web",           items: ["Next.js / React", "WordPress"] },
+  { label: "E-commerce",    items: ["Shopify / Liquid", "PayPal"] },
+  { label: "CMS & Backend", items: ["Sanity", "Supabase"] },
+  { label: "Deploy",        items: ["Vercel"] },
 ];
 
 export const EDUCATION = [
@@ -145,12 +146,12 @@ export const EDUCATION = [
 ] as const;
 
 export const SERVICES = [
-  "Web Design & Development",
-  "E-commerce & Shopify",
-  "Brand Identity",
-  "Frontend (React / Next.js)",
+  "Brand & Visual Identity",
+  "Website Design & Build",
+  "Online Stores & E-commerce",
+  "Content-managed Sites (CMS)",
   "Technical SEO",
-  "Hosting & Deploy",
+  "Hosting, DNS & Deployment",
 ] as const;
 
 export const LANGUAGES = [

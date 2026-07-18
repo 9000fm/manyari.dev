@@ -12,7 +12,7 @@ export const BLUE = "#0000EE";
 export const SHARED_CSS = `
   .brut a { color: ${BLUE}; }
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
-  .brut h2 { font-size: 24px; margin: 32px 0 12px; }
+  .brut h2 { font-size: 24px; margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
   .brutAbout p::first-letter {
     float: left; font-size: 4em; line-height: 0.85; padding: 6px 8px 0 0; font-weight: bold;
@@ -26,7 +26,7 @@ export const SHARED_CSS = `
 
   /* infinite seamless ticker */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
-  .brutMarqTrack { display: inline-flex; white-space: nowrap; animation: brutScroll 45s linear infinite; }
+  .brutMarqTrack { display: inline-flex; white-space: nowrap; animation: brutScroll 75s linear infinite; }
   .brutMarqTrack span { flex-shrink: 0; font-size: 15px; }
   @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
@@ -45,7 +45,8 @@ export const SHARED_CSS = `
 
   /* contact */
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
-  .brutWa { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; fill: currentColor; }
+  .brutRefs { font-size: 13px; color: #555; padding-left: 22px; margin: 0; line-height: 1.7; }
+  .brutRefs a { word-break: break-word; }
 `;
 
 /** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */
@@ -71,15 +72,7 @@ export const NAV_SECTIONS = [
   { id: "contact", label: "contact" },
 ] as const;
 
-function WaIcon(): ReactElement {
-  return (
-    <svg className="brutWa" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.359.101 11.945c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a11.882 11.882 0 005.71 1.447h.006c6.585 0 11.946-5.359 11.949-11.945a11.821 11.821 0 00-3.48-8.4" />
-    </svg>
-  );
-}
-
-/** The document body: About -> Contact. */
+/** The document body: About -> References. */
 export function Sections(): ReactElement {
   return (
     <>
@@ -151,30 +144,40 @@ export function Sections(): ReactElement {
       <section id="contact">
         <h2>Contact</h2>
         <p style={{ marginTop: 0 }}>
-          Available for freelance or full-time. Let&apos;s build something that sells.
+          Based in {ME.location}. Available for freelance or full-time - let&apos;s build something that sells.
         </p>
         <ul className="brutContact">
           <li>
             <a href={`mailto:${ME.email}`}>{ME.email}</a>
           </li>
+          <li>Phone: {ME.phone}</li>
           <li>
-            <WaIcon />
-            <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">
-              WhatsApp
-            </a>{" "}
-            · {ME.phone}
-          </li>
-          <li>
-            <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>{" "}
-            ·{" "}
-            <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
+            <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            {" · "}
+            <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            {" · "}
+            <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            {" · "}
+            <a href="#">Portfolio ↗</a>
           </li>
           <li style={{ color: "#555", fontSize: 14 }}>Full CV on request.</li>
         </ul>
+      </section>
+
+      <p className="brutAst" />
+
+      <section id="references">
+        <h2>References</h2>
+        <ol className="brutRefs">
+          {PROJECTS.map((p) => (
+            <li key={p.slug}>
+              {p.title} -{" "}
+              <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
+                {(p.url ?? "").replace(/^https?:\/\//, "")}
+              </a>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <p className="brutAst" />
