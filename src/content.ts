@@ -1,15 +1,16 @@
 export const ME = {
   name: "Flavio Manyari",
-  role: "Web Developer & Graphic Designer",
+  role: "Freelance Designer & Developer",
   location: "Lima, PE",
-  email: "flavio@superself.online",
+  email: "flavio@manyari.dev",
   phone: "+51 990 028 077",
   available: "Available",
   about:
-    "Web developer and graphic designer with 4+ years taking projects end-to-end — brand, design, code, deploy — for clients across three continents. Background in music production and generative art.",
+    "I help brands and online shops sell more - end to end, from brand and design to code and launch. 4+ years, clients across three continents. One person, from concept to live.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
+    whatsapp: "https://wa.me/51990028077",
   },
 } as const;
 
@@ -64,7 +65,7 @@ export const PROJECTS: Project[] = [
     slug: "brisol",
     title: "Brisol",
     year: 2026,
-    role: "Design · Redesign · WordPress",
+    role: "Redesign · WordPress",
     url: "https://brisol.pe",
     tag: "client",
     blurb: "Corporate website design and redesign for a Peruvian solar-energy company - rebuilt on WordPress with a lead-capture funnel.",
@@ -122,10 +123,10 @@ export const EXPERIENCE: Job[] = [
 export type SkillGroup = { label: string; items: string[] };
 
 export const SKILLS: SkillGroup[] = [
-  { label: "Design",          items: ["Adobe Suite", "Canva", "Brand Identity", "UI/UX"] },
-  { label: "Frontend",        items: ["JavaScript", "TypeScript", "React 19", "Next.js 16", "HTML5/CSS3", "Tailwind CSS 4"] },
-  { label: "Creative Coding", items: ["p5.js", "Framer Motion", "TouchDesigner", "Blender", "Generative Art"] },
-  { label: "Tools",           items: ["Git", "Vercel", "WordPress", "Linux/EC2", "Claude / Cursor"] },
+  { label: "Design",           items: ["Brand Identity", "UI/UX", "Adobe Suite"] },
+  { label: "Development",      items: ["React", "Next.js", "TypeScript", "JavaScript", "HTML / CSS", "Tailwind"] },
+  { label: "E-commerce & CMS", items: ["Shopify", "Liquid", "WordPress", "Sanity"] },
+  { label: "Infrastructure",   items: ["Git", "Vercel", "Linux / EC2", "Technical SEO"] },
 ];
 
 export const EDUCATION = [
@@ -145,11 +146,11 @@ export const EDUCATION = [
 
 export const SERVICES = [
   "Web Design & Development",
+  "E-commerce & Shopify",
   "Brand Identity",
-  "Visual Systems",
-  "Generative & Creative Coding",
+  "Frontend (React / Next.js)",
   "Technical SEO",
-  "Hosting & Infrastructure",
+  "Hosting & Deploy",
 ] as const;
 
 export const LANGUAGES = [
