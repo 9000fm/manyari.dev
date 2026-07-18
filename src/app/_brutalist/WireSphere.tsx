@@ -2,6 +2,7 @@
 import { useRef, useEffect } from "react";
 import { COASTLINE } from "./coastline";
 import { LANDGRID } from "./landgrid";
+import { LANDFILL } from "./landfill";
 
 /**
  * GPU-rendered rotating wireframe globe. Raw WebGL, no libraries.
@@ -122,6 +123,22 @@ function buildLandGrid() {
   return new Float32Array(v);
 }
 
+// Land fill triangles (see landfill.ts) - opaque white, hides the ocean grid inside continents.
+function buildLandFill() {
+  const v: number[] = [];
+  const P = (latDeg: number, lonDeg: number): [number, number, number] => {
+    const lat = (latDeg * Math.PI) / 180;
+    const lon = (lonDeg * Math.PI) / 180;
+    return [Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon)];
+  };
+  for (let i = 0; i + 5 < LANDFILL.length; i += 6) {
+    v.push(...P(LANDFILL[i + 1], LANDFILL[i]));
+    v.push(...P(LANDFILL[i + 3], LANDFILL[i + 2]));
+    v.push(...P(LANDFILL[i + 5], LANDFILL[i + 4]));
+  }
+  return new Float32Array(v);
+}
+
 export default function WireSphere({
   size = 160,
   tilt = 0.5, // polar-axis incline (radians) - Wikipedia-style view from above
@@ -157,6 +174,7 @@ export default function WireSphere({
     const disc = buildDisc();
     const coast = buildCoast();
     const land = buildLandGrid();
+    const fill = buildLandFill();
     const mk = (data: Float32Array) => {
       const b = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, b);
@@ -168,6 +186,7 @@ export default function WireSphere({
     const discBuf = mk(disc);
     const coastBuf = mk(coast);
     const landBuf = mk(land);
+    const fillBuf = mk(fill);
 
     const a_pos = gl.getAttribLocation(prog, "a_pos");
     gl.enableVertexAttribArray(a_pos);
@@ -219,6 +238,11 @@ export default function WireSphere({
       bind(sphereBuf);
       gl.drawArrays(gl.LINES, 0, sphere.length / 3);
 
+      // 2-fill. opaque white land fill hides the ocean grid inside continents
+      gl.uniform1f(u_white, 1);
+      bind(fillBuf);
+      gl.drawArrays(gl.TRIANGLES, 0, fill.length / 3);
+
       // 2a. finer land-only graticule, medium grey
       gl.uniform1f(u_white, 0.52);
       bind(landBuf);
@@ -249,6 +273,7 @@ export default function WireSphere({
       gl.deleteBuffer(discBuf);
       gl.deleteBuffer(coastBuf);
       gl.deleteBuffer(landBuf);
+      gl.deleteBuffer(fillBuf);
       gl.deleteProgram(prog);
     };
   }, [size, tilt, speed]);
