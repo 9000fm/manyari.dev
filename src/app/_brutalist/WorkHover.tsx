@@ -191,6 +191,7 @@ export default function WorkHover() {
           <div className="workHoverMedia">
             {preview?.type === "video" ? (
               <video
+                key={active?.slug}
                 src={preview.src}
                 muted
                 loop
@@ -200,7 +201,7 @@ export default function WorkHover() {
               />
             ) : preview?.type === "image" ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview.src} alt="" />
+              <img key={active?.slug} src={preview.src} alt="" />
             ) : (
               <span className="workHoverPh">&#9654; preview</span>
             )}
