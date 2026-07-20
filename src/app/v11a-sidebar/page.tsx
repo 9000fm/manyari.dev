@@ -38,9 +38,10 @@ const LAYOUT_CSS = `
   .topline { text-align: center; font-size: var(--t-micro); color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
   .topline a { color: #0645ad; }
 
-  /* welcome banner - a defined block, WP main-page style; dismissible */
-  .welcome { position: relative; text-align: center; background: #f6f7f9; border: 1px solid #c8ccd1; padding: 22px 42px 18px; margin: 0 0 28px; font-size: var(--t-lead); line-height: 1.55; color: #111; }
+  /* welcome banner - full-width yellow wiki notice at the top, above Contents; dismissible */
+  .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 22px 46px; margin: 14px 26px 0; min-height: 84px; font-size: var(--t-lead); line-height: 1.55; color: #111; }
   .welcome b { font-weight: bold; }
+  .welcomeText { margin: 0; }
   .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #6f6f6f; cursor: pointer; padding: 2px 7px; }
   .welcomeX:hover { color: #000; }
 
@@ -75,7 +76,7 @@ const LAYOUT_CSS = `
     .identRow { align-items: center; }
     .identText { padding-left: 8px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
-    .welcome { padding: 20px 34px 14px; }
+    .welcome { padding: 20px 30px; margin: 12px 22px 0; }
 
     .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-101%); transition: transform 0.28s ease; will-change: transform; pointer-events: none; }
     .mnav.mnavShown { transform: translateY(0); pointer-events: auto; }
@@ -117,6 +118,8 @@ export default function BrutalistSidebar() {
           <span>{ME.location}</span>
         </div>
 
+        <WelcomeBanner />
+
         <div className="grid">
           <aside className="side">
             <div className="identRow">
@@ -150,7 +153,6 @@ export default function BrutalistSidebar() {
 
           <div className="content">
             <div className="inner">
-              <WelcomeBanner />
               <Sections />
             </div>
           </div>
