@@ -20,9 +20,11 @@ export default function WelcomeBanner() {
       >
         ×
       </button>
-      <b>Hello and welcome.</b> This is where I keep my work, the tools I use,
-      and how to{" "}
-      <span style={{ whiteSpace: "nowrap" }}>reach me.</span> Take a look around.
+      <p className="welcomeText">
+        <b>Hello and welcome.</b> This is where I keep{" "}
+        <a href="#work">my work</a>, <a href="#tools">the tools I use</a>, and
+        how to <a href="#contact">reach me</a>. Take a look around.
+      </p>
     </div>
   );
 }

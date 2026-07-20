@@ -215,9 +215,9 @@ export default function WireSphere({
     let cooldownUntil = 0;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // buttery reverse: coast down to a stop, hold a beat, then ease up the other way
-    const DECEL = 1900;
-    const HOLD = 400;
-    const ACCEL = 1900;
+    const DECEL = 900;
+    const HOLD = 250;
+    const ACCEL = 1100;
 
     // Double-tap (mouse or touch): glide the spin to a stop, then send it the
     // other way. 8s cooldown so it can't be spammed. Respects reduced motion.
