@@ -26,7 +26,9 @@ const LAYOUT_CSS = `
   .side h1 { font-size: var(--t-name); line-height: 0.98; margin: 0; }
   .identRow { display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .identText { min-width: 0; }
-  .identSphere { flex-shrink: 0; }
+  /* fixed box so the sphere's space is always reserved - the name never shifts
+     when the globe mounts (placeholder -> null frame -> real canvas all fit here) */
+  .identSphere { flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
   .sideMeta { color: #444; font-size: var(--t-small); margin: 6px 0 0; }
   .sideMeta a { text-decoration: underline; }
 
@@ -75,6 +77,7 @@ const LAYOUT_CSS = `
     :root { --t-name: 34px; }
     .identRow { align-items: center; }
     .identText { padding-left: 8px; }
+    .identSphere { width: 168px; height: 168px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .welcome { padding: 20px 30px; margin: 12px 22px 0; }
 
