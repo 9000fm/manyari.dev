@@ -21,9 +21,9 @@ export default function WelcomeBanner() {
         ×
       </button>
       <p className="welcomeText">
-        <b>Hello and welcome.</b> This is where I keep{" "}
-        <a href="#work">my work</a>, <a href="#tools">the tools I use</a>, and
-        how to <a href="#contact">reach me</a>. Take a look around.
+        <b>Hello and welcome.</b> This is where I keep my{" "}
+        <a href="#work">work</a>, the <a href="#tools">tools</a> I use, and how
+        to <a href="#contact">reach me</a>. Take a look around.
       </p>
     </div>
   );

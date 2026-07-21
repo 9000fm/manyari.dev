@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
-import WireSphereLazy from "../_brutalist/WireSphereLazy";
+import WireSphere from "../_brutalist/WireSphere";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
@@ -9,10 +9,18 @@ import SmoothScroll from "../_brutalist/SmoothScroll";
 
 export const metadata: Metadata = { title: "flavio manyari - designer & developer" };
 
+// build-time "last updated" for the sidebar colophon - refreshes on each deploy
+const UPDATED = new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+
 // Classic Monobook palette: dark desk, grey page frame, white article box.
 const GREY_PAGE = "#232220";   // desk background (warm charcoal, behind the page frame)
 const BLUE_LINE = "#a7d7f9";   // Monobook light-blue border
 const GREY_PANEL = "#f6f7f9";  // light grey panels (ticker, toc)
+
+// Subtle paper-grain texture for the sidebar background (behind the globe),
+// as an inline SVG fractal-noise data URI - no external asset, no extra request.
+const PAPER =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E\")";
 
 const LAYOUT_CSS = `
   html { scroll-behavior: smooth; touch-action: manipulation; }
@@ -56,12 +64,21 @@ const LAYOUT_CSS = `
   .wikiToc ol { list-style: decimal outside; margin: 8px 0 0; padding-left: 26px; }
   .wikiToc li { display: list-item; padding: 2px 0; }
 
+  /* sidebar toolbox + colophon - fills the space under Contents on desktop */
+  .sideTools { margin-top: 20px; }
+  .sideToolsLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); color: #555; margin-bottom: 6px; }
+  .sideTools ul { list-style: none; margin: 0; padding: 0; font-size: var(--t-small); }
+  .sideTools li { padding: 2px 0; }
+  .sideTools a { color: #0645ad; text-decoration: none; }
+  .sideTools a:hover { text-decoration: underline; }
+  .sideColophon { margin-top: 16px; padding-top: 12px; border-top: 1px solid #c8ccd1; font-size: var(--t-micro); color: #6f6f6f; line-height: 1.7; }
+
   /* mobile sticky header (FM + burger) - hidden on desktop */
   .mnav { display: none; }
 
   @media (min-width: 900px) {
     .grid { grid-template-columns: 264px 1fr; }
-    .side { position: sticky; top: 18px; align-self: start; padding-left: 14px; padding-right: 18px; max-height: calc(100vh - 36px); overflow: auto; }
+    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; max-height: calc(100vh - 36px); overflow: auto; background: ${PAPER}, #e9ebef; border: 1px solid #c8ccd1; }
     .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
     .identSphere { align-self: center; }
     .identText { padding-left: 2px; }
@@ -79,6 +96,7 @@ const LAYOUT_CSS = `
     .identText { padding-left: 8px; }
     .identSphere { width: 168px; height: 168px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
+    .sideTools { display: none; }
     .welcome { padding: 20px 30px; margin: 12px 22px 0; }
 
     .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-101%); transition: transform 0.28s ease; will-change: transform; pointer-events: none; }
@@ -140,7 +158,7 @@ export default function BrutalistSidebar() {
                 </p>
               </div>
               <div className="identSphere">
-                <WireSphereLazy size={215} />
+                <WireSphere size={215} />
               </div>
             </div>
 
@@ -152,6 +170,19 @@ export default function BrutalistSidebar() {
                 ))}
               </ol>
             </details>
+
+            <nav className="sideTools" aria-label="Toolbox">
+              <span className="sideToolsLabel">Toolbox</span>
+              <ul>
+                <li><a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a></li>
+                <li><a href={`mailto:${ME.email}`}>Email</a></li>
+                <li><a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              </ul>
+              <p className="sideColophon">
+                This page was last updated {UPDATED}.
+              </p>
+            </nav>
           </aside>
 
           <div className="content">
