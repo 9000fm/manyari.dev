@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { renderMainThread } from "./globeMainThread";
 
 /**
- * Rotating wireframe globe. Renders directly on the main thread and eagerly on
- * mount, so it shows up reliably on every load / reload (no worker, no watchdog,
- * no fallback chain - those added flakiness where the globe could come up blank).
- * Drag to spin. Decorative -> aria-hidden. The canvas box is reserved by
- * `.identSphere` in the page CSS, so there is no layout shift.
+ * Rotating wireframe globe. Renders on the main thread, but its heavy module
+ * (WebGL + ~140KB of geo data) is dynamic-imported one animation frame AFTER
+ * mount, so those bytes stay OUT of the initial bundle (lower TBT) yet load
+ * reliably right after first paint - requestAnimationFrame is guaranteed to
+ * fire (unlike requestIdleCallback / interaction gating, which could leave the
+ * globe blank). Drag to spin. Decorative -> aria-hidden. The canvas box is
+ * reserved by `.identSphere` in the page CSS, so there is no layout shift.
  */
 export default function WireSphere({
   size = 160,
@@ -23,9 +24,21 @@ export default function WireSphere({
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    return renderMainThread(canvas, { size, tilt, speed });
+    if (!ref.current) return;
+    let cleanup = () => {};
+    let cancelled = false;
+    const raf = requestAnimationFrame(() => {
+      import("./globeMainThread").then((m) => {
+        if (!cancelled && ref.current) {
+          cleanup = m.renderMainThread(ref.current, { size, tilt, speed });
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      cleanup();
+    };
   }, [size, tilt, speed]);
 
   return (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
 import WireSphere from "../_brutalist/WireSphere";
+import GlobeHint from "../_brutalist/GlobeHint";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
@@ -31,7 +32,11 @@ const LAYOUT_CSS = `
   .identText { min-width: 0; }
   /* fixed box so the sphere's space is always reserved - the name never shifts
      when the globe mounts (placeholder -> null frame -> real canvas all fit here) */
-  .identSphere { flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
+  .identSphere { position: relative; flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
+  /* "drag to spin" hint - fades out (see GlobeHint); never blocks the drag */
+  .globeHint { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 11px; font-style: italic; letter-spacing: 0.03em; color: #555; background: rgba(240,242,245,0.9); border: 1px solid #d3d8df; border-radius: 2px; padding: 1px 8px; white-space: nowrap; pointer-events: none; opacity: 1; transition: opacity 0.7s ease; }
+  .globeHint[data-on="false"] { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .globeHint { transition: none; } }
   .sideMeta { color: #444; font-size: var(--t-small); margin: 6px 0 0; }
   .sideMeta a { text-decoration: underline; }
 
@@ -44,7 +49,7 @@ const LAYOUT_CSS = `
   .topline a { color: #0645ad; }
 
   /* welcome banner - full-width yellow wiki notice at the top, above Contents; dismissible */
-  .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 22px 46px; margin: 14px 26px 0; min-height: 84px; font-size: var(--t-lead); line-height: 1.55; color: #111; }
+  .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 12px 46px; margin: 14px 26px 0; font-size: var(--t-body); line-height: 1.5; color: #111; }
   .welcome b { font-weight: bold; }
   .welcomeText { margin: 0; }
   .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #6f6f6f; cursor: pointer; padding: 2px 7px; }
@@ -73,7 +78,7 @@ const LAYOUT_CSS = `
 
   @media (min-width: 900px) {
     .grid { grid-template-columns: 264px 1fr; }
-    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; background: #e9ebef; border: 1px solid #c8ccd1; }
+    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; background: #f0f2f5; border: 1px solid #c8ccd1; }
     .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
     .identSphere { align-self: center; }
     .identText { padding-left: 2px; }
@@ -92,7 +97,7 @@ const LAYOUT_CSS = `
     .identSphere { width: 168px; height: 168px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .sideTools { display: none; }
-    .welcome { padding: 20px 30px; margin: 12px 22px 0; }
+    .welcome { padding: 11px 26px; margin: 12px 22px 0; }
 
     .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-101%); transition: transform 0.28s ease; will-change: transform; pointer-events: none; }
     .mnav.mnavShown { transform: translateY(0); pointer-events: auto; }
@@ -154,6 +159,7 @@ export default function BrutalistSidebar() {
               </div>
               <div className="identSphere">
                 <WireSphere size={215} />
+                <GlobeHint />
               </div>
             </div>
 
