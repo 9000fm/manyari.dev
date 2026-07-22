@@ -17,11 +17,6 @@ const GREY_PAGE = "#232220";   // desk background (warm charcoal, behind the pag
 const BLUE_LINE = "#a7d7f9";   // Monobook light-blue border
 const GREY_PANEL = "#f6f7f9";  // light grey panels (ticker, toc)
 
-// Subtle paper-grain texture for the sidebar background (behind the globe),
-// as an inline SVG fractal-noise data URI - no external asset, no extra request.
-const PAPER =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E\")";
-
 const LAYOUT_CSS = `
   html { scroll-behavior: smooth; touch-action: manipulation; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -78,7 +73,7 @@ const LAYOUT_CSS = `
 
   @media (min-width: 900px) {
     .grid { grid-template-columns: 264px 1fr; }
-    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; max-height: calc(100vh - 36px); overflow: auto; background: ${PAPER}, #e9ebef; border: 1px solid #c8ccd1; }
+    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; background: #e9ebef; border: 1px solid #c8ccd1; }
     .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
     .identSphere { align-self: center; }
     .identText { padding-left: 2px; }

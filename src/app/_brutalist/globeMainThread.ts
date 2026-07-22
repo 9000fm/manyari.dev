@@ -2,13 +2,10 @@ import { createGlobeController } from "./globeGL";
 import { createDragHandler } from "./globeDrag";
 
 /**
- * Main-thread globe render - the fallback for browsers without OffscreenCanvas
- * (e.g. Safari < 17) or if the worker reports failure. Same visuals as the
- * worker path; the only difference is it runs on the main thread, driven by
- * requestAnimationFrame. Loaded via dynamic import(), so this + its ~140KB geo
- * data never land in the initial bundle - only supported-less browsers pay it.
- *
- * Returns a cleanup function.
+ * Main-thread globe render, driven by requestAnimationFrame. This is the sole
+ * render path: it runs eagerly on mount so the globe shows reliably on every
+ * load / reload. Sets up the WebGL globe (via globeGL) and drag-to-spin (via
+ * globeDrag). Returns a cleanup function.
  */
 export function renderMainThread(
   canvas: HTMLCanvasElement,
