@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
 import WireSphere from "../_brutalist/WireSphere";
-import GlobeHint from "../_brutalist/GlobeHint";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
@@ -32,11 +31,7 @@ const LAYOUT_CSS = `
   .identText { min-width: 0; }
   /* fixed box so the sphere's space is always reserved - the name never shifts
      when the globe mounts (placeholder -> null frame -> real canvas all fit here) */
-  .identSphere { position: relative; flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
-  /* "drag to spin" hint - fades out (see GlobeHint); never blocks the drag */
-  .globeHint { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 11px; font-style: italic; letter-spacing: 0.03em; color: #555; background: rgba(240,242,245,0.9); border: 1px solid #d3d8df; border-radius: 2px; padding: 1px 8px; white-space: nowrap; pointer-events: none; opacity: 1; transition: opacity 0.7s ease; }
-  .globeHint[data-on="false"] { opacity: 0; }
-  @media (prefers-reduced-motion: reduce) { .globeHint { transition: none; } }
+  .identSphere { flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
   .sideMeta { color: #444; font-size: var(--t-small); margin: 6px 0 0; }
   .sideMeta a { text-decoration: underline; }
 
@@ -159,7 +154,6 @@ export default function BrutalistSidebar() {
               </div>
               <div className="identSphere">
                 <WireSphere size={215} />
-                <GlobeHint />
               </div>
             </div>
 
