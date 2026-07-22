@@ -6,6 +6,7 @@ import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
 import SmoothScroll from "../_brutalist/SmoothScroll";
+import SmoothWheel from "../_brutalist/SmoothWheel";
 
 export const metadata: Metadata = { title: "flavio manyari - designer & developer" };
 
@@ -124,6 +125,7 @@ export default function BrutalistSidebar() {
 
       <MobileNav />
       <SmoothScroll />
+      <SmoothWheel />
 
       <div className="wrap">
         <div className="topline">
