@@ -21,7 +21,7 @@ export const SHARED_CSS = `
   .brutAboutText { margin: 0; }
   .brutWork { list-style: none; }
   .brutWork > li { position: relative; }
-  .brutWork > li::before { content: "—"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
+  .brutWork > li::before { content: "-"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: var(--t-micro); }
   .brutAst::before { content: "* * *"; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }

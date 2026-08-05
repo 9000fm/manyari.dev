@@ -4,7 +4,7 @@ import { join } from "node:path";
 
 // Generated social share card (WhatsApp, X, LinkedIn, etc.).
 // Matches the site: white document, black Times-style serif, stacked name.
-export const alt = "Flavio Manyari — Web developer and designer";
+export const alt = "Flavio Manyari - Web developer and designer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

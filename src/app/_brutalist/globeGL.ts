@@ -138,11 +138,14 @@ export type GlobeController = {
   reduce: boolean;
 };
 
-// drag-to-spin feel: MAX_VEL caps how fast a fling can spin (kept low so it never
-// whips into a cartoonish free-spin); RETURN_EASE is how quickly it settles back
-// to the gentle auto-spin after you let go (higher = settles sooner)
-const MAX_VEL = 0.009;
-const RETURN_EASE = 0.025;
+// slingshot feel: MAX_VEL caps the release spin at ~11x the idle speed, so a
+// full pull snaps into a genuinely fast rotation without becoming a toy.
+// RETURN_EASE is the decay back to the gentle auto-spin - at 60fps it works out
+// to roughly a 4s glide down, long enough that the wind-up feels like it paid
+// off. Both are deliberately looser than the old anti-fling tuning, because with
+// the slingshot the fast spin IS the reward for the effort.
+const MAX_VEL = 0.028;
+const RETURN_EASE = 0.0165;
 
 /**
  * Sets up the globe on an already-obtained GL context and returns a controller.

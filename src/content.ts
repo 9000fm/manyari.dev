@@ -79,20 +79,35 @@ export type Job = {
   blurb: string;
 };
 
+// Reverse chronological: the current role first, then by end date.
 export const EXPERIENCE: Job[] = [
   {
     title: "Freelance Web Developer & Designer",
     company: "Independent",
     location: "Peru",
-    period: "2020 — Present",
-    blurb: "Websites built end to end for international clients - brand, design, code, deployment, and the infrastructure behind them (DNS, SSL, hosting, SEO) - working with remote, multidisciplinary teams. Early projects for local clients before expanding internationally.",
+    period: "2023 - Present",
+    blurb: "Sites designed, built, and deployed, plus the infrastructure that keeps them up: DNS, SSL, hosting, email deliverability. Remote work, usually alongside the client's own team.",
+  },
+  {
+    title: "Junior UI Designer",
+    company: "Design In DC",
+    location: "United States",
+    period: "2025 - 2026",
+    blurb: "Junior designer at a Washington DC agency, remote from Lima. A year and a half of interface work on client web projects.",
+  },
+  {
+    title: "Freelance Graphic Designer",
+    company: "Independent",
+    location: "Peru",
+    period: "2020 - 2023",
+    blurb: "Print and identity work in Lima. Brochures, forms, and institutional documents for a medical company, flyers for the city's electronic music scene, and logos for small businesses getting started.",
   },
   {
     title: "Community Manager",
     company: "T&IL Cleaning Services",
     location: "United States",
-    period: "2021 — 2023",
-    blurb: "Content and social for a US brand.",
+    period: "2021 - 2023",
+    blurb: "Social content for a Baltimore cleaning company: posts and short video for Instagram, Facebook, and TikTok. I also handled client messages and scheduling.",
   },
 ];
 
@@ -122,9 +137,9 @@ export const EDUCATION = [
     detail: "Certified. HTML, CSS, JavaScript, Python, Flask, Django, MySQL.",
   },
   {
-    title: "University studies — Engineering & Music Production",
+    title: "University studies - Engineering & Music Production",
     school: "Universidad Peruana de Ciencias Aplicadas (UPC)",
-    period: "2018 — 2023",
+    period: "2018 - 2023",
     detail: "",
   },
 ] as const;

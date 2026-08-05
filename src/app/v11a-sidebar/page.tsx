@@ -50,6 +50,32 @@ const LAYOUT_CSS = `
   .welcomeText { margin: 0; }
   .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #6f6f6f; cursor: pointer; padding: 2px 7px; }
   .welcomeX:hover { color: #000; }
+  /* dismissal: the notice is squashed flat instead of just clipped away.
+     .welcomeInner's overflow:hidden traps the notice's 14px top margin inside
+     the row, so it collapses too and leaves no gap.
+     The box's scaleY and the row's 1fr -> 0fr share the exact same duration and
+     curve, so the squashing box always fills the shrinking row precisely - no
+     gap, no early-clipped border. scaleX overshoots to 1.045 for the squash-and-
+     stretch bulge (horizontal, so it can't break that vertical lock), and the
+     text scales down harder than its parent so it looks crushed into the seam
+     rather than sliding under it. Transform + opacity only: GPU, no repaint. */
+  .welcomeWrap { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.42s cubic-bezier(0.16,0.84,0.28,1); }
+  .welcomeWrap.isLeaving { grid-template-rows: 0fr; pointer-events: none; }
+  .welcomeInner { overflow: hidden; min-height: 0; }
+  .welcome { transform-origin: top center; transition: transform 0.42s cubic-bezier(0.16,0.84,0.28,1), opacity 0.3s ease 0.12s; }
+  .welcomeText, .welcomeX { transform-origin: top center; transition: transform 0.42s cubic-bezier(0.16,0.84,0.28,1); }
+  /* the box can only bulge to ~1.047 before it outgrows .wrap and overflow:hidden
+     starts shaving its side borders, so the box stays at that ceiling and the
+     extra drama goes into the text: it splays wider as it is crushed flatter
+     than its own container. opacity is delayed 0.12s so the crush is legible
+     before it fades out. */
+  .welcomeWrap.isLeaving .welcome { transform: scaleY(0) scaleX(1.045); opacity: 0; will-change: transform, opacity; }
+  .welcomeWrap.isLeaving .welcomeText { transform: scaleY(0.18) scaleX(1.07); }
+  .welcomeWrap.isLeaving .welcomeX { transform: scaleY(0.18); }
+  @media (prefers-reduced-motion: reduce) {
+    .welcomeWrap, .welcome, .welcomeText, .welcomeX { transition: none; }
+    .welcomeWrap.isLeaving .welcome { transform: none; }
+  }
 
   /* numbered Contents [hide] box */
   .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: var(--t-small); }
