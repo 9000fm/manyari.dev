@@ -48,7 +48,8 @@ const LAYOUT_CSS = `
   .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 12px 46px; margin: 14px 26px 0; font-size: var(--t-body); line-height: 1.5; color: #111; }
   .welcome b { font-weight: bold; }
   .welcomeText { margin: 0; }
-  .welcomeX { position: absolute; top: 6px; right: 9px; background: none; border: none; font-size: 19px; line-height: 1; color: #6f6f6f; cursor: pointer; padding: 2px 7px; }
+  /* padded out to a ~44px hit area (WCAG target size); glyph stays put */
+  .welcomeX { position: absolute; top: 0; right: 0; background: none; border: none; font-size: var(--t-lead); line-height: 1; color: #6f6f6f; cursor: pointer; padding: 10px 12px; }
   .welcomeX:hover { color: #000; }
   /* dismissal: the notice is squashed flat instead of just clipped away.
      .welcomeInner's overflow:hidden traps the notice's 14px top margin inside
@@ -93,7 +94,8 @@ const LAYOUT_CSS = `
   .sideTools li { padding: 2px 0; }
   .sideTools a { color: #0645ad; text-decoration: none; }
   .sideTools a:hover { text-decoration: underline; }
-  .sideColophon { margin-top: 16px; padding-top: 12px; border-top: 1px solid #c8ccd1; font-size: var(--t-micro); color: #6f6f6f; line-height: 1.7; }
+  /* #5f5f5f: 4.5:1+ on the grey sidebar panel (#6f6f6f failed AA at 4.48) */
+  .sideColophon { margin-top: 16px; padding-top: 12px; border-top: 1px solid #c8ccd1; font-size: var(--t-micro); color: #5f5f5f; line-height: 1.7; }
 
   /* mobile sticky header (FM + burger) - hidden on desktop */
   .mnav { display: none; }
@@ -108,29 +110,43 @@ const LAYOUT_CSS = `
   }
   @media (max-width: 899px) {
     /* land section headings below the fixed mobile navbar, not under it */
-    section[id], #top { scroll-margin-top: 64px; }
+    section[id], #top { scroll-margin-top: 72px; }
     .brut { padding: 0 0 8px; }
     .wrap { border-left: none; border-right: none; }
     .grid { padding: 12px 22px 40px; }
     .content { padding: 16px 22px 36px; }
-    :root { --t-name: 34px; }
+    /* shrinks with the viewport so MANYARI never runs under the globe (<380px) */
+    :root { --t-name: clamp(26px, 9vw, 34px); }
     .identRow { align-items: center; }
     .identText { padding-left: 8px; }
     .identSphere { width: 168px; height: 168px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
     .sideTools { display: none; }
-    .welcome { padding: 11px 26px; margin: 12px 22px 0; }
+    /* keep 46px sides: less than that and the centered text runs under the X */
+    .welcome { padding: 11px 46px; margin: 12px 22px 0; }
 
-    .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; border-bottom: 1px solid #7c828b; padding: 8px 16px; transform: translateY(-101%); transition: transform 0.28s ease; will-change: transform; pointer-events: none; }
-    .mnav.mnavShown { transform: translateY(0); pointer-events: auto; }
-    .mnav .mnavFM { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 36px; background: #000; color: #fff; font-weight: bold; font-size: 19px; letter-spacing: 0.03em; text-decoration: none; box-sizing: border-box; }
-    .mnavBurger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; width: 42px; height: 36px; background: none; border: 1px solid #999; padding: 0 9px; cursor: pointer; box-sizing: border-box; }
-    .mnavBurger span { display: block; width: 100%; height: 2px; background: #000; }
-    .mnavMenu { position: absolute; top: 100%; left: 0; right: 0; background: ${GREY_PANEL}; border-bottom: 1px solid #7c828b; box-shadow: 0 8px 20px rgba(0,0,0,0.25); padding: 12px 18px 16px; font-size: var(--t-small); }
-    .mnavMenuLabel { display: block; font-weight: bold; margin-bottom: 8px; }
-    .mnavMenu ol { list-style: decimal outside; margin: 0; padding-left: 26px; }
-    .mnavMenu li { padding: 6px 0; }
-    .mnavMenu a { color: #0645ad; text-decoration: none; }
+    /* "Article chrome" header (lab pick): the bar is wiki furniture - grey
+       panel, Monobook blue rule, name in small caps, contents [show]/[hide].
+       visibility toggles with the slide so the hidden bar's links are never
+       keyboard-focusable while invisible (transform alone leaves them tabbable) */
+    .mnav { display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 5px 16px; transform: translateY(-101%); visibility: hidden; transition: transform 0.28s ease, visibility 0s 0.28s; will-change: transform; pointer-events: none; }
+    .mnav.mnavShown { transform: translateY(0); visibility: visible; transition: transform 0.28s ease, visibility 0s 0s; pointer-events: auto; }
+    /* .mnav prefix: outranks the generic .brut a link blue */
+    .mnav .mnavBrand { font-variant: small-caps; letter-spacing: 0.05em; font-size: var(--t-body); color: #000; text-decoration: none; padding: 11px 4px; }
+    .mnavTog { display: inline-flex; align-items: center; min-height: 44px; background: none; border: none; font: inherit; font-size: var(--t-small); color: #0645ad; cursor: pointer; padding: 0 4px; }
+    /* the drop squishes open and releases the entries one by one */
+    .mnavDrop { position: absolute; top: 100%; left: 0; right: 0; display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.34s cubic-bezier(0.16,0.84,0.28,1), visibility 0s 0.34s; }
+    .mnavDrop.on { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.34s cubic-bezier(0.16,0.84,0.28,1), visibility 0s 0s; }
+    .mnavDropIn { overflow: hidden; min-height: 0; background: ${GREY_PANEL}; box-shadow: 0 10px 24px rgba(0,0,0,0.22); }
+    .mnavList { list-style: decimal outside; margin: 0; padding: 8px 18px 12px 44px; border-bottom: 1px solid ${BLUE_LINE}; font-size: var(--t-small); }
+    .mnavList li { opacity: 0; }
+    .mnavDrop.on .mnavList li { animation: mnavIn 0.3s cubic-bezier(0.16,0.84,0.28,1) both; animation-delay: calc(50ms + var(--i) * 45ms); }
+    .mnavList a { display: block; padding: 8px 0; color: #0645ad; text-decoration: none; }
+  }
+  @keyframes mnavIn { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .mnav, .mnavDrop { transition: none; }
+    .mnavDrop.on .mnavList li { animation: none; opacity: 1; }
   }
 `;
 

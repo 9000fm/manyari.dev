@@ -7,7 +7,9 @@ import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW, EXPERIENCE
  * Private folder (leading underscore) => not a route.
  */
 
-export const BLUE = "#0000EE";
+// Monobook wiki-link blue - the ONE link colour, shared with the page chrome
+// (topline, TOC "[hide]", toolbox, mobile menu all use it already).
+export const BLUE = "#0645ad";
 
 export const SHARED_CSS = `
   /* Type scale - the ONLY sizes allowed. Everything maps to one of these. */
@@ -19,11 +21,24 @@ export const SHARED_CSS = `
   .brutAboutRow { display: flex; align-items: flex-start; }
   .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
   .brutAboutText { margin: 0; }
+  /* Selected Work - "figura arriba" (lab-work option A): plate full width on
+     top like a paper figure, text below, hairline rules between entries. */
   .brutWork { list-style: none; }
-  .brutWork > li { position: relative; }
-  .brutWork > li::before { content: "-"; position: absolute; left: -20px; color: #b0b0b0; font-weight: normal; }
+  .brutWork > li { position: relative; -webkit-tap-highlight-color: transparent; margin: 0 0 26px; padding: 0 0 22px; border-bottom: 1px solid #e3e6ea; }
+  .brutWork > li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  /* work plates - Wikipedia thumb frame. #c8ccd1 and #f6f7f9 already exist in
+     the palette (.side border, GREY_PANEL), so this adds no new colours.
+     Cap at the PNG's natural 440px so the 1-bit dither never CSS-upscales. */
+  .brutPlate { max-width: 440px; margin: 0 0 10px; padding: 3px; border: 1px solid #c8ccd1; background: #f6f7f9; }
+  .brutPlate img { display: block; width: 100%; height: auto; }
+  .brutPlate figcaption { font-size: var(--t-micro); color: #555; line-height: 1.45; padding: 4px 2px 1px; }
+  .brutWorkHead { margin: 0 0 2px; }
+  .brutWorkBlurb { margin: 0; font-size: var(--t-small); opacity: 0.85; }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: var(--t-micro); }
-  .brutAst::before { content: "* * *"; }
+  /* letter-spacing adds a trailing 1em after the last asterisk; pull it back
+     so the glyphs sit on true centre */
+  .brutAst::before { content: "* * *"; margin-right: -1em; }
   .brutFootnote { vertical-align: super; font-size: 0.7em; color: #555; margin-right: 2px; }
   .brutColophon { text-align: center; margin-top: 48px; font-variant: small-caps; letter-spacing: 0.15em; font-size: var(--t-small); color: #000; }
   .brutCursor { display: inline-block; width: 0.5em; height: 0.95em; background: currentColor; vertical-align: -0.12em; margin-left: 5px; animation: brutBlink 1.1s steps(1) infinite; }
@@ -36,8 +51,10 @@ export const SHARED_CSS = `
   .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: var(--t-micro); color: #000; }
   .brutTopLink { font-size: var(--t-micro); }
   @keyframes brutBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .brutCursor { animation: none; } }
 
-  /* infinite seamless ticker */
+  /* infinite seamless ticker - NOT used by the live page (v11a), which uses the
+     static .topline instead. Still rendered by the frozen v11b/v11c variants. */
   .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
   .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 105s linear infinite; }
   .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
@@ -83,7 +100,9 @@ export const SHARED_CSS = `
   }
 `;
 
-/** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%). */
+/** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%).
+ *  The live page (v11a) deliberately does NOT use this, see commit 08a4246; it is
+ *  kept for the frozen v11b-wide and v11c-split variants, which still render it. */
 export function Marquee(): ReactElement {
   const tags = [ME.role, ...TICKER];
   const unit = (rk: string) => (
@@ -133,24 +152,44 @@ export function Sections(): ReactElement {
 
       <section id="work">
         <h2>Selected Work</h2>
-        <ol className="brutWork" style={{ margin: 0, paddingLeft: 24 }}>
+        <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
           {PROJECTS.map((p, i) => (
-            <li key={p.slug} style={{ marginBottom: 18 }}>
-              {p.url ? (
-                <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: "bold" }}>
-                  {p.title}
-                </a>
-              ) : (
-                <strong>{p.title}</strong>
-              )}
-              <span className="brutFootnote">[{i + 1}]</span>
-              {" - "}
-              <em>{p.role}</em>
-              {" ("}
-              {p.year}
-              {")"}
-              <br />
-              <span style={{ fontSize: "var(--t-small)", opacity: 0.85 }}>{p.blurb}</span>
+            <li key={p.slug}>
+              {/* The plate deliberately contains no <a>: WorkHover maps each row
+                  to its project via the first anchor inside the <li>, so a link
+                  here would silently kill the hover previews for the whole list. */}
+              {p.plate ? (
+                <figure className="brutPlate">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.plate}
+                    alt={p.plateAlt ?? ""}
+                    width={p.plateW}
+                    height={p.plateH}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                  <figcaption>
+                    Fig. {i + 1}. {p.plateCap}
+                  </figcaption>
+                </figure>
+              ) : null}
+              <p className="brutWorkHead">
+                {p.url ? (
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: "bold" }}>
+                    {p.title}
+                  </a>
+                ) : (
+                  <strong>{p.title}</strong>
+                )}
+                <span className="brutFootnote">[{i + 1}]</span>
+                {" - "}
+                <em>{p.role}</em>
+                {" ("}
+                {p.year}
+                {")"}
+              </p>
+              <p className="brutWorkBlurb">{p.blurb}</p>
             </li>
           ))}
         </ol>

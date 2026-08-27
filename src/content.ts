@@ -21,6 +21,14 @@ export type Project = {
   url: string | null;
   tag: string;
   blurb: string;
+  // 1-bit Atkinson-dithered plate, shown as a figure in Selected Work.
+  // plateW/plateH are the real pixel size so the box is reserved and nothing
+  // shifts while it loads (same reasoning as .identSphere for the globe).
+  plate?: string;
+  plateAlt?: string;
+  plateCap?: string;
+  plateW?: number;
+  plateH?: number;
 };
 
 export const PROJECTS: Project[] = [
@@ -32,6 +40,11 @@ export const PROJECTS: Project[] = [
     url: "https://tonydecay.com",
     tag: "client",
     blurb: "Limited-edition print store for illustrator Tony Decay - brand, shop, and a live inventory counter, built end to end.",
+    plate: "/plates/tonydecay.png",
+    plateAlt: "The Foundation Series section of tonydecay.com, showing a grid of fifteen art prints beside the collection heading and price.",
+    plateCap: "Foundation Series, the fifteen-print collection page.",
+    plateW: 440,
+    plateH: 182,
   },
   {
     slug: "silverback",
@@ -41,6 +54,11 @@ export const PROJECTS: Project[] = [
     url: "https://silverbackstripes.com",
     tag: "client",
     blurb: "Storefront redesign for a combat-sports apparel brand - rebuilt the homepage, navigation, and key brand pages.",
+    plate: "/plates/silverback.png",
+    plateAlt: "The silverbackstripes.com homepage hero, with the headline Earn Your Stripes over a photograph of a grappling session.",
+    plateCap: "Homepage hero after the redesign.",
+    plateW: 440,
+    plateH: 172,
   },
   {
     slug: "superself",
@@ -50,6 +68,11 @@ export const PROJECTS: Project[] = [
     url: "https://superself.online",
     tag: "self",
     blurb: "Site and brand for an electronic music label - a playful desktop-style interface, generative visuals, a live shoutbox, and a shop. Built end to end, in three languages.",
+    plate: "/plates/superself.png",
+    plateAlt: "The superself.online interface, a white wireframe corridor drawn in one-point perspective on black, with a text menu at the top left.",
+    plateCap: "The label's main interface, drawn in one-point perspective.",
+    plateW: 440,
+    plateH: 266,
   },
   {
     slug: "micaela",
@@ -59,6 +82,11 @@ export const PROJECTS: Project[] = [
     url: "https://micaelalucia.com",
     tag: "client",
     blurb: "Portfolio for a photographer and filmmaker - editorial layout, animated transitions, and a client-managed CMS. Designed, built, and deployed end to end.",
+    plate: "/plates/micaela.png",
+    plateAlt: "The micaelalucia.com portfolio, an edge-to-edge masonry grid of documentary and archival photographs under a light header.",
+    plateCap: "Editorial grid, managed by the client through Sanity.",
+    plateW: 440,
+    plateH: 238,
   },
   {
     slug: "digeart",
@@ -68,6 +96,11 @@ export const PROJECTS: Project[] = [
     url: "https://digeart.online",
     tag: "personal",
     blurb: "Personal project - a hand-curated discovery app for underground electronic music, with genre filters and YouTube playback.",
+    plate: "/plates/digeart.png",
+    plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
+    plateCap: "Hand-curated discovery grid.",
+    plateW: 440,
+    plateH: 214,
   },
 ];
 

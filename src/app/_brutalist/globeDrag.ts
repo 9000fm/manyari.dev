@@ -8,26 +8,26 @@
 // starts falling behind, harder the further you go. That growing lag IS the
 // tension readout - no gauge, no hint text, nothing to draw.
 //
-// On release the stored pull (distance, not speed) becomes angular velocity, so
-// a slow deliberate haul winds it up just as hard as a fast flick. Pulling it a
-// long way and letting go is the whole mechanic.
+// On release we hand the globe two numbers (see globeGL's release()): the angle
+// it is visibly wound to, and the tension stored PAST the visible ceiling. The
+// second is what makes hauling further keep mattering after the globe has
+// stopped visibly moving, which is how a nearly-maxed rubber band feels.
+//
+// Nothing here reverses anything. The spring on the other side unwinds through
+// centre and out the far side on its own.
 
 // radians of pull per pixel dragged.
 const DRAG_SENS = 0.0052;
 // radians the visible rotation asymptotes toward, no matter how far you pull.
 // Reached at roughly 120px of drag; past that the globe is visibly straining.
 const TENSION = 0.62;
-// stored pull -> release velocity (radians/frame). A ~200px haul lands near the
-// MAX_VEL ceiling in globeGL, so a full-arm drag maxes it out and a short tug
-// gives a proportionally gentler spin.
-const RELEASE_GAIN = 0.022;
 
 export function createDragHandler(
   canvas: HTMLCanvasElement,
   cbs: {
     onDragStart: () => void;
     onDrag: (dTheta: number) => void;
-    onDragEnd: (flingVel: number) => void;
+    onDragEnd: (windUp: number, excess: number) => void;
   },
 ): () => void {
   let dragging = false;
@@ -60,7 +60,8 @@ export function createDragHandler(
     dragging = false;
     canvas.releasePointerCapture?.(e.pointerId);
     canvas.style.cursor = "grab";
-    cbs.onDragEnd(pull * RELEASE_GAIN);
+    // shown = where it visibly sits; pull - shown = what the tanh swallowed
+    cbs.onDragEnd(shown, pull - shown);
     pull = 0;
     shown = 0;
   };

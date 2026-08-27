@@ -19,16 +19,17 @@ import { PROJECTS, type Project } from "@/content";
  * prefers-reduced-motion.
  */
 
-type Preview = { type: "video" | "image"; src: string };
+type Preview = { type: "video" | "image"; src: string; poster?: string };
 
 // Real assets, keyed by project slug. Missing slug => placeholder card.
-// Stepped-slideshow GIFs of the live sites (built from curated screenshots).
+// Stepped-slideshow MP4s of the live sites (re-encoded from the source GIFs:
+// ~70% smaller, and the poster doubles as the reduced-motion static frame).
 const PREVIEWS: Record<string, Preview> = {
-  tonydecay:  { type: "image", src: "/previews/tonydecay.gif" },
-  silverback: { type: "image", src: "/previews/silverback.gif" },
-  superself:  { type: "image", src: "/previews/superself.gif" },
-  micaela:    { type: "image", src: "/previews/micaela.gif" },
-  digeart:    { type: "image", src: "/previews/digeart.gif" },
+  tonydecay:  { type: "video", src: "/previews/tonydecay.mp4",  poster: "/previews/tonydecay.jpg" },
+  silverback: { type: "video", src: "/previews/silverback.mp4", poster: "/previews/silverback.jpg" },
+  superself:  { type: "video", src: "/previews/superself.mp4",  poster: "/previews/superself.jpg" },
+  micaela:    { type: "video", src: "/previews/micaela.mp4",    poster: "/previews/micaela.jpg" },
+  digeart:    { type: "video", src: "/previews/digeart.mp4",    poster: "/previews/digeart.jpg" },
 };
 
 export default function WorkHover() {
@@ -58,6 +59,13 @@ export default function WorkHover() {
 
     const cleanups: Array<() => void> = [];
 
+    // Escape always dismisses the peek (WCAG 1.4.13), in both modes
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeRef.current();
+    };
+    document.addEventListener("keydown", onKey);
+    cleanups.push(() => document.removeEventListener("keydown", onKey));
+
     // ---------- MOBILE: tap the row TEXT to peek; the blue title link navigates ----------
     if (!fine) {
       closeRef.current = () => setShown(false);
@@ -86,6 +94,12 @@ export default function WorkHover() {
     let visible = false;
     let raf = 0;
     let hideTimer = 0;
+    let hasCursor = false; // no hit-testing until the mouse has really moved
+    let scrollRaf = 0;
+    closeRef.current = () => {
+      visible = false;
+      setShown(false);
+    };
 
     const apply = () => {
       const card = cardRef.current;
@@ -113,6 +127,7 @@ export default function WorkHover() {
     };
 
     const onMove = (e: MouseEvent) => {
+      hasCursor = true;
       tx = e.clientX;
       ty = e.clientY;
       if (reduceRef.current) {
@@ -124,24 +139,29 @@ export default function WorkHover() {
       }
     };
 
+    const openAt = (proj: Project) => {
+      // fresh appear: snap to cursor + lock side so it never flips mid-hover.
+      // moving between rows (already visible): glide instead of teleport.
+      if (!visible) {
+        cx = tx;
+        cy = ty;
+        const w = cardRef.current?.offsetWidth || 340;
+        sideRight = tx + GAP + w + PAD <= window.innerWidth;
+      }
+      visible = true;
+      setActive(proj);
+      setShown(true);
+      if (reduceRef.current) apply();
+      else kick();
+    };
+
     for (const [li, proj] of byLi) {
       const enter = (e: MouseEvent) => {
+        hasCursor = true;
         window.clearTimeout(hideTimer);
         tx = e.clientX;
         ty = e.clientY;
-        // fresh appear: snap to cursor + lock side so it never flips mid-hover.
-        // moving between rows (already visible): glide instead of teleport.
-        if (!visible) {
-          cx = tx;
-          cy = ty;
-          const w = cardRef.current?.offsetWidth || 340;
-          sideRight = tx + GAP + w + PAD <= window.innerWidth;
-        }
-        visible = true;
-        setActive(proj);
-        setShown(true);
-        if (reduceRef.current) apply();
-        else kick();
+        openAt(proj);
       };
       const leave = () => {
         // small delay so crossing the gap between rows doesn't blink
@@ -161,12 +181,53 @@ export default function WorkHover() {
       });
     }
 
+    // Re-sync on scroll. Chrome refires enter/leave while content scrolls under
+    // a static cursor; Firefox and Safari do not, which left the card stuck
+    // with a stale project. Hit-test the last cursor spot ourselves so all
+    // three behave the same: swap to the row now under the cursor, or close.
+    const onScroll = () => {
+      if (!hasCursor || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = 0;
+        const li = document.elementFromPoint(tx, ty)?.closest?.(".brutWork > li");
+        const proj = li ? byLi.get(li as HTMLLIElement) : undefined;
+        if (proj) {
+          window.clearTimeout(hideTimer);
+          openAt(proj);
+        } else if (visible) {
+          visible = false;
+          setShown(false);
+        }
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    cleanups.push(() => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(scrollRaf);
+    });
+
     return () => {
       window.clearTimeout(hideTimer);
       cancelAnimationFrame(raf);
       cleanups.forEach((c) => c());
     };
   }, []);
+
+  // while the mobile peek is up, the page must not scroll under the backdrop.
+  // iOS Safari can rubber-band straight past body overflow:hidden, so the
+  // touchmove gesture itself is blocked too (non-passive on purpose; nothing
+  // inside the card scrolls, so swallowing the gesture costs nothing).
+  useEffect(() => {
+    if (!(touch && shown)) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const block = (e: TouchEvent) => e.preventDefault();
+    document.addEventListener("touchmove", block, { passive: false });
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("touchmove", block);
+    };
+  }, [touch, shown]);
 
   const preview = active ? PREVIEWS[active.slug] : undefined;
 
@@ -179,12 +240,20 @@ export default function WorkHover() {
     <>
       <style>{CSS}</style>
       {touch && shown && (
-        <div className="workHoverBackdrop" onClick={() => closeRef.current()} />
+        <div
+          className="workHoverBackdrop"
+          role="button"
+          aria-label="Close preview"
+          onClick={() => closeRef.current()}
+        />
       )}
+      {/* decorative on desktop (follows the cursor); a real, perceivable layer
+          while the mobile peek is open - hiding it then would leave AT users
+          behind an overlay they cannot see or dismiss */}
       <div
         ref={cardRef}
         className={`workHoverCard${shown ? " on" : ""}${touch ? " centered" : ""}`}
-        aria-hidden="true"
+        aria-hidden={touch && shown ? undefined : true}
         onClick={onCardTap}
       >
         <div className="workHoverInner">
@@ -193,6 +262,7 @@ export default function WorkHover() {
               <video
                 key={active?.slug}
                 src={preview.src}
+                poster={preview.poster}
                 muted
                 loop
                 autoPlay={!reduceRef.current}

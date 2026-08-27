@@ -51,7 +51,10 @@ export default function WireSphere({
         display: "block",
         cursor: "grab",
         transform: `rotate(${lean}deg)`,
-        touchAction: "none",
+        // pan-y: horizontal drags spin the globe, vertical swipes still scroll
+        // the page (the drag handler only reads clientX; a scroll takeover
+        // fires pointercancel, which releases cleanly)
+        touchAction: "pan-y",
       }}
     />
   );

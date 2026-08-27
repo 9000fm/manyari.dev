@@ -121,31 +121,52 @@ function buildLandFill() {
   return new Float32Array(v);
 }
 
+// Slingshot ("liga") tuning. Values are per-frame at 60fps.
+//
+// The band does NOT pull the globe back home. Dragging stretches it, and letting
+// go launches the globe into a spin the OTHER way, which then keeps running and
+// eases down into the gentle idle drift wherever it happens to be. There is no
+// oscillation and no rest position - a released slingshot fires its projectile
+// and is done with it.
+//
+// The launch velocity comes from total stored tension, which is the visible wound
+// angle PLUS whatever the drag ceiling swallowed (see globeDrag.ts). That is what
+// makes hauling further keep mattering after the globe has stopped visibly
+// turning, the way a nearly-maxed rubber band does.
+export type LaunchTuning = {
+  gain: number;    // stored tension -> launch velocity
+  decay: number;   // how quickly the launch eases back into the idle drift
+  maxVel: number;  // ceiling so a full haul never smears into a blur
+};
+
+// Dialled in by hand on the tuning page, not calculated. Snappier and roughly
+// 2.5x the top speed of the first pass, with a short ~1.9s glide.
+export const LAUNCH_DEFAULT: LaunchTuning = {
+  gain: 0.049,
+  decay: 0.026,
+  maxVel: 0.125,
+};
+
 export type GlobeParams = {
   size: number;
   dpr: number;
   tilt?: number;
   speed?: number;
   reduce?: boolean;
+  launch?: Partial<LaunchTuning>;
 };
 
 export type GlobeController = {
   tick: () => void;
   dragBy: (dTheta: number) => void;
   setDragging: (on: boolean) => void;
-  fling: (vel: number) => void;
+  /** let go: windUp is the visible wound angle, excess is the tension stored
+   *  past the drag ceiling (see globeDrag.ts) */
+  release: (windUp: number, excess: number) => void;
+  setLaunch: (next: Partial<LaunchTuning>) => void;
   dispose: () => void;
   reduce: boolean;
 };
-
-// slingshot feel: MAX_VEL caps the release spin at ~11x the idle speed, so a
-// full pull snaps into a genuinely fast rotation without becoming a toy.
-// RETURN_EASE is the decay back to the gentle auto-spin - at 60fps it works out
-// to roughly a 4s glide down, long enough that the wind-up feels like it paid
-// off. Both are deliberately looser than the old anti-fling tuning, because with
-// the slingshot the fast spin IS the reward for the effort.
-const MAX_VEL = 0.028;
-const RETURN_EASE = 0.0165;
 
 /**
  * Sets up the globe on an already-obtained GL context and returns a controller.
@@ -202,40 +223,57 @@ export function createGlobeController(gl: WebGLRenderingContext, p: GlobeParams)
   const cosT = Math.cos(tilt);
   const sinT = Math.sin(tilt);
   const IDENT = new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+  // rotation matrix reused every frame - only the 6 spin-dependent cells are
+  // rewritten in drawFrame, so the loop allocates nothing (no GC churn)
+  const M = new Float32Array(16);
+  M[5] = cosT;
+  M[6] = sinT;
+  M[15] = 1;
 
   const bind = (buf: WebGLBuffer | null) => {
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.vertexAttribPointer(a_pos, 3, gl.FLOAT, false, 0, 0);
   };
 
+  const launch: LaunchTuning = { ...LAUNCH_DEFAULT, ...p.launch };
+
   let spin = 0;
-  let autoDir = -1; // gentle auto-spin direction (starts clockwise); follows drags
+  let autoDir = -1; // idle drift direction; a launch re-aims it
   let vel = autoDir * speed;
   let dragging = false;
 
-  // grab the globe: rotate it directly by the drag delta (radians)
+  // grab the globe: stretch the band, which rotates it directly
   function dragBy(dTheta: number) {
     spin += dTheta;
   }
   function setDragging(on: boolean) {
     dragging = on;
+    if (on) vel = 0; // grabbing mid-flight catches it dead
   }
-  // let go: carry a capped bit of momentum, and remember the direction thrown so
-  // the gentle auto-spin continues that way
-  function fling(v: number) {
-    vel = Math.max(-MAX_VEL, Math.min(MAX_VEL, v));
+  // let go: total stored tension becomes launch speed, fired the OPPOSITE way to
+  // the pull. The globe keeps spinning that way and eases down into the idle
+  // drift wherever it ends up - it never travels back to where it started.
+  function release(windUp: number, excess: number) {
+    const stored = windUp + excess;
+    vel = -stored * launch.gain;
+    if (vel > launch.maxVel) vel = launch.maxVel;
+    else if (vel < -launch.maxVel) vel = -launch.maxVel;
+    // the gentle drift now continues in whichever way it was fired
     if (Math.abs(vel) > 0.0005) autoDir = vel < 0 ? -1 : 1;
+  }
+  function setLaunch(next: Partial<LaunchTuning>) {
+    Object.assign(launch, next);
   }
 
   function drawFrame() {
     const cs = Math.cos(spin);
     const sn = Math.sin(spin);
-    const M = new Float32Array([
-      cs, sinT * sn, -cosT * sn, 0,
-      0, cosT, sinT, 0,
-      sn, -sinT * cs, cosT * cs, 0,
-      0, 0, 0, 1,
-    ]);
+    M[0] = cs;
+    M[1] = sinT * sn;
+    M[2] = -cosT * sn;
+    M[8] = sn;
+    M[9] = -sinT * cs;
+    M[10] = cosT * cs;
 
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -271,10 +309,10 @@ export function createGlobeController(gl: WebGLRenderingContext, p: GlobeParams)
   }
 
   function tick() {
-    // while dragging, spin is moved directly by dragBy(); otherwise ease the
-    // velocity back toward the gentle auto-spin (a slow, heavy glide after a fling)
+    // while dragging, only dragBy() moves the globe. Otherwise the launch speed
+    // eases back down toward the gentle drift - a long glide, not a stop.
     if (!dragging && !reduce) {
-      vel += (autoDir * speed - vel) * RETURN_EASE;
+      vel += (autoDir * speed - vel) * launch.decay;
       spin += vel;
     }
     drawFrame();
@@ -290,5 +328,5 @@ export function createGlobeController(gl: WebGLRenderingContext, p: GlobeParams)
     gl.deleteProgram(prog);
   }
 
-  return { tick, dragBy, setDragging, fling, dispose, reduce };
+  return { tick, dragBy, setDragging, release, setLaunch, dispose, reduce };
 }
