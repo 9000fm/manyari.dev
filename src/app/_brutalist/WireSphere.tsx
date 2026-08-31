@@ -51,10 +51,13 @@ export default function WireSphere({
         display: "block",
         cursor: "grab",
         transform: `rotate(${lean}deg)`,
-        // pan-y: horizontal drags spin the globe, vertical swipes still scroll
-        // the page (the drag handler only reads clientX; a scroll takeover
-        // fires pointercancel, which releases cleanly)
-        touchAction: "pan-y",
+        // none, not pan-y: with pan-y iOS holds the first few pointermove
+        // events back while it decides scroll-vs-drag, so the opening degrees
+        // of the pull never land, and if it then picks scroll it fires
+        // pointercancel mid-haul - the page slid AND the globe launched. The
+        // canvas is a small box in the header, so taking the whole gesture
+        // there costs one scroll start and buys the same drag as desktop.
+        touchAction: "none",
       }}
     />
   );

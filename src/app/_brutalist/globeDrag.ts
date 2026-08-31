@@ -39,6 +39,8 @@ export function createDragHandler(
   const tension = (p: number) => TENSION * Math.tanh(p / TENSION);
 
   const onDown = (e: PointerEvent) => {
+    // stops iOS from starting a text selection / callout on the long press
+    e.preventDefault();
     dragging = true;
     lastX = e.clientX;
     pull = 0;
@@ -55,27 +57,33 @@ export function createDragHandler(
     cbs.onDrag(next - shown); // feed only the delta; the lag is the difference
     shown = next;
   };
-  const onUp = (e: PointerEvent) => {
+  // `launch` separates a real release from an interrupted one. Letting go is a
+  // throw and spends the stored tension; a gesture the OS takes away from us is
+  // not, so it hands back zero tension and the globe just keeps drifting from
+  // wherever it was left instead of firing a spin nobody asked for.
+  const finish = (e: PointerEvent, launch: boolean) => {
     if (!dragging) return;
     dragging = false;
     canvas.releasePointerCapture?.(e.pointerId);
     canvas.style.cursor = "grab";
     // shown = where it visibly sits; pull - shown = what the tanh swallowed
-    cbs.onDragEnd(shown, pull - shown);
+    cbs.onDragEnd(shown, launch ? pull - shown : -shown);
     pull = 0;
     shown = 0;
   };
+  const onUp = (e: PointerEvent) => finish(e, true);
+  const onCancel = (e: PointerEvent) => finish(e, false);
 
   canvas.style.cursor = "grab";
   canvas.addEventListener("pointerdown", onDown);
   canvas.addEventListener("pointermove", onMove);
   canvas.addEventListener("pointerup", onUp);
-  canvas.addEventListener("pointercancel", onUp);
+  canvas.addEventListener("pointercancel", onCancel);
 
   return () => {
     canvas.removeEventListener("pointerdown", onDown);
     canvas.removeEventListener("pointermove", onMove);
     canvas.removeEventListener("pointerup", onUp);
-    canvas.removeEventListener("pointercancel", onUp);
+    canvas.removeEventListener("pointercancel", onCancel);
   };
 }
