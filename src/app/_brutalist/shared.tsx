@@ -1,5 +1,15 @@
 import type { ReactElement } from "react";
 import { ME, PROJECTS, SKILLS, LANGUAGES, TICKER, EXPERIENCE, EDUCATION } from "@/content";
+import {
+  ME_ES, PROJECTS_ES, EXPERIENCE_ES, EDUCATION_ES, SKILLS_ES,
+  LANGUAGES_ES, UI_ES,
+} from "@/content.es";
+
+// Spanish lookups. A miss returns undefined, React drops the data-es attribute,
+// and that one element stays English instead of blanking out.
+const esProj = (slug: string) => PROJECTS_ES[slug];
+const esJob = (company: string, period: string) => EXPERIENCE_ES[company + period];
+const esEdu = (school: string) => EDUCATION_ES[school];
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -122,12 +132,12 @@ export function Marquee(): ReactElement {
 
 /** Section anchor list, reused by the sidebar TOC. */
 export const NAV_SECTIONS = [
-  { id: "about", label: "about" },
-  { id: "work", label: "work" },
-  { id: "experience", label: "experience" },
-  { id: "education", label: "education" },
-  { id: "tools", label: "skills" },
-  { id: "contact", label: "contact" },
+  { id: "about", label: "about", labelEs: UI_ES.tocAbout },
+  { id: "work", label: "work", labelEs: UI_ES.tocWork },
+  { id: "experience", label: "experience", labelEs: UI_ES.tocExperience },
+  { id: "education", label: "education", labelEs: UI_ES.tocEducation },
+  { id: "tools", label: "skills", labelEs: UI_ES.tocSkills },
+  { id: "contact", label: "contact", labelEs: UI_ES.tocContact },
 ] as const;
 
 /** The document body: About -> References. */
@@ -135,17 +145,17 @@ export function Sections(): ReactElement {
   return (
     <>
       <section id="about" className="brutAbout">
-        <h2>About</h2>
+        <h2 data-es={UI_ES.about}>About</h2>
         <div className="brutAboutRow">
-          <span className="brutDropCap">{ME.about.charAt(0)}</span>
-          <p className="brutAboutText">{ME.about.slice(1)}</p>
+          <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
+          <p className="brutAboutText" data-es={ME_ES.about.slice(1)}>{ME.about.slice(1)}</p>
         </div>
       </section>
 
       <p className="brutAst" />
 
       <section id="work">
-        <h2>Selected Work</h2>
+        <h2 data-es={UI_ES.work}>Selected Work</h2>
         <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
           {PROJECTS.map((p, i) => (
             <li key={p.slug}>
@@ -163,7 +173,9 @@ export function Sections(): ReactElement {
                     loading={i === 0 ? "eager" : "lazy"}
                     decoding="async"
                   />
-                  <figcaption>
+                  <figcaption
+                    data-es={esProj(p.slug) ? `Fig. ${i + 1}. ${esProj(p.slug).plateCap}` : undefined}
+                  >
                     Fig. {i + 1}. {p.plateCap}
                   </figcaption>
                 </figure>
@@ -178,24 +190,25 @@ export function Sections(): ReactElement {
                 )}
                 <span className="brutFootnote">[{i + 1}]</span>
                 {" - "}
-                <em>{p.role}</em>
+                <em data-es={esProj(p.slug)?.role}>{p.role}</em>
                 {" ("}
                 {p.year}
                 {")"}
               </p>
-              <p className="brutWorkBlurb">{p.blurb}</p>
+              <p className="brutWorkBlurb" data-es={esProj(p.slug)?.blurb}>{p.blurb}</p>
             </li>
           ))}
         </ol>
 
-        <p className="brutRefsLabel">References</p>
+        <p className="brutRefsLabel" data-es={UI_ES.references}>References</p>
         <ol className="brutRefs">
           {PROJECTS.map((p, i) => {
             const kind = p.tag === "self" ? "Own brand" : p.tag === "personal" ? "Personal project" : "Client work";
+            const kindEs = p.tag === "self" ? UI_ES.ownBrand : p.tag === "personal" ? UI_ES.personalProject : UI_ES.clientWork;
             return (
               <li key={p.slug}>
                 <span className="brutRefNum">{i + 1}.</span>
-                {p.title} ({p.year}). {kind}.{" "}
+                {p.title} ({p.year}). <span data-es={kindEs}>{kind}</span>.{" "}
                 <a href={p.url ?? "#"} target="_blank" rel="noopener noreferrer">
                   {(p.url ?? "").replace(/^https?:\/\//, "")}
                 </a>
@@ -209,18 +222,20 @@ export function Sections(): ReactElement {
       <p className="brutAst" />
 
       <section id="experience">
-        <h2>Experience</h2>
+        <h2 data-es={UI_ES.experience}>Experience</h2>
         <ol className="brutExp">
           {EXPERIENCE.map((job) => (
             <li key={job.company + job.period}>
               <div className="brutExpMeta">
                 <strong>{job.company}</strong>
-                <span>{job.period}</span>
-                {job.location ? <span>{job.location}</span> : null}
+                <span data-es={esJob(job.company, job.period)?.period}>{job.period}</span>
+                {job.location ? (
+                  <span data-es={esJob(job.company, job.period)?.location}>{job.location}</span>
+                ) : null}
               </div>
               <div className="brutExpBody">
-                <span className="brutExpRole">{job.title}</span>
-                <p>{job.blurb}</p>
+                <span className="brutExpRole" data-es={esJob(job.company, job.period)?.title}>{job.title}</span>
+                <p data-es={esJob(job.company, job.period)?.blurb}>{job.blurb}</p>
               </div>
             </li>
           ))}
@@ -230,7 +245,7 @@ export function Sections(): ReactElement {
       <p className="brutAst" />
 
       <section id="education">
-        <h2>Education</h2>
+        <h2 data-es={UI_ES.education}>Education</h2>
         <ol className="brutExp">
           {EDUCATION.map((ed) => (
             <li key={ed.school}>
@@ -239,8 +254,8 @@ export function Sections(): ReactElement {
                 <span>{ed.period}</span>
               </div>
               <div className="brutExpBody">
-                <span className="brutExpRole">{ed.title}</span>
-                {ed.detail ? <p>{ed.detail}</p> : null}
+                <span className="brutExpRole" data-es={esEdu(ed.school)?.title}>{ed.title}</span>
+                {ed.detail ? <p data-es={esEdu(ed.school)?.detail}>{ed.detail}</p> : null}
               </div>
             </li>
           ))}
@@ -250,16 +265,22 @@ export function Sections(): ReactElement {
       <p className="brutAst" />
 
       <section id="tools">
-        <h2>Skills</h2>
+        <h2 data-es={UI_ES.skills}>Skills</h2>
         <div className="brutTools">
           {SKILLS.map((g) => (
             <div key={g.label}>
-              <span className="brutToolLabel">{g.label}</span>
+              <span className="brutToolLabel" data-es={SKILLS_ES[g.label]}>{g.label}</span>
               <span className="brutToolItems">{g.items.join(", ")}</span>
             </div>
           ))}
         </div>
-        <p className="brutLangs">
+        <p
+          className="brutLangs"
+          data-es={`${UI_ES.languagesLabel} ${LANGUAGES.map((l) => {
+            const t = LANGUAGES_ES[l.lang];
+            return t ? `${t.lang} (${t.level})` : `${l.lang} (${l.level})`;
+          }).join(", ")}.`}
+        >
           Languages: {LANGUAGES.map((l) => `${l.lang} (${l.level})`).join(", ")}.
         </p>
       </section>
@@ -267,9 +288,9 @@ export function Sections(): ReactElement {
       <p className="brutAst" />
 
       <section id="contact">
-        <h2>Contact</h2>
-        <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }}>Let&apos;s build something.</p>
-        <p style={{ margin: "0 0 4px" }}>
+        <h2 data-es={UI_ES.contact}>Contact</h2>
+        <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Let&apos;s build something.</p>
+        <p style={{ margin: "0 0 4px" }} data-es={UI_ES.contactBased}>
           Based in {ME.location}. Available for freelance or full-time.
         </p>
         <ul className="brutContact">
@@ -283,7 +304,7 @@ export function Sections(): ReactElement {
             {" · "}
             <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             {" · "}
-            <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer">Download CV {"↗︎"}</a>
+            <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
           </li>
         </ul>
       </section>
@@ -293,17 +314,17 @@ export function Sections(): ReactElement {
       <footer className="brutFooter">
         <div className="brutFootCols">
           <div>
-            <span className="brutFootLabel">Index</span>
+            <span className="brutFootLabel" data-es={UI_ES.contents}>Index</span>
             <ul>
               {NAV_SECTIONS.map((s) => (
                 <li key={s.id}>
-                  <a href={`#${s.id}`}>{s.label}</a>
+                  <a href={`#${s.id}`} data-es={s.labelEs}>{s.label}</a>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <span className="brutFootLabel">Contact</span>
+            <span className="brutFootLabel" data-es={UI_ES.contact}>Contact</span>
             <ul>
               <li>
                 <a href={`mailto:${ME.email}`}>{ME.email}</a>
@@ -321,7 +342,7 @@ export function Sections(): ReactElement {
         </div>
         <div className="brutFootBottom">
           <span className="brutFootCopy">© Flavio Manyari 2026<span className="brutCursor" /></span>
-          <a href="#top" className="brutTopLink">Back to top ↑</a>
+          <a href="#top" className="brutTopLink" data-es={`${UI_ES.backToTop} ↑`}>Back to top ↑</a>
         </div>
       </footer>
     </>

@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { NAV_SECTIONS } from "./shared";
+import { UI_ES } from "@/content.es";
+import { useLang } from "./useLang";
+import LangSwitch from "./LangSwitch";
 
 // Mobile-only header, "article chrome" style (lab pick): a grey Monobook panel
 // with the name in small caps and a wiki contents [show]/[hide] toggle. Hidden
@@ -10,6 +13,11 @@ export default function MobileNav() {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
   const rootRef = useRef<HTMLElement>(null);
+
+  // This menu's labels are re-rendered by React, so they cannot ride along in a
+  // data-es attribute the way the static page does: the next render would put
+  // English back. It follows <html lang> instead.
+  const es = useLang() === "es";
 
   useEffect(() => {
     const onScroll = () => {
@@ -55,17 +63,24 @@ export default function MobileNav() {
         aria-controls="mnavMenu"
         onClick={() => setOpen((o) => !o)}
       >
-        contents {open ? "[hide]" : "[show]"}
+        {es ? UI_ES.contentsLower : "contents"} {open ? (es ? UI_ES.hide : "[hide]") : es ? UI_ES.show : "[show]"}
       </button>
       <div className={`mnavDrop${open ? " on" : ""}`} id="mnavMenu">
         <div className="mnavDropIn">
           <ol className="mnavList">
             {NAV_SECTIONS.map((s, i) => (
               <li key={s.id} style={{ "--i": i } as CSSProperties}>
-                <a href={`#${s.id}`} onClick={() => setOpen(false)}>{s.label}</a>
+                <a href={`#${s.id}`} onClick={() => setOpen(false)}>{es ? s.labelEs : s.label}</a>
               </li>
             ))}
           </ol>
+          {/* Once you are scrolled into the document the sidebar portlet is far
+              above, so the language links repeat here. Both switches read the
+              same <html lang>, so they never disagree. */}
+          <div className="mnavLangs">
+            <span className="mnavLangsLabel">{es ? UI_ES.otherLanguages : "Other languages"}</span>
+            <LangSwitch variant="list" />
+          </div>
         </div>
       </div>
     </nav>

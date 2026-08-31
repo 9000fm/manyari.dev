@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
+import LangSwitch from "../_brutalist/LangSwitch";
+import { UI_ES, ME_ES } from "@/content.es";
 import WireSphere from "../_brutalist/WireSphere";
 import MobileNav from "../_brutalist/MobileNav";
 import WelcomeBanner from "../_brutalist/WelcomeBanner";
@@ -11,7 +13,11 @@ import SmoothWheel from "../_brutalist/SmoothWheel";
 export const metadata: Metadata = { title: "flavio manyari - designer & developer" };
 
 // build-time "last updated" for the sidebar colophon - refreshes on each deploy
-const UPDATED = new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+const NOW = new Date();
+const UPDATED = NOW.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+// the month name has to be localised too, or the Spanish colophon reads
+// "por ultima vez en August 2026"
+const UPDATED_ES = NOW.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
 
 // Classic Monobook palette: dark desk, grey page frame, white article box.
 const GREY_PAGE = "#232220";   // desk background (warm charcoal, behind the page frame)
@@ -43,6 +49,14 @@ const LAYOUT_CSS = `
   /* static top line (replaced the scrolling ticker) - non-moving, document-like */
   .topline { text-align: center; font-size: var(--t-micro); color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
   .topline a { color: #0645ad; }
+  /* language switch: wiki chrome, not a control. The active language is plain
+     dark text like the rest of the topline; the other one is a blue link. */
+  .langSwitch { white-space: nowrap; }
+  .langSwitch button { font: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; }
+  .langSwitch .langOff { color: #0645ad; text-decoration: underline; cursor: pointer; }
+  .langSwitch .langOff:hover { text-decoration: none; }
+  .langSwitch .langOn { color: #444; font-weight: bold; cursor: default; }
+  .langSwitch button:focus-visible { outline: 1px solid #0645ad; outline-offset: 2px; }
 
   /* welcome banner - full-width yellow wiki notice at the top, above Contents; dismissible */
   .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 12px 46px; margin: 14px 26px 0; font-size: var(--t-body); line-height: 1.5; color: #111; }
@@ -84,6 +98,9 @@ const LAYOUT_CSS = `
   .wikiToc summary::-webkit-details-marker { display: none; }
   .wikiToc summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: var(--t-micro); }
   .wikiToc:not([open]) summary::after { content: " [show]"; }
+  /* pseudo-element text is CSS, not a text node, so data-es cannot reach it */
+  html[lang="es"] .wikiToc summary::after { content: " [ocultar]"; }
+  html[lang="es"] .wikiToc:not([open]) summary::after { content: " [mostrar]"; }
   .wikiToc ol { list-style: decimal outside; margin: 8px 0 0; padding-left: 26px; }
   .wikiToc li { display: list-item; padding: 2px 0; }
 
@@ -95,6 +112,41 @@ const LAYOUT_CSS = `
   .sideTools a { color: #0645ad; text-decoration: none; }
   .sideTools a:hover { text-decoration: underline; }
   /* #5f5f5f: 4.5:1+ on the grey sidebar panel (#6f6f6f failed AA at 4.48) */
+  .langList { list-style: none; margin: 0; padding: 0; font-size: var(--t-small); }
+  .langList li { padding: 2px 0; }
+  .langList button, .langSwitch button { font: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; text-align: left; }
+  .langList .langOff, .langSwitch .langOff { color: #0645ad; cursor: pointer; }
+  .langList .langOff:hover, .langSwitch .langOff:hover { text-decoration: underline; }
+  .langList .langOn, .langSwitch .langOn { color: #202122; font-weight: bold; cursor: default; }
+  .langList button:focus-visible, .langSwitch button:focus-visible { outline: 1px solid #0645ad; outline-offset: 2px; }
+
+  /* interlanguage button, Vector 2022 shape: hairline box, language glyph, the
+     name of the edition it takes you to. Sits flush with the right edge of the
+     text column and clears the first heading. */
+  .langBar { display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .langBtn { display: inline-flex; align-items: center; justify-content: center; font: inherit;
+    background: #f8f9fa; border: 1px solid #a2a9b1; border-radius: 2px;
+    padding: 3px 9px; cursor: pointer; line-height: 1.35;
+    transition: background 0.12s ease, border-color 0.12s ease; }
+  .langBtn:hover, .langBtn.langBtnOpen { background: #eaecf0; border-color: #72777d; }
+  .langBtn:focus-visible { outline: 2px solid #0645ad; outline-offset: 1px; }
+  .langBtnIcon { font-size: var(--t-small); color: #202122; letter-spacing: 0.02em; }
+
+  /* Panel of editions, placed at the pointer rather than pinned to the button,
+     so on a phone the choices land under the thumb that opened them. */
+  .langPop { position: fixed; z-index: 240; min-width: 132px;
+    background: #fff; border: 1px solid #a2a9b1; box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+    padding: 7px 0 6px; font-size: var(--t-small); }
+  .langPopLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em;
+    font-weight: bold; font-size: var(--t-micro); color: #555; padding: 0 12px 4px;
+    margin-bottom: 3px; border-bottom: 1px solid #eaecf0; }
+  .langPop button { display: block; width: 100%; text-align: left; font: inherit;
+    background: none; border: 0; padding: 5px 12px; cursor: pointer; }
+  .langPop .langOff { color: #0645ad; }
+  .langPop .langOff:hover { background: #eaecf0; }
+  .langPop .langOn { color: #202122; font-weight: bold; cursor: default; }
+  .langPop button:focus-visible { outline: 2px solid #0645ad; outline-offset: -2px; }
+  @media (prefers-reduced-motion: reduce) { .langBtn { transition: none; } }
   .sideColophon { margin-top: 16px; padding-top: 12px; border-top: 1px solid #c8ccd1; font-size: var(--t-micro); color: #5f5f5f; line-height: 1.7; }
 
   /* mobile sticky header (FM + burger) - hidden on desktop */
@@ -121,7 +173,10 @@ const LAYOUT_CSS = `
     .identText { padding-left: 8px; }
     .identSphere { width: 168px; height: 168px; }
     .identSphere canvas { width: 168px !important; height: 168px !important; }
-    .sideTools { display: none; }
+    /* The sidebar is the TOP of the page on mobile, so what is not identity or
+       contents comes out of it. The language button lives over the document and
+       is unaffected. */
+    .sideTools, .sideColophon { display: none; }
     /* keep 46px sides: less than that and the centered text runs under the X */
     .welcome { padding: 11px 46px; margin: 12px 22px 0; }
 
@@ -142,6 +197,9 @@ const LAYOUT_CSS = `
     .mnavList li { opacity: 0; }
     .mnavDrop.on .mnavList li { animation: mnavIn 0.3s cubic-bezier(0.16,0.84,0.28,1) both; animation-delay: calc(50ms + var(--i) * 45ms); }
     .mnavList a { display: block; padding: 8px 0; color: #0645ad; text-decoration: none; }
+    .mnavLangs { padding: 10px 18px 14px 44px; }
+    .mnavLangsLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); color: #555; margin-bottom: 3px; }
+    .mnavLangs .langList li { padding: 6px 0; }
   }
   @keyframes mnavIn { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) {
@@ -171,9 +229,9 @@ export default function BrutalistSidebar() {
 
       <div className="wrap">
         <div className="topline">
-          <span>{ME.role}</span>
+          <span data-es={ME_ES.role}>{ME.role}</span>
           {" · "}
-          <a href="#contact">Available for work</a>
+          <a href="#contact" data-es={UI_ES.availableForWork}>Available for work</a>
           {" · "}
           <span>{ME.location}</span>
         </div>
@@ -189,11 +247,11 @@ export default function BrutalistSidebar() {
                     <span key={i} style={{ display: "block" }}>{w}</span>
                   ))}
                 </h1>
-                <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: "var(--t-small)" }}>{ME.role}.</p>
+                <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: "var(--t-small)" }} data-es={ME_ES.role + "."}>{ME.role}.</p>
                 <p className="sideMeta">
                   <a href={`mailto:${ME.email}`}>{ME.email}</a>
                   <br />
-                  Status: <strong>{ME.available}</strong>
+                  <span data-es={UI_ES.status}>Status:</span> <strong data-es={ME_ES.available}>{ME.available}</strong>
                 </p>
               </div>
               <div className="identSphere">
@@ -202,10 +260,10 @@ export default function BrutalistSidebar() {
             </div>
 
             <details className="wikiToc" id="wikiToc" suppressHydrationWarning>
-              <summary>Contents</summary>
+              <summary data-es={UI_ES.contents}>Contents</summary>
               <ol>
                 {NAV_SECTIONS.map((s) => (
-                  <li key={s.id}><a href={`#${s.id}`}>{s.label}</a></li>
+                  <li key={s.id}><a href={`#${s.id}`} data-es={s.labelEs}>{s.label}</a></li>
                 ))}
               </ol>
             </details>
@@ -222,21 +280,30 @@ export default function BrutalistSidebar() {
             />
 
             <nav className="sideTools" aria-label="Toolbox">
-              <span className="sideToolsLabel">Toolbox</span>
+              <span className="sideToolsLabel" data-es={UI_ES.toolbox}>Toolbox</span>
               <ul>
-                <li><a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a></li>
-                <li><a href={`mailto:${ME.email}`}>Email</a></li>
+                <li><a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={UI_ES.downloadCv}>Download CV</a></li>
+                <li><a href={`mailto:${ME.email}`} data-es={UI_ES.email}>Email</a></li>
                 <li><a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
                 <li><a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
               </ul>
-              <p className="sideColophon">
-                This page was last updated {UPDATED}.
-              </p>
             </nav>
+
+            {/* The colophon closes the whole sidebar. */}
+            <p className="sideColophon" data-es={`${UI_ES.colophon} ${UPDATED_ES}.`}>
+              This page was last updated {UPDATED}.
+            </p>
           </aside>
 
           <div className="content">
             <div className="inner">
+              {/* Vector 2022 puts the interlanguage control here: a bordered
+                  button at the top right of the article, above the first
+                  heading. With two languages a dropdown would be theatre, so
+                  the button names the edition you get by pressing it. */}
+              <div className="langBar">
+                <LangSwitch variant="button" />
+              </div>
               <Sections />
             </div>
           </div>

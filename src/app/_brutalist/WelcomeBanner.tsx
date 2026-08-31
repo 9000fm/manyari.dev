@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { UI_ES } from "@/content.es";
 
 // Availability notice. Shows on every load; the × dismisses it for the current
 // view only (no persistence) - reloading brings it back.
@@ -34,10 +35,18 @@ export default function WelcomeBanner() {
           >
             ×
           </button>
+          {/* Split into spans so each run of text is its own element: the
+              language switch swaps textContent per [data-es] node, and a bare
+              text node between two links cannot carry the attribute. */}
           <p className="welcomeText">
-            <b>Open to work.</b> I&apos;m looking for frontend, e-commerce and
-            product-focused roles. See my <a href="#work">work</a>, or{" "}
-            <a href="#contact">get in touch</a>.
+            <b data-es={UI_ES.bannerLead}>Open to work.</b>{" "}
+            <span data-es={UI_ES.bannerRest1}>
+              I&apos;m looking for frontend, e-commerce and product-focused roles. See my
+            </span>{" "}
+            <a href="#work" data-es={UI_ES.bannerWork}>work</a>
+            <span data-es={UI_ES.bannerRest2}>, or</span>{" "}
+            <a href="#contact" data-es={UI_ES.bannerContact}>get in touch</a>
+            <span data-es={UI_ES.bannerEnd}>.</span>
           </p>
         </div>
       </div>
