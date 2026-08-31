@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-// Welcome banner. Shows on every load; the × dismisses it for the current
+// Availability notice. Shows on every load; the × dismisses it for the current
 // view only (no persistence) - reloading brings it back.
 //
 // Leaving is a CSS-only collapse: the wrapper animates grid-template-rows
@@ -26,7 +26,7 @@ export default function WelcomeBanner() {
         <div className="welcome">
           <button
             className="welcomeX"
-            aria-label="Dismiss welcome"
+            aria-label="Dismiss notice"
             onClick={() => {
               setLeaving(true);
               timer.current = setTimeout(() => setGone(true), LEAVE_MS);
@@ -35,9 +35,9 @@ export default function WelcomeBanner() {
             ×
           </button>
           <p className="welcomeText">
-            <b>Hello and welcome.</b> This is where I keep my{" "}
-            <a href="#work">work</a>, the <a href="#tools">tools</a> I use, and how
-            to <a href="#contact">reach me</a>. Take a look around.
+            <b>Open to work.</b> I&apos;m looking for frontend, e-commerce and
+            product-focused roles. See my <a href="#work">work</a>, or{" "}
+            <a href="#contact">get in touch</a>.
           </p>
         </div>
       </div>

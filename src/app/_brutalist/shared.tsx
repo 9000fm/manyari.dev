@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, SERVICES, LANGUAGES, TICKER, WORKFLOW, EXPERIENCE, EDUCATION } from "@/content";
+import { ME, PROJECTS, SKILLS, LANGUAGES, TICKER, EXPERIENCE, EDUCATION } from "@/content";
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -64,13 +64,8 @@ export const SHARED_CSS = `
   @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
 
   /* services */
-  .brutServices { list-style: none; padding: 0; margin: 0; column-count: 2; column-gap: 44px; }
-  @media (max-width: 620px) { .brutServices { column-count: 1; } }
-  .brutServices li { margin: 0 0 9px; break-inside: avoid; }
-  .brutSvcNum { color: #6f6f6f; margin-right: 12px; font-variant-numeric: tabular-nums; }
 
   /* tools */
-  .brutWorkflow { margin: 0 0 20px; font-style: italic; font-size: var(--t-lead); color: #222; }
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
   .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
@@ -131,8 +126,7 @@ export const NAV_SECTIONS = [
   { id: "work", label: "work" },
   { id: "experience", label: "experience" },
   { id: "education", label: "education" },
-  { id: "services", label: "services" },
-  { id: "tools", label: "tools" },
+  { id: "tools", label: "skills" },
   { id: "contact", label: "contact" },
 ] as const;
 
@@ -255,23 +249,8 @@ export function Sections(): ReactElement {
 
       <p className="brutAst" />
 
-      <section id="services">
-        <h2>Services</h2>
-        <ol className="brutServices">
-          {SERVICES.map((s, i) => (
-            <li key={s}>
-              <span className="brutSvcNum">{String(i + 1).padStart(2, "0")}</span>
-              {s}
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <p className="brutAst" />
-
       <section id="tools">
-        <h2>Tools</h2>
-        <p className="brutWorkflow">{WORKFLOW}</p>
+        <h2>Skills</h2>
         <div className="brutTools">
           {SKILLS.map((g) => (
             <div key={g.label}>
