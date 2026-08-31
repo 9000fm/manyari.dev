@@ -5,7 +5,7 @@ export const ME = {
   email: "flavio@manyari.dev",
   available: "Available",
   about:
-    "Web design and development, end to end - brand, interface, code, and deployment. I've shipped stores, portfolios, and platforms for clients in the US, Europe, and Latin America.",
+    "Welcome. This is where I keep my work. I design and build e-commerce experiences and digital products, from early direction to launch. I like staying close to the whole project, especially where design and technical decisions meet. I've built stores, portfolios, and platforms for clients and teams across the US, Europe, and Latin America. Get in touch if you have something in mind.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",

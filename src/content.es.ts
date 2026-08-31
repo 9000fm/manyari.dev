@@ -21,7 +21,7 @@ export const ME_ES = {
   role: "Diseñador y Desarrollador Web",
   available: "Disponible",
   about:
-    "Diseño y desarrollo web, de principio a fin - marca, interfaz, código y despliegue. He publicado tiendas, portafolios y plataformas para clientes en Estados Unidos, Europa y Latinoamérica.",
+    "Bienvenido. Aquí es donde guardo mi trabajo. Diseño y construyo experiencias de e-commerce y productos digitales, desde la dirección inicial hasta el lanzamiento. Me gusta estar cerca de todo el proyecto, sobre todo donde se cruzan el diseño y las decisiones técnicas. He construido tiendas, portafolios y plataformas para clientes y equipos en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
