@@ -104,8 +104,8 @@ export default function WorkHover() {
     const apply = () => {
       const card = cardRef.current;
       if (!card) return;
-      const w = card.offsetWidth || 340;
-      const h = card.offsetHeight || 220;
+      const w = card.offsetWidth || 480;
+      const h = card.offsetHeight || 300;
       let x = sideRight ? cx + GAP : cx - GAP - w;
       x = Math.max(PAD, Math.min(x, window.innerWidth - w - PAD));
       const y = Math.max(PAD, Math.min(cy - h / 2, window.innerHeight - h - PAD));
@@ -145,7 +145,7 @@ export default function WorkHover() {
       if (!visible) {
         cx = tx;
         cy = ty;
-        const w = cardRef.current?.offsetWidth || 340;
+        const w = cardRef.current?.offsetWidth || 480;
         sideRight = tx + GAP + w + PAD <= window.innerWidth;
       }
       visible = true;
@@ -285,7 +285,11 @@ export default function WorkHover() {
 const CSS = `
   .workHoverCard {
     position: fixed; top: 0; left: 0; z-index: 210;
-    width: 340px; pointer-events: none; will-change: transform;
+    /* 480 is the target, but it must always leave room for the PAD=16 clamp in
+       apply() - that clamp moves the card, it never shrinks it, so a fixed width
+       wider than the window pins the card left and spills off the right edge.
+       48px of slack covers both pads plus a vertical scrollbar. */
+    width: min(480px, calc(100vw - 48px)); pointer-events: none; will-change: transform;
   }
   .workHoverCard.centered {
     left: 50%; top: 50%; transform: translate(-50%, -50%);

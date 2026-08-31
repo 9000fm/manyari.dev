@@ -201,7 +201,7 @@ export default function BrutalistSidebar() {
               </div>
             </div>
 
-            <details className="wikiToc" open>
+            <details className="wikiToc" id="wikiToc" suppressHydrationWarning>
               <summary>Contents</summary>
               <ol>
                 {NAV_SECTIONS.map((s) => (
@@ -209,6 +209,17 @@ export default function BrutalistSidebar() {
                 ))}
               </ol>
             </details>
+            {/* Contents ships CLOSED so mobile gets the compressed "[show]" box with
+                no open-then-collapse flash. This runs while the parser is still on
+                this node, before first paint, and re-opens it on desktop where the
+                sidebar TOC is the whole point of the layout. Same 900px breakpoint
+                as the CSS below. */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html:
+                  'try{if(matchMedia("(min-width:900px)").matches)document.getElementById("wikiToc").open=true}catch(e){}',
+              }}
+            />
 
             <nav className="sideTools" aria-label="Toolbox">
               <span className="sideToolsLabel">Toolbox</span>
