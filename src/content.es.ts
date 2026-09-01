@@ -163,9 +163,9 @@ export const UI_ES = {
 
   // welcome banner
   bannerLead: "Disponible",
-  bannerRest1: "para trabajos de frontend, e-commerce y producto digital. Todo el trabajo reciente está en esta página. Mira mi",
-  bannerWork: "trabajo",
-  bannerRest2: ", o",
+  bannerRest1: "para trabajos de frontend, e-commerce y producto digital. Mira el",
+  bannerWork: "trabajo reciente",
+  bannerRest2: " en esta misma página, o",
   bannerContact: "escríbeme",
   bannerEnd: ".",
   dismiss: "Cerrar aviso",
