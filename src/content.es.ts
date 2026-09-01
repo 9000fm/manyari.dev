@@ -29,7 +29,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   tonydecay: {
     role: "Integral · Marca · Next.js · Supabase · PayPal",
     blurb:
-      "Tienda de láminas de edición limitada para el ilustrador Tony Decay - marca, tienda y un contador de stock en vivo, hecho de principio a fin.",
+      "Tienda de láminas de edición limitada para el ilustrador Tony Decay - marca, tienda, pagos y un contador de stock en vivo, hecho de principio a fin.",
     plateCap: "Foundation Series, la página de la colección de quince láminas.",
   },
   silverback: {
@@ -41,7 +41,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   superself: {
     role: "Integral · Marca · Next.js · WebGL · Despliegue",
     blurb:
-      "Sitio y marca para un sello de música electrónica - una interfaz tipo escritorio, visuales generativos, un shoutbox en vivo y una tienda. En tres idiomas.",
+      "Sitio y marca para un sello de música electrónica que cofundé - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
