@@ -41,14 +41,14 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   superself: {
     role: "Integral · Marca · Next.js · WebGL · Despliegue",
     blurb:
-      "Sitio y marca para un sello de música electrónica que cofundé - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
+      "Sitio y marca para mi sello de música electrónica - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
     role: "Integral · Next.js · Sanity CMS · Despliegue",
     blurb:
-      "Portafolio para una fotógrafa y cineasta - grilla editorial, transiciones animadas, y ella misma actualiza todo desde Sanity.",
-    plateCap: "Grilla editorial, gestionada por la clienta desde Sanity.",
+      "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
+    plateCap: "La grilla de fotos, de borde a borde.",
   },
   digeart: {
     role: "Integral · Next.js · Supabase · Despliegue",
