@@ -63,7 +63,7 @@ export default function MobileNav() {
         aria-controls="mnavMenu"
         onClick={() => setOpen((o) => !o)}
       >
-        {es ? UI_ES.indexLower : "index"} {open ? (es ? UI_ES.hide : "[hide]") : es ? UI_ES.show : "[show]"}
+        {es ? UI_ES.contentsLower : "contents"} {open ? (es ? UI_ES.hide : "[hide]") : es ? UI_ES.show : "[show]"}
       </button>
       <div className={`mnavDrop${open ? " on" : ""}`} id="mnavMenu">
         <div className="mnavDropIn">
