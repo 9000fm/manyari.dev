@@ -53,7 +53,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   digeart: {
     role: "Integral · Next.js · Supabase · Despliegue",
     blurb:
-      "Una app de descubrimiento de música electrónica underground, catalogada a mano, con filtros por género y reproducción desde YouTube.",
+      "Una app de descubrimiento con un catálogo curado de música electrónica underground que suena mientras navegas. Construida como producto completo - interfaz, base de datos y curaduría - y sigue creciendo.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
 };
