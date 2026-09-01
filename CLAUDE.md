@@ -60,6 +60,19 @@ src/
   Renaming one silently breaks three navs.
 - Editing `.brutExp` styling hits **both** Experience and Education, they share the class.
 
+## Type scale (enforced, 6 sizes, defined in shared.tsx :root)
+
+| Token | px | Where |
+|---|---|---|
+| `--t-name` | 28 | Sidebar name only |
+| `--t-head` | 24 | Section h2 |
+| `--t-lead` | 19 | Lead lines (contact lead, banner close) |
+| `--t-body` | 18 | Body text |
+| `--t-small` | 16 | Lists and items: TOC, Toolbox, footer lists, mobile nav |
+| `--t-micro` | 13 | Small-caps LABELS (Herramientas, Index, Contacto), topline, colophon |
+
+Rule: small-caps section labels are `--t-micro`; the list ITEMS under them are `--t-small`. Never a hardcoded px.
+
 ## Motion
 
 Every animation is hand-rolled CSS in a template string. The established idiom:
