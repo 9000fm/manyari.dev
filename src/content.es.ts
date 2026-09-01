@@ -162,7 +162,7 @@ export const UI_ES = {
   languagesLabel: "Idiomas:",
 
   // contact
-  contactLead: "El correo es la forma más rápida de contactarme.",
+  contactLead: "Hablemos de lo que estás construyendo.",
   contactBased: "Radicado en Lima, PE. Trabajo en remoto con equipos de Estados Unidos y Europa. Abierto a tiempo completo o freelance.",
 
   // welcome banner
