@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, LANGUAGES, TICKER, EXPERIENCE, EDUCATION } from "@/content";
+import { ME, PROJECTS, SKILLS, LANGUAGES, TICKER, EXPERIENCE } from "@/content";
 import {
-  ME_ES, PROJECTS_ES, EXPERIENCE_ES, EDUCATION_ES, SKILLS_ES,
+  ME_ES, PROJECTS_ES, EXPERIENCE_ES, SKILLS_ES,
   LANGUAGES_ES, UI_ES,
 } from "@/content.es";
 
@@ -9,7 +9,6 @@ import {
 // and that one element stays English instead of blanking out.
 const esProj = (slug: string) => PROJECTS_ES[slug];
 const esJob = (company: string, period: string) => EXPERIENCE_ES[company + period];
-const esEdu = (school: string) => EDUCATION_ES[school];
 
 /**
  * Shared brutalist / raw-HTML content for the portfolio homepage.
@@ -135,7 +134,6 @@ export const NAV_SECTIONS = [
   { id: "about", label: "about", labelEs: UI_ES.tocAbout },
   { id: "work", label: "work", labelEs: UI_ES.tocWork },
   { id: "experience", label: "experience", labelEs: UI_ES.tocExperience },
-  { id: "education", label: "education", labelEs: UI_ES.tocEducation },
   { id: "tools", label: "skills", labelEs: UI_ES.tocSkills },
   { id: "contact", label: "contact", labelEs: UI_ES.tocContact },
 ] as const;
@@ -236,26 +234,6 @@ export function Sections(): ReactElement {
               <div className="brutExpBody">
                 <span className="brutExpRole" data-es={esJob(job.company, job.period)?.title}>{job.title}</span>
                 <p data-es={esJob(job.company, job.period)?.blurb}>{job.blurb}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <p className="brutAst" />
-
-      <section id="education">
-        <h2 data-es={UI_ES.education}>Education</h2>
-        <ol className="brutExp">
-          {EDUCATION.map((ed) => (
-            <li key={ed.school}>
-              <div className="brutExpMeta">
-                <strong>{ed.school}</strong>
-                <span>{ed.period}</span>
-              </div>
-              <div className="brutExpBody">
-                <span className="brutExpRole" data-es={esEdu(ed.school)?.title}>{ed.title}</span>
-                {ed.detail ? <p data-es={esEdu(ed.school)?.detail}>{ed.detail}</p> : null}
               </div>
             </li>
           ))}
