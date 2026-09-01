@@ -267,7 +267,7 @@ export function Sections(): ReactElement {
 
       <section id="contact">
         <h2 data-es={UI_ES.contact}>Contact</h2>
-        <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Let&apos;s talk about what you&apos;re building.</p>
+        <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Tell me what you need.</p>
         <p style={{ margin: "0 0 4px" }} data-es={UI_ES.contactBased}>
           Based in {ME.location}. Available for freelance or full-time.
         </p>
