@@ -21,7 +21,7 @@ export const ME_ES = {
   role: "Diseñador y Desarrollador Web",
   available: "Disponible",
   about:
-    "Bienvenido. Aquí es donde guardo mi trabajo. Diseño y construyo experiencias de e-commerce y productos digitales, desde la dirección inicial hasta el lanzamiento. Me gusta estar cerca de todo el proyecto, sobre todo donde se cruzan el diseño y las decisiones técnicas. He construido tiendas, portafolios y plataformas para clientes y equipos en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
+    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y construyo sitios de e-commerce y productos digitales, desde la dirección inicial hasta el lanzamiento. La mayor parte de mi trabajo está entre el diseño y el desarrollo, así que suelo seguir involucrado en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
