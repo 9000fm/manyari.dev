@@ -258,9 +258,6 @@ export function Sections(): ReactElement {
       <section id="contact">
         <h2 data-es={UI_ES.contact}>Contact</h2>
         <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Tell me what you need.</p>
-        <p style={{ margin: "0 0 4px" }} data-es={UI_ES.contactBased}>
-          Based in {ME.location}. Spanish and English. Available for freelance or full-time.
-        </p>
         <ul className="brutContact">
           <li>
             <a href={`mailto:${ME.email}`}>{ME.email}</a>
@@ -275,6 +272,9 @@ export function Sections(): ReactElement {
             <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
           </li>
         </ul>
+        <p style={{ margin: "12px 0 0", fontSize: "var(--t-small)", color: "#555" }} data-es={UI_ES.contactBased}>
+          Based in {ME.location}. Spanish and English. Available for freelance or full-time.
+        </p>
       </section>
 
       <p className="brutAst" />
