@@ -65,7 +65,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "Perú",
     period: "2023 - Presente",
     blurb:
-      "Diseño y construyo los sitios, y después los mantengo en pie: DNS, SSL, hosting, entregabilidad de correo. Remoto, normalmente trabajando dentro del propio equipo del cliente.",
+      "Trabajo de forma independiente con clientes y equipos pequeños, normalmente llevando los proyectos desde el diseño hasta el desarrollo y el lanzamiento. Me hago responsable del lado operativo: hosting, dominios, correo y mantenimiento continuo.",
   },
   "Design In DC2025 - 2026": {
     title: "Diseñador UI Junior",

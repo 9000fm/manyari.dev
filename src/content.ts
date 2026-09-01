@@ -119,7 +119,7 @@ export const EXPERIENCE: Job[] = [
     company: "Independent",
     location: "Peru",
     period: "2023 - Present",
-    blurb: "Sites designed, built, and deployed, plus the infrastructure that keeps them up: DNS, SSL, hosting, email deliverability. Remote work, usually alongside the client's own team.",
+    blurb: "I work independently with clients and small teams, usually taking projects from design through development and launch. I take responsibility for the operational side: hosting, domains, email, and ongoing maintenance.",
   },
   {
     title: "Junior UI Designer",
