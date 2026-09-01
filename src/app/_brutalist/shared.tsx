@@ -55,7 +55,7 @@ export const SHARED_CSS = `
   .brutFootCols { display: flex; gap: clamp(36px, 8vw, 72px); margin-bottom: 22px; }
   .brutFootLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); color: #555; margin-bottom: 8px; }
   .brutFootCols ul { list-style: none; padding: 0; margin: 0; }
-  .brutFootCols li { padding: 2px 0; font-size: var(--t-micro); }
+  .brutFootCols li { padding: 2px 0; font-size: var(--t-small); }
   .brutFootBottom { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-top: 1px solid #000; padding-top: 12px; }
   .brutFootCopy { font-variant: small-caps; letter-spacing: 0.15em; font-size: var(--t-micro); color: #000; }
   .brutTopLink { font-size: var(--t-micro); }
@@ -282,7 +282,7 @@ export function Sections(): ReactElement {
       <footer className="brutFooter">
         <div className="brutFootCols">
           <div>
-            <span className="brutFootLabel" data-es={UI_ES.contents}>Index</span>
+            <span className="brutFootLabel" data-es={UI_ES.footIndex}>Index</span>
             <ul>
               {NAV_SECTIONS.map((s) => (
                 <li key={s.id}>
