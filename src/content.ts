@@ -140,11 +140,11 @@ export const EXPERIENCE: Job[] = [
 export type SkillGroup = { label: string; items: string[] };
 
 export const SKILLS: SkillGroup[] = [
-  { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
   { label: "Frontend",      items: ["Next.js / React", "TypeScript", "Tailwind"] },
-  { label: "Creative Code", items: ["p5.js", "WebGL", "Framer Motion", "Generative Art"] },
   { label: "E-commerce",    items: ["Shopify / Liquid", "PayPal"] },
   { label: "CMS & Backend", items: ["Sanity", "Supabase", "WordPress"] },
+  { label: "Design",        items: ["Adobe Suite", "Figma", "Brand Identity", "UI/UX"] },
+  { label: "Creative Code", items: ["p5.js", "WebGL", "Framer Motion", "Generative Art"] },
   { label: "Infra & SEO",   items: ["Vercel", "DNS / SSL / Hosting", "Technical SEO"] },
 ];
 

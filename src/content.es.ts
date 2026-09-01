@@ -158,7 +158,7 @@ export const UI_ES = {
 
   // contact
   contactLead: "Cuéntame qué necesitas.",
-  contactBased: "Actualmente en Lima, PE. Disponible para freelance o tiempo completo.",
+  contactBased: "Actualmente en Lima, PE. Español e inglés. Disponible para freelance o tiempo completo.",
 
   // welcome banner
   bannerLead: "Buscando trabajo.",

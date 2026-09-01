@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, LANGUAGES, TICKER, EXPERIENCE } from "@/content";
+import { ME, PROJECTS, SKILLS, TICKER, EXPERIENCE } from "@/content";
 import {
   ME_ES, PROJECTS_ES, EXPERIENCE_ES, SKILLS_ES,
-  LANGUAGES_ES, UI_ES,
+  UI_ES,
 } from "@/content.es";
 
 // Spanish lookups. A miss returns undefined, React drops the data-es attribute,
@@ -78,7 +78,6 @@ export const SHARED_CSS = `
   .brutTools { display: flex; flex-direction: column; gap: 16px; }
   .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
-  .brutLangs { margin-top: 22px; font-size: var(--t-small); color: #333; }
 
   /* contact */
   .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
@@ -252,15 +251,6 @@ export function Sections(): ReactElement {
             </div>
           ))}
         </div>
-        <p
-          className="brutLangs"
-          data-es={`${UI_ES.languagesLabel} ${LANGUAGES.map((l) => {
-            const t = LANGUAGES_ES[l.lang];
-            return t ? `${t.lang} (${t.level})` : `${l.lang} (${l.level})`;
-          }).join(", ")}.`}
-        >
-          Languages: {LANGUAGES.map((l) => `${l.lang} (${l.level})`).join(", ")}.
-        </p>
       </section>
 
       <p className="brutAst" />
@@ -269,7 +259,7 @@ export function Sections(): ReactElement {
         <h2 data-es={UI_ES.contact}>Contact</h2>
         <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Tell me what you need.</p>
         <p style={{ margin: "0 0 4px" }} data-es={UI_ES.contactBased}>
-          Based in {ME.location}. Available for freelance or full-time.
+          Based in {ME.location}. Spanish and English. Available for freelance or full-time.
         </p>
         <ul className="brutContact">
           <li>
