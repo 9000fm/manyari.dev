@@ -95,7 +95,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Next.js · Supabase · Deploy",
     url: "https://digeart.online",
     tag: "personal",
-    blurb: "A discovery app with a curated catalog of underground electronic music that plays as you browse. Built as a complete product - interface, database, and curation - and still growing.",
+    blurb: "A discovery app with a curated catalog of underground electronic music that plays as you browse. Built as a complete product - interface, database, and curation - maintained since launch and still growing.",
     plate: "/plates/digeart.png",
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
     plateCap: "Hand-curated discovery grid.",
