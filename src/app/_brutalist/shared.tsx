@@ -79,8 +79,11 @@ export const SHARED_CSS = `
   .brutToolLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); margin-bottom: 1px; }
   .brutToolItems { display: block; color: #222; }
 
-  /* contact */
-  .brutContact { list-style: none; padding: 0; margin: 0; line-height: 2; }
+  /* contact - the email is the section's one big object; everything else is a small row under it */
+  .brutMail { font-size: var(--t-head); margin: 6px 0 10px; }
+  .brutChannels { font-size: var(--t-small); margin: 0; }
+  .brutBased { margin: 12px 0 0; font-size: var(--t-small); color: #555; }
+
   .brutRefsLabel { margin: 26px 0 6px; font-variant: small-caps; letter-spacing: 0.07em; font-weight: bold; font-size: var(--t-micro); color: #666; }
   .brutRefs { font-size: var(--t-micro); color: #555; padding-left: 0; margin: 0; line-height: 1.85; list-style: none; }
   .brutRefs li { padding-left: 22px; text-indent: -22px; }
@@ -258,21 +261,19 @@ export function Sections(): ReactElement {
       <section id="contact">
         <h2 data-es={UI_ES.contact}>Contact</h2>
         <p style={{ marginTop: 0, fontSize: "var(--t-lead)", fontStyle: "italic" }} data-es={UI_ES.contactLead}>Tell me what you need.</p>
-        <ul className="brutContact">
-          <li>
-            <a href={`mailto:${ME.email}`}>{ME.email}</a>
-          </li>
-          <li>
-            <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            {" · "}
-            <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-            {" · "}
-            <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            {" · "}
-            <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
-          </li>
-        </ul>
-        <p style={{ margin: "12px 0 0", fontSize: "var(--t-small)", color: "#555" }} data-es={UI_ES.contactBased}>
+        <p className="brutMail">
+          <a href={`mailto:${ME.email}`}>{ME.email}</a>
+        </p>
+        <p className="brutChannels">
+          <a href={ME.socials.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          {" · "}
+          <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+          {" · "}
+          <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          {" · "}
+          <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
+        </p>
+        <p className="brutBased" data-es={UI_ES.contactBased}>
           Based in {ME.location}. Spanish and English. Available for freelance or full-time.
         </p>
       </section>
