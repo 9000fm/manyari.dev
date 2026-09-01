@@ -75,20 +75,13 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     blurb:
       "Una agencia de Washington DC. Año y medio de trabajo de interfaz en proyectos web de clientes, en remoto desde Lima.",
   },
-  "Independent2020 - 2023": {
+  "Independent2020 - Present": {
     company: "Independiente",
     title: "Diseñador Gráfico Freelance",
     location: "Perú",
-    period: "2020 - 2023",
+    period: "2020 - Presente",
     blurb:
-      "Diseño impreso e identidad de marca en Lima. Folletos, formularios y documentos institucionales para una empresa médica, flyers para la escena de música electrónica de la ciudad, y logos para negocios que recién empezaban.",
-  },
-  "T&IL Cleaning Services2021 - 2023": {
-    title: "Community Manager",
-    location: "Estados Unidos",
-    period: "2021 - 2023",
-    blurb:
-      "Contenido social para una empresa de limpieza de Baltimore: publicaciones y videos cortos para Instagram, Facebook y TikTok. También llevaba los mensajes de clientes y la agenda.",
+      "Diseño gráfico en Lima desde 2020: identidad de marca, impresos corporativos y flyers de eventos.",
   },
 };
 

@@ -132,15 +132,8 @@ export const EXPERIENCE: Job[] = [
     title: "Freelance Graphic Designer",
     company: "Independent",
     location: "Peru",
-    period: "2020 - 2023",
-    blurb: "Print and identity work in Lima. Brochures, forms, and institutional documents for a medical company, flyers for the city's electronic music scene, and logos for small businesses getting started.",
-  },
-  {
-    title: "Community Manager",
-    company: "T&IL Cleaning Services",
-    location: "United States",
-    period: "2021 - 2023",
-    blurb: "Social content for a Baltimore cleaning company: posts and short video for Instagram, Facebook, and TikTok. I also handled client messages and scheduling.",
+    period: "2020 - Present",
+    blurb: "Graphic design in Lima since 2020: brand identity, corporate print, and event flyers.",
   },
 ];
 
