@@ -162,8 +162,8 @@ export const UI_ES = {
   contactBased: "Actualmente en Lima, PE. Español e inglés. Disponible para freelance o tiempo completo.",
 
   // welcome banner
-  bannerLead: "Buscando trabajo.",
-  bannerRest1: "Busco puestos de frontend, e-commerce y producto. Mira mi",
+  bannerLead: "Disponible",
+  bannerRest1: "para trabajos de frontend, e-commerce y producto digital, freelance o a tiempo completo. Todo el trabajo reciente está en esta página. Mira mi",
   bannerWork: "trabajo",
   bannerRest2: ", o",
   bannerContact: "escríbeme",
