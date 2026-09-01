@@ -193,7 +193,7 @@ const LAYOUT_CSS = `
     .mnavDrop { position: absolute; top: 100%; left: 0; right: 0; display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.34s cubic-bezier(0.16,0.84,0.28,1), visibility 0s 0.34s; }
     .mnavDrop.on { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.34s cubic-bezier(0.16,0.84,0.28,1), visibility 0s 0s; }
     .mnavDropIn { overflow: hidden; min-height: 0; background: ${GREY_PANEL}; box-shadow: 0 10px 24px rgba(0,0,0,0.22); }
-    .mnavList { list-style: decimal outside; margin: 0; padding: 8px 18px 12px 44px; border-bottom: 1px solid ${BLUE_LINE}; font-size: var(--t-small); }
+    .mnavList { list-style: none; margin: 0; padding: 8px 18px 12px 18px; border-bottom: 1px solid ${BLUE_LINE}; font-size: var(--t-small); }
     .mnavList li { opacity: 0; }
     .mnavDrop.on .mnavList li { animation: mnavIn 0.3s cubic-bezier(0.16,0.84,0.28,1) both; animation-delay: calc(50ms + var(--i) * 45ms); }
     .mnavList a { display: block; padding: 8px 0; color: #0645ad; text-decoration: none; }

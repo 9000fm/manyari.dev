@@ -134,6 +134,7 @@ export const UI_ES = {
   // sidebar chrome
   contents: "Contenido",
   footIndex: "Índice",
+  indexLower: "índice",
   contentsLower: "contenido",
   hide: "[ocultar]",
   show: "[mostrar]",
