@@ -291,7 +291,7 @@ export default function BrutalistSidebar() {
 
             {/* The colophon closes the whole sidebar. */}
             <p className="sideColophon" data-es={`${UI_ES.colophon} ${UPDATED_ES}.`}>
-              This page was last updated {UPDATED}.
+              This page was last edited {UPDATED}.
             </p>
           </aside>
 

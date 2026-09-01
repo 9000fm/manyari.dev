@@ -81,7 +81,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "Perú",
     period: "2020 - 2023",
     blurb:
-      "Trabajo de impresión e identidad en Lima. Folletos, formularios y documentos institucionales para una empresa médica, flyers para la escena de música electrónica de la ciudad, y logos para negocios que recién empezaban.",
+      "Diseño impreso e identidad de marca en Lima. Folletos, formularios y documentos institucionales para una empresa médica, flyers para la escena de música electrónica de la ciudad, y logos para negocios que recién empezaban.",
   },
   "T&IL Cleaning Services2021 - 2023": {
     title: "Community Manager",
@@ -165,7 +165,7 @@ export const UI_ES = {
 
   // contact
   contactLead: "Hablemos de lo que estás construyendo.",
-  contactBased: "Radicado en Lima, PE. Trabajo en remoto con equipos de Estados Unidos y Europa. Abierto a tiempo completo o freelance.",
+  contactBased: "Actualmente en Lima, PE. Disponible para freelance o tiempo completo.",
 
   // welcome banner
   bannerLead: "Buscando trabajo.",
