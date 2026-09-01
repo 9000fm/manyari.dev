@@ -21,7 +21,7 @@ export const ME_ES = {
   role: "Diseñador y Desarrollador Web",
   available: "Disponible",
   about:
-    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y construyo sitios de e-commerce y productos digitales, desde la dirección inicial hasta el lanzamiento. La mayor parte de mi trabajo está entre el diseño y el desarrollo, así que suelo seguir involucrado en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
+    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y construyo sitios de e-commerce y productos digitales, desde la idea inicial hasta el lanzamiento. La mayor parte de mi trabajo se mueve entre el diseño y el desarrollo, así que suelo estar en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
@@ -59,8 +59,9 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
 };
 
 /** Experience, keyed by company + period to match the React key used in Sections(). */
-export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string }> = {
+export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
   "Independent2023 - Present": {
+    company: "Independiente",
     title: "Desarrollador y Diseñador Web Freelance",
     location: "Perú",
     period: "2023 - Presente",
@@ -75,6 +76,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
       "Una agencia de Washington DC. Año y medio de trabajo de interfaz en proyectos web de clientes, en remoto desde Lima.",
   },
   "Independent2020 - 2023": {
+    company: "Independiente",
     title: "Diseñador Gráfico Freelance",
     location: "Perú",
     period: "2020 - 2023",
@@ -86,7 +88,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "Estados Unidos",
     period: "2021 - 2023",
     blurb:
-      "Contenido social para una empresa de limpieza de Baltimore: publicaciones y video corto para Instagram, Facebook y TikTok. También llevaba los mensajes de clientes y la agenda.",
+      "Contenido social para una empresa de limpieza de Baltimore: publicaciones y videos cortos para Instagram, Facebook y TikTok. También llevaba los mensajes de clientes y la agenda.",
   },
 };
 
@@ -121,7 +123,7 @@ export const LANGUAGES_ES: Record<string, { lang: string; level: string }> = {
 export const UI_ES = {
   // section headings
   about: "Sobre mí",
-  work: "Trabajo Seleccionado",
+  work: "Trabajos seleccionados",
   experience: "Experiencia",
   education: "Formación",
   skills: "Habilidades",
@@ -147,7 +149,7 @@ export const UI_ES = {
   downloadCv: "Descargar CV",
   email: "Correo",
   status: "Estado:",
-  colophon: "Esta página se actualizó por última vez en",
+  colophon: "Esta página se editó por última vez en",
 
   // topline
   availableForWork: "Disponible para trabajar",
@@ -166,7 +168,7 @@ export const UI_ES = {
   contactBased: "Radicado en Lima, PE. Trabajo en remoto con equipos de Estados Unidos y Europa. Abierto a tiempo completo o freelance.",
 
   // welcome banner
-  bannerLead: "Abierto a trabajar.",
+  bannerLead: "Buscando trabajo.",
   bannerRest1: "Busco puestos de frontend, e-commerce y producto. Mira mi",
   bannerWork: "trabajo",
   bannerRest2: ", o",

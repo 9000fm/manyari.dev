@@ -227,7 +227,7 @@ export function Sections(): ReactElement {
           {EXPERIENCE.map((job) => (
             <li key={job.company + job.period}>
               <div className="brutExpMeta">
-                <strong>{job.company}</strong>
+                <strong data-es={esJob(job.company, job.period)?.company}>{job.company}</strong>
                 <span data-es={esJob(job.company, job.period)?.period}>{job.period}</span>
                 {job.location ? (
                   <span data-es={esJob(job.company, job.period)?.location}>{job.location}</span>
