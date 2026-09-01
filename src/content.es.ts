@@ -29,13 +29,13 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   tonydecay: {
     role: "Integral · Marca · Next.js · Supabase · PayPal",
     blurb:
-      "Tienda de láminas de edición limitada para el ilustrador Tony Decay - marca, tienda, pagos y un contador de stock en vivo, hecho de principio a fin.",
+      "Tienda de prints del ilustrador Tony Decay - e-commerce completo: marca, tienda, pagos y gestión de pedidos, hecho de principio a fin.",
     plateCap: "Foundation Series, la página de la colección de quince láminas.",
   },
   silverback: {
     role: "Rediseño de sitio · Shopify · Liquid",
     blurb:
-      "Rediseño de la tienda de una marca de ropa de deportes de combate - rehice la portada, la navegación y las páginas de marca.",
+      "Rediseño de la tienda de una marca de ropa de entrenamiento y combate - rehice la portada, la navegación y las páginas de marca.",
     plateCap: "La portada después del rediseño.",
   },
   superself: {

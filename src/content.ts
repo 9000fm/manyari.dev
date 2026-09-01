@@ -39,7 +39,7 @@ export const PROJECTS: Project[] = [
     role: "End-to-end · Brand · Next.js · Supabase · PayPal",
     url: "https://tonydecay.com",
     tag: "client",
-    blurb: "Limited-edition print store for illustrator Tony Decay - brand, shop, payments, and a live inventory counter, built end to end.",
+    blurb: "Print store for illustrator Tony Decay - full e-commerce: brand, shop, payments, and order management, built end to end.",
     plate: "/plates/tonydecay.png",
     plateAlt: "The Foundation Series section of tonydecay.com, showing a grid of fifteen art prints beside the collection heading and price.",
     plateCap: "Foundation Series, the fifteen-print collection page.",
