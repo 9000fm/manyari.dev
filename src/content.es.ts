@@ -27,33 +27,33 @@ export const ME_ES = {
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
 export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string }> = {
   tonydecay: {
-    role: "Integral · Marca · Next.js · Supabase · PayPal",
+    role: "Marca y desarrollo",
     blurb:
       "Tienda de prints del ilustrador Tony Decay - e-commerce completo: marca, tienda, pagos y gestión de pedidos, hecho de principio a fin.",
     plateCap: "Foundation Series, la página de la colección de quince láminas.",
   },
   silverback: {
-    role: "Rediseño de sitio · Shopify · Liquid",
+    role: "Rediseño de tienda",
     blurb:
       "Rediseño de la tienda de una marca de ropa de entrenamiento y combate - rehice la portada, la navegación y las páginas de marca.",
     plateCap: "La portada después del rediseño.",
   },
   superself: {
-    role: "Integral · Marca · Next.js · WebGL · Despliegue",
+    role: "Marca, sitio y tienda",
     blurb:
       "Sitio y marca para mi sello de música electrónica - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
-    role: "Integral · Next.js · Sanity CMS · Despliegue",
+    role: "Diseño y desarrollo",
     blurb:
       "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
     plateCap: "La grilla de fotos, de borde a borde.",
   },
   digeart: {
-    role: "Integral · Next.js · Supabase · Despliegue",
+    role: "Producto propio",
     blurb:
-      "Una app de descubrimiento con un catálogo curado de música electrónica underground que suena mientras navegas. Construida como producto completo - interfaz, base de datos y curaduría - mantenida desde el lanzamiento, y sigue creciendo.",
+      "Una app de descubrimiento con un catálogo curado de música electrónica underground que suena mientras navegas. Mantenida y creciendo desde el lanzamiento.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
 };
