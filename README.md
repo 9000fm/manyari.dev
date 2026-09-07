@@ -1,27 +1,33 @@
-# fm-portfolio
+# manyari.dev
 
-Personal portfolio for Flavio Manyari — SUPERSELF Studio.
-Creative development, generative art, visual identity.
+Personal portfolio for Flavio Manyari, web designer and developer in Lima.
+Live at https://manyari.dev.
 
-## Tech Stack
+## Stack
 
-- Next.js 16 (App Router)
-- React 19 / TypeScript
-- Tailwind CSS v4
-- Three.js + `@react-three/fiber` + drei (3D hero)
-- Framer Motion · GSAP · Lenis
+- Next.js 16 (App Router, Turbopack)
+- React 19, TypeScript 5
+- Tailwind CSS v4, used for the base reset only. Pages are inline-styled and ship their CSS as template strings.
+- No animation or 3D libraries. The globe is hand-written WebGL.
+
+## Layout
+
+- `src/content.ts` holds all site content. `src/content.es.ts` is the Spanish mirror.
+- `src/app/page.tsx` re-exports `src/app/v11a-sidebar/page.tsx`, the live site.
+- `src/app/_brutalist/` holds the shared sections, CSS, and client islands: globe, mobile nav, hover previews.
+- `src/app/v01-*` to `v12-*` are the other layouts from the direction study. They still build and are kept as an archive.
 
 ## Development
 
 ```bash
 npm install
 npm run dev    # localhost:3000
-npm run build  # production build (TS errors caught here)
+npm run build  # production build
 npm run lint   # ESLint
 ```
 
 ## Deployment
 
-- Host: Vercel
-- Domain (planned): studio.superself.online
-- Repo: github.com/9000fm/fm-portfolio
+- Host: Vercel, auto-deploys on push to `main`
+- Domain: manyari.dev
+- Repo: github.com/9000fm/manyari.dev
