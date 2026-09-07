@@ -106,7 +106,7 @@ TBT was a real problem and the fixes are load-bearing. Do not undo them casually
 - Site register is plain and factual, close to a Wikipedia article. No promotional language.
 - **Never invent biographical facts.** Ground every claim in `content.ts` or the CV at
   `E:\WEB+DESIGN\_PERSONAL\cv\Flavio-Manyari-CV-2026-ATS-EN.txt`. Ask instead of guessing.
-- The freelance Experience blurb stays **general, with no named projects** (deliberate, commit `e01084c`).
+- The freelance Experience blurb stays **general, with no named projects** (deliberate, commit `bcaf56e`).
   The projects are already listed in Work directly above it.
 
 ## Content facts
