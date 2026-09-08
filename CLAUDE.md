@@ -21,8 +21,11 @@ Only `/` is the real site. Treat everything under `v01-*` … `v12-*` as frozen 
 
 - Next.js 16.1.1 (App Router, Turbopack) · React 19.2.3 · TypeScript 5
 - Tailwind CSS v4 present but barely used. Pages are inline-styled and ship CSS as template strings.
-- **No animation or 3D libraries.** `package.json` runtime deps are only `next`, `react`, `react-dom`.
-  The globe is hand-written WebGL. Framer Motion appears in `SKILLS` as a claimed skill, not as a dependency.
+- **No animation or 3D libraries.** `package.json` runtime deps are `next`, `react`, `react-dom` and
+  `@vercel/analytics` (Web Analytics, mounted once in `layout.tsx`; the project must have Analytics
+  enabled in the Vercel dashboard or nothing is collected). The globe is hand-written WebGL.
+  Framer Motion appears in `SKILLS` as a claimed skill, not as a dependency.
+- Dev deps include `playwright-core` (pinned) for `scripts/`: the plates/previews pipeline and the CV printer.
 
 ## Layout
 
@@ -33,10 +36,12 @@ src/
   fonts.ts                # next/font/google loaders
   app/
     page.tsx              # 2 lines: re-exports v11a-sidebar as the homepage
-    layout.tsx            # minimal shell, no global font, no global background
+    layout.tsx            # minimal shell, metadata from ME, Vercel Analytics
+    not-found.tsx         # the 404, "this page does not exist" in the site frame
     globals.css           # tailwind import + box-sizing reset only (18 lines, zero animation)
-    opengraph-image.tsx · robots.ts · sitemap.ts · icon.svg
+    opengraph-image.tsx · robots.ts · sitemap.ts · icon.svg · icon.png · favicon.ico
     v11a-sidebar/page.tsx # THE SITE. Monobook-style layout CSS + composition
+    _cv/CvSheet.tsx       # the printed CV, reads content.ts; not a route (see CV PDFs)
     _brutalist/           # shared internals for the v11 family (underscore = not a route)
       shared.tsx          #   SHARED_CSS, Sections(), NAV_SECTIONS - all page content
       WelcomeBanner.tsx   #   dismissible yellow notice
@@ -48,6 +53,9 @@ src/
       SmoothScroll.tsx · SmoothWheel.tsx · useMountOnInteraction.ts
       coastline.ts · landfill.ts · landgrid.ts   # ~140KB of geo data for the globe
     v01-* … v12-*         # frozen variant archive
+scripts/
+  assets.mjs · assets.config.mjs · plate.py   # plates + previews pipeline (see below)
+  cv-pdf.mjs                                  # prints the CV PDFs from _cv/CvSheet.tsx
 ```
 
 ## Conventions
@@ -120,15 +128,45 @@ TBT was a real problem and the fixes are load-bearing. Do not undo them casually
 
 ## Known issues
 
-- `npm run lint` reports **5 pre-existing errors**: 2 in `_brutalist/WorkHover.tsx` (refs accessed
-  during render), and one each in `v03-newspaper`, `v06-terminal`, `v08-riso` (unescaped entities,
-  comment-in-JSX). All predate current work. Fix them deliberately, not as drive-by noise, and
-  do not treat a red lint run as proof that your change broke something.
+- `npm run lint` reports **3 pre-existing errors**, one each in `v03-newspaper`, `v06-terminal`,
+  `v08-riso` (unescaped entities, comment-in-JSX), all in the frozen archive. Fix them deliberately,
+  not as drive-by noise, and do not treat a red lint run as proof that your change broke something.
 
 ## Commands
 
 ```bash
-npm run dev      # localhost:3000
-npm run build    # production build, 21 static routes
-npm run lint     # ESLint (see Known issues above)
+npx next dev -p 4444   # localhost:4444 (port 3000 belongs to the digeart dev server)
+npm run build          # production build, 21 static routes
+npm run lint           # ESLint (see Known issues above)
 ```
+
+## Regenerating plates and previews
+
+Plates (`public/plates/<slug>.png`, 1-bit Atkinson, 440px wide) and hover previews
+(`public/previews/<slug>.mp4` + `.jpg` poster, 480x300, 11/8 fps stepped slideshow) are built
+from live-site screenshots by `scripts/assets.mjs` (Node + playwright-core) and `scripts/plate.py`
+(Pillow + numpy). What gets captured is declared per project in `scripts/assets.config.mjs`:
+ordered frames (the first is always `home`, it becomes the poster) and 2-3 plate candidates with
+crop and gamma. Scout a site's real DOM first: `npm run assets -- inspect <url> [--click <sel>]`.
+
+1. `npm run assets -- all --out "<scratch dir>"` captures, dithers, encodes, writes `<scratch dir>\sheet.html`.
+2. Open the sheet locally and pick one plate per project. The sheet is never committed or published.
+3. `npm run assets -- apply --out "<scratch dir>" --pick digeart=grid,tonydecay=foundation,...`
+   copies the chosen assets and rewrites `plateW`/`plateH` in `content.ts`. When the subject changed,
+   rewrite `plateAlt`/`plateCap` (`content.ts`) and `plateCap` (`content.es.ts`) by hand.
+4. `npx next dev -p 4444`, then `npm run assets -- verify --base http://localhost:4444`.
+
+Needs ffmpeg on PATH, Python 3 with `pip install -r scripts/requirements.txt`, and the pinned
+Playwright headless shell (`npx playwright-core install chromium` on a fresh machine).
+`--browser chrome` uses the system Chrome, `--only <slug>` limits the run.
+Never CSS-upscale a plate: 440px is its natural width.
+
+## CV PDFs
+
+`public/Flavio-Manyari-CV.pdf` (EN) and `public/Flavio-Manyari-CV-ES.pdf` (ES) are printed from
+`src/app/_cv/CvSheet.tsx`, which reads `content.ts` and `content.es.ts`. Nothing is hardcoded there,
+so a copy change on the site is a reprint away. With the dev server on 4444:
+`node scripts/cv-pdf.mjs [--png <dir>]`. The script mounts a temporary `/cv` route (gitignored),
+prints A4 at 14mm margins, removes the route and reports the sheet height: it must stay under
+1017px for one page. Tighten leading in `CvSheet.tsx`, never cut copy. The Spanish site links the
+ES PDF through `data-es-href`, swapped by `useLang.ts`.
