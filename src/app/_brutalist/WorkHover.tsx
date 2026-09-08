@@ -39,10 +39,13 @@ export default function WorkHover() {
   const [active, setActive] = useState<Project | null>(null); // current row (content)
   const [shown, setShown] = useState(false); // visibility (drives grow/shrink)
   const [touch, setTouch] = useState(false); // tap mode vs cursor-follow
+  // reduced motion as state for render (autoPlay), the ref stays for the rAF paths
+  const [reduce, setReduce] = useState(false);
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     reduceRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setReduce(reduceRef.current);
     setTouch(!fine);
 
     const items = Array.from(
@@ -265,7 +268,7 @@ export default function WorkHover() {
                 poster={preview.poster}
                 muted
                 loop
-                autoPlay={!reduceRef.current}
+                autoPlay={!reduce}
                 playsInline
                 preload="none"
               />
