@@ -1,10 +1,12 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ME } from "../content";
 
 // Generated social share card (WhatsApp, X, LinkedIn, etc.).
 // Matches the site: white document, black Times-style serif, stacked name.
-export const alt = "Flavio Manyari - Web developer and designer";
+// Every string comes from ME in content.ts, so the card cannot drift from the page.
+export const alt = `${ME.name} - ${ME.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,6 +32,7 @@ async function loadFonts() {
 
 export default async function Image() {
   const fonts = await loadFonts();
+  const [first, ...rest] = ME.name.split(" ");
 
   return new ImageResponse(
     (
@@ -53,17 +56,17 @@ export default async function Image() {
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 150, fontWeight: 700, lineHeight: 0.98 }}>
-            <div style={{ display: "flex" }}>Flavio</div>
-            <div style={{ display: "flex" }}>Manyari</div>
+            <div style={{ display: "flex" }}>{first}</div>
+            <div style={{ display: "flex" }}>{rest.join(" ")}</div>
           </div>
           <div style={{ display: "flex", fontSize: 42, fontStyle: "italic", marginTop: 22, color: "#111" }}>
-            Web developer and designer
+            {ME.role}
           </div>
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 25, color: "#333" }}>
-          <div style={{ display: "flex" }}>Projects end to end - brand, design, code, deploy.</div>
-          <div style={{ display: "flex" }}>Lima, PE</div>
+          <div style={{ display: "flex" }}>{ME.tagline}</div>
+          <div style={{ display: "flex" }}>{ME.location}</div>
         </div>
       </div>
     ),

@@ -4,6 +4,10 @@ export const ME = {
   location: "Lima, PE",
   email: "flavio@manyari.dev",
   available: "Available",
+  // Page metadata and the social share card (layout.tsx, opengraph-image.tsx)
+  // read these, so a copy change here reaches link previews too.
+  siteTitle: "Flavio Manyari - Portfolio",
+  tagline: "Projects end to end - brand, design, code, deploy.",
   about:
     "Welcome. My name is Flavio, and this is my website. I design and build e-commerce sites and digital products, from early direction to launch. Most of my work sits between design and development, so I tend to stay involved in the whole process. I've shipped stores, interfaces, and platforms for clients in the US, Europe, and Latin America. Get in touch if you have something in mind.",
   // The About minus its greeting and closing line. The printed CV uses it as
