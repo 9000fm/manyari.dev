@@ -173,11 +173,7 @@ export function Sections(): ReactElement {
                     loading={i === 0 ? "eager" : "lazy"}
                     decoding="async"
                   />
-                  <figcaption
-                    data-es={esProj(p.slug) ? `Fig. ${i + 1}. ${esProj(p.slug).plateCap}` : undefined}
-                  >
-                    Fig. {i + 1}. {p.plateCap}
-                  </figcaption>
+                  <figcaption data-es={esProj(p.slug)?.plateCap}>{p.plateCap}</figcaption>
                 </figure>
               ) : null}
               <p className="brutWorkHead">
