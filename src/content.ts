@@ -52,7 +52,7 @@ export const PROJECTS: Project[] = [
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
     plateCap: "Hand-curated discovery grid.",
     plateW: 440,
-    plateH: 214,
+    plateH: 275,
   },
   {
     slug: "tonydecay",
@@ -63,10 +63,10 @@ export const PROJECTS: Project[] = [
     tag: "client",
     blurb: "Print store for illustrator Tony Decay - full e-commerce: brand, shop, payments, and order management, built end to end.",
     plate: "/plates/tonydecay.png",
-    plateAlt: "The Foundation Series section of tonydecay.com, showing a grid of fifteen art prints beside the collection heading and price.",
+    plateAlt: "The Foundation Series shop page of tonydecay.com, showing the grid of fifteen art prints beside the collection heading.",
     plateCap: "Foundation Series, the fifteen-print collection page.",
     plateW: 440,
-    plateH: 182,
+    plateH: 275,
   },
   {
     slug: "silverback",
@@ -80,7 +80,7 @@ export const PROJECTS: Project[] = [
     plateAlt: "The silverbackstripes.com homepage hero, with the headline Earn Your Stripes over a photograph of a grappling session.",
     plateCap: "Homepage hero after the redesign.",
     plateW: 440,
-    plateH: 172,
+    plateH: 275,
   },
   {
     slug: "superself",
@@ -94,7 +94,7 @@ export const PROJECTS: Project[] = [
     plateAlt: "The superself.online interface, a white wireframe corridor drawn in one-point perspective on black, with a text menu at the top left.",
     plateCap: "The label's main interface, drawn in one-point perspective.",
     plateW: 440,
-    plateH: 266,
+    plateH: 275,
   },
   {
     slug: "micaela",
@@ -108,7 +108,7 @@ export const PROJECTS: Project[] = [
     plateAlt: "The micaelalucia.com portfolio, an edge-to-edge masonry grid of documentary and archival photographs under a light header.",
     plateCap: "The photo grid, edge to edge.",
     plateW: 440,
-    plateH: 238,
+    plateH: 275,
   },
 ];
 

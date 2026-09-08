@@ -6,6 +6,7 @@
 // Per project: slug, url, settle?, colorScheme?, dismiss?[], hide?[], afterOpen?[steps], frames[], plates[]
 // Per frame:   name, url?, continue?, steps?[], settle?
 // Per plate:   name, caption, url?, steps?[], hide?[], clip{x,y,width,height} | selector, gamma?, contrast?, autocontrast?
+//              Every plate clip is the full 1440x900 viewport (16:10, the preview's box) so all five share one ratio.
 // Steps: {goto} {click} {tapIf: selector} {press} {hover} {scroll: number|selector, offset?} {evaluate: "js"} {hide: [...]} {waitCanvas: true} {wait: ms}
 // click fails if the element is missing; tapIf clicks only if it shows up within 3 s (entry gates).
 // Selectors are Playwright selectors. clip is viewport-relative: scroll first, then clip.
@@ -31,9 +32,9 @@ export const PROJECTS = [
       { name: "about", steps: [{ click: 'button[aria-label="About"]' }, { wait: 800 }] },
     ],
     plates: [
-      { name: "grid", caption: "Hand-curated discovery grid.", clip: { x: 0, y: 0, width: 1440, height: 700 } }, // 2.06:1 as today
-      { name: "grid-tight", caption: "Hand-curated discovery grid.", steps: [{ scroll: 140 }], clip: { x: 0, y: 80, width: 1440, height: 620 } },
-      { name: "mixes", caption: "The Mixes view.", steps: [{ click: 'button[aria-label="Mixes"]' }, { wait: 1500 }], clip: { x: 0, y: 0, width: 1440, height: 700 } },
+      { name: "grid", caption: "Hand-curated discovery grid.", clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "grid-scrolled", caption: "Hand-curated discovery grid.", steps: [{ scroll: 300 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "mixes", caption: "The Mixes view.", steps: [{ click: 'button[aria-label="Mixes"]' }, { wait: 1500 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
     ],
   },
   {
@@ -50,9 +51,9 @@ export const PROJECTS = [
       { name: "faq", url: "https://tonydecay.com/faq" },
     ],
     plates: [
-      { name: "foundation", caption: "Foundation Series, the fifteen-print collection page.", steps: [{ scroll: 'h2:has-text("FOUNDATION SERIES")', offset: 110 }], clip: { x: 0, y: 90, width: 1440, height: 595 } }, // 2.42:1 as today
-      { name: "shop", caption: "The Foundation Series shop page.", url: "https://tonydecay.com/shop", clip: { x: 0, y: 0, width: 1440, height: 595 } },
-      { name: "gallery", caption: "The gallery index.", url: "https://tonydecay.com/gallery", clip: { x: 0, y: 0, width: 1440, height: 595 } },
+      { name: "foundation", caption: "Foundation Series, the fifteen-print collection page.", steps: [{ scroll: 'h2:has-text("FOUNDATION SERIES")', offset: 110 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "home", caption: "The homepage hero.", clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "shop", caption: "The Foundation Series shop page.", url: "https://tonydecay.com/shop", clip: { x: 0, y: 0, width: 1440, height: 900 } },
     ],
   },
   {
@@ -69,9 +70,9 @@ export const PROJECTS = [
       { name: "troop", url: "https://www.silverbackstripes.com/pages/join-the-troop" },
     ],
     plates: [
-      { name: "hero", caption: "Homepage hero after the redesign.", clip: { x: 0, y: 0, width: 1440, height: 562 } }, // 2.56:1 as today
-      { name: "hero-clean", caption: "Homepage hero after the redesign.", hide: ['[id$="__announcement-bar"]'], clip: { x: 0, y: 0, width: 1440, height: 562 } },
-      { name: "featured", caption: "The featured products row.", steps: [{ scroll: 'h2:has-text("FEATURED PRODUCTS")', offset: 40 }], clip: { x: 0, y: 0, width: 1440, height: 640 } },
+      { name: "hero", caption: "Homepage hero after the redesign.", clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "hero-clean", caption: "Homepage hero after the redesign.", hide: ['[id$="__announcement-bar"]'], clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "featured", caption: "The featured products row.", steps: [{ scroll: 'h2:has-text("FEATURED PRODUCTS")', offset: 40 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
     ],
   },
   {
@@ -92,9 +93,9 @@ export const PROJECTS = [
       { name: "home-t6", continue: true, steps: [{ wait: 2500 }] },
     ],
     plates: [
-      { name: "corridor", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.5, clip: { x: 0, y: 0, width: 1440, height: 872 } }, // 1.65:1 as today
-      { name: "corridor-wide", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.5, clip: { x: 0, y: 90, width: 1440, height: 720 } }, // 2:1
-      { name: "corridor-lift", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.35, clip: { x: 0, y: 0, width: 1440, height: 872 } },
+      { name: "corridor", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.5, clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "corridor-later", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.5, steps: [{ wait: 3000 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "corridor-lift", caption: "The label's main interface, drawn in one-point perspective.", gamma: 0.35, clip: { x: 0, y: 0, width: 1440, height: 900 } },
     ],
   },
   {
@@ -111,9 +112,9 @@ export const PROJECTS = [
       { name: "contacto", url: "https://micaelalucia.com/contacto" },
     ],
     plates: [
-      { name: "grid", caption: "The photo grid, edge to edge.", steps: [{ scroll: 900 }], clip: { x: 0, y: 0, width: 1440, height: 780 } }, // 1.85:1 as today, header visible
-      { name: "grid-noheader", caption: "The photo grid, edge to edge.", steps: [{ scroll: 900 }], hide: ["header"], clip: { x: 0, y: 0, width: 1440, height: 780 } },
-      { name: "hero", caption: "The homepage after the redesign.", clip: { x: 0, y: 0, width: 1440, height: 780 } },
+      { name: "grid", caption: "The photo grid, edge to edge.", clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "grid-scrolled", caption: "The photo grid, edge to edge.", steps: [{ scroll: 900 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
+      { name: "grid-noheader", caption: "The photo grid, edge to edge.", hide: ["header"], clip: { x: 0, y: 0, width: 1440, height: 900 } },
     ],
   },
 ];
