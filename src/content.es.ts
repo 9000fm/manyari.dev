@@ -22,6 +22,9 @@ export const ME_ES = {
   available: "Disponible",
   about:
     "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y construyo sitios de e-commerce y productos digitales, desde la idea inicial hasta el lanzamiento. La mayor parte de mi trabajo se mueve entre el diseño y el desarrollo, así que suelo estar en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
+  // El About sin el saludo ni el cierre: el resumen del CV impreso (src/app/_cv/CvSheet.tsx).
+  summary:
+    "Diseño y construyo sitios de e-commerce y productos digitales, desde la idea inicial hasta el lanzamiento. La mayor parte de mi trabajo se mueve entre el diseño y el desarrollo, así que suelo estar en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
@@ -156,6 +159,7 @@ export const UI_ES = {
 
   // skills section
   languagesLabel: "Idiomas:",
+  languages: "Idiomas", // CV heading
 
   // contact
   contactLead: "Cuéntame qué necesitas.",

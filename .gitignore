@@ -46,3 +46,6 @@ next-env.d.ts
 # private personal notes
 NEXT_STEPS.md
 FABLE5-image-trail-brief.md
+
+# temporary CV print route, created and removed by scripts/cv-pdf.mjs
+src/app/cv/

@@ -282,7 +282,7 @@ export default function BrutalistSidebar() {
             <nav className="sideTools" aria-label="Toolbox">
               <span className="sideToolsLabel" data-es={UI_ES.toolbox}>Toolbox</span>
               <ul>
-                <li><a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={UI_ES.downloadCv}>Download CV</a></li>
+                <li><a href="/Flavio-Manyari-CV.pdf" data-es-href="/Flavio-Manyari-CV-ES.pdf" target="_blank" rel="noopener noreferrer" data-es={UI_ES.downloadCv}>Download CV</a></li>
                 <li><a href={`mailto:${ME.email}`} data-es={UI_ES.email}>Email</a></li>
                 <li><a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
                 <li><a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>

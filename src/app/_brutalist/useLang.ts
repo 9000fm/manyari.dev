@@ -65,6 +65,11 @@ function swapText(next: Lang) {
     const to = next === "es" ? el.dataset.es : el.dataset.en;
     if (to !== undefined) el.textContent = to;
   });
+  // Links with a Spanish edition (the CV PDF) carry it in data-es-href.
+  document.querySelectorAll<HTMLElement>("[data-es-href]").forEach((el) => {
+    const to = next === "es" ? el.dataset.esHref : el.dataset.enHref;
+    if (to !== undefined) el.setAttribute("href", to);
+  });
 }
 
 /**
@@ -80,6 +85,9 @@ export function bootLang(): void {
 
   document.querySelectorAll<HTMLElement>("[data-es]").forEach((el) => {
     if (el.dataset.en === undefined) el.dataset.en = el.textContent ?? "";
+  });
+  document.querySelectorAll<HTMLElement>("[data-es-href]").forEach((el) => {
+    if (el.dataset.enHref === undefined) el.dataset.enHref = el.getAttribute("href") ?? "";
   });
 
   let saved: string | null = null;

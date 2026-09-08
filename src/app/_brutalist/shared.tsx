@@ -271,7 +271,7 @@ export function Sections(): ReactElement {
           {" · "}
           <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
           {" · "}
-          <a href="/Flavio-Manyari-CV.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
+          <a href="/Flavio-Manyari-CV.pdf" data-es-href="/Flavio-Manyari-CV-ES.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
         </p>
         <p className="brutBased" data-es={UI_ES.contactBased}>
           Based in {ME.location}. Spanish and English. Available for freelance or full-time.

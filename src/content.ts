@@ -6,6 +6,10 @@ export const ME = {
   available: "Available",
   about:
     "Welcome. My name is Flavio, and this is my website. I design and build e-commerce sites and digital products, from early direction to launch. Most of my work sits between design and development, so I tend to stay involved in the whole process. I've shipped stores, interfaces, and platforms for clients in the US, Europe, and Latin America. Get in touch if you have something in mind.",
+  // The About minus its greeting and closing line. The printed CV uses it as
+  // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
+  summary:
+    "I design and build e-commerce sites and digital products, from early direction to launch. Most of my work sits between design and development, so I tend to stay involved in the whole process. I've shipped stores, interfaces, and platforms for clients in the US, Europe, and Latin America.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
