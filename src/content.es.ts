@@ -173,4 +173,9 @@ export const UI_ES = {
   bannerContact: "escríbeme",
   bannerEnd: ".",
   dismiss: "Cerrar aviso",
+
+  // 404 (src/app/not-found.tsx)
+  notFoundTitle: "Esta página no existe",
+  notFoundBody: "No hay ningún artículo en esta dirección. Puede que se haya movido, o que el enlace esté mal escrito.",
+  notFoundBack: "Volver a la portada",
 } as const;
