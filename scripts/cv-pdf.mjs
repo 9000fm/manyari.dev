@@ -24,10 +24,11 @@ const JOBS = [
   { route: "/cv/es", file: "Flavio-Manyari-CV-ES.pdf", lang: "es" },
 ];
 
+// the PDF's document title comes from the page <title>, so each temp route sets its own
 const pageSource = (lang) =>
   lang === "es"
-    ? 'import CvSheet from "../../_cv/CvSheet";\nexport default function Page() {\n  return (\n    <div lang="es">\n      <CvSheet lang="es" />\n    </div>\n  );\n}\n'
-    : 'import CvSheet from "../_cv/CvSheet";\nexport default function Page() {\n  return <CvSheet lang="en" />;\n}\n';
+    ? 'import CvSheet from "../../_cv/CvSheet";\nexport const metadata = { title: "Flavio Manyari - CV" };\nexport default function Page() {\n  return (\n    <div lang="es">\n      <CvSheet lang="es" />\n    </div>\n  );\n}\n'
+    : 'import CvSheet from "../_cv/CvSheet";\nexport const metadata = { title: "Flavio Manyari - CV" };\nexport default function Page() {\n  return <CvSheet lang="en" />;\n}\n';
 
 const pageCount = (pdf) => (fs.readFileSync(pdf).toString("latin1").match(/\/Type\s*\/Page[^s]/g) || []).length;
 

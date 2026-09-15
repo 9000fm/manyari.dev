@@ -1,6 +1,6 @@
 # manyari.dev
 
-Personal portfolio for Flavio Manyari, web designer and developer in Lima.
+Personal portfolio for Flavio Manyari, web designer and developer.
 Live at https://manyari.dev.
 
 ## Stack

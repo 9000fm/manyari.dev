@@ -32,13 +32,13 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   tonydecay: {
     role: "Marca y desarrollo",
     blurb:
-      "Tienda de prints del ilustrador Tony Decay - e-commerce completo: marca, tienda, pagos y gestión de pedidos, hecho de principio a fin.",
+      "Tienda de prints del ilustrador Tony Decay, hecha de principio a fin: marca, tienda, pago con PayPal, inventario y un panel de pedidos que el artista maneja solo.",
     plateCap: "Foundation Series, la página de la colección de quince láminas.",
   },
   silverback: {
     role: "Rediseño de tienda",
     blurb:
-      "Rediseño de la tienda de una marca de ropa de entrenamiento y combate - rehice la portada, la navegación y las páginas de marca.",
+      "Refresh de la tienda Shopify de una marca de ropa de combate: portada nueva, secciones reorganizadas y una tienda y páginas de producto más limpias.",
     plateCap: "La portada después del rediseño.",
   },
   superself: {
@@ -56,7 +56,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   digeart: {
     role: "Producto propio",
     blurb:
-      "Una app de descubrimiento con un catálogo curado de música electrónica underground que suena mientras navegas. Mantenida y creciendo desde el lanzamiento.",
+      "Una app de descubrimiento de música electrónica underground que suena mientras navegas: catálogo curado a mano, cola, atajos de teclado, likes y playlists. Mantenida desde el lanzamiento.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
 };
@@ -66,25 +66,25 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
   "Independent2023 - Present": {
     company: "Independiente",
     title: "Desarrollador y Diseñador Web Freelance",
-    location: "Perú",
+    location: "",
     period: "2023 - Presente",
     blurb:
-      "Trabajo de forma independiente con clientes y equipos pequeños, normalmente llevando los proyectos desde el diseño hasta el desarrollo y el lanzamiento. Me hago responsable del lado operativo: hosting, dominios, correo y mantenimiento continuo.",
+      "Diseño y construyo sitios web y tiendas online para clientes y equipos pequeños en Estados Unidos, Europa y Latinoamérica, desde el primer boceto hasta el lanzamiento, preparados para que ellos mismos actualicen su contenido. También me encargo del hosting, los dominios, el correo y el mantenimiento.",
   },
   "Design In DC2025 - 2026": {
-    title: "Diseñador UI Junior",
-    location: "Estados Unidos",
+    title: "Diseñador UI",
+    location: "Estados Unidos (remoto)",
     period: "2025 - 2026",
     blurb:
-      "Una agencia de Washington DC. Año y medio de trabajo de interfaz en proyectos web de clientes, en remoto desde Lima.",
+      "Diseño de interfaces por contrato para una agencia de Washington DC. Año y medio de layouts web y mockups para los proyectos de clientes de la agencia.",
   },
   "Independent2020 - Present": {
     company: "Independiente",
     title: "Diseñador Gráfico Freelance",
-    location: "Perú",
+    location: "",
     period: "2020 - Presente",
     blurb:
-      "Diseño gráfico en Lima desde 2020: identidad de marca, impresos corporativos y flyers de eventos.",
+      "Diseño gráfico desde 2020: identidad de marca, impresos corporativos y flyers de eventos.",
   },
 };
 
@@ -104,7 +104,7 @@ export const EDUCATION_ES: Record<string, { title: string; detail: string }> = {
 export const SKILLS_ES: Record<(typeof SKILLS)[number]["label"], string> = {
   Design: "Diseño",
   Frontend: "Frontend",
-  "Creative Code": "Código Creativo",
+  "Motion & Graphics": "Motion y Gráficos",
   "E-commerce": "E-commerce",
   "CMS & Backend": "CMS y Backend",
   "Infra & SEO": "Infraestructura y SEO",
@@ -163,7 +163,7 @@ export const UI_ES = {
 
   // contact
   contactLead: "Cuéntame qué necesitas.",
-  contactBased: "Actualmente en Lima, PE. Español e inglés. Disponible para freelance o tiempo completo.",
+  contactBased: "Español e inglés. Disponible para freelance o tiempo completo.",
 
   // welcome banner
   bannerLead: "Disponible",

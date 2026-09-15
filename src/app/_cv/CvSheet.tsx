@@ -89,7 +89,7 @@ export default function CvSheet({ lang }: { lang: CvLang }) {
                     <span className="itemDates">{j.period}</span>
                   </div>
                   <div className="itemOrg">
-                    {j.company} · {j.location}
+                    {j.company}{j.location ? ` · ${j.location}` : ""}
                   </div>
                   <p>{j.blurb}</p>
                 </div>
