@@ -151,7 +151,7 @@ export const SKILLS: SkillGroup[] = [
   { label: "Frontend",          items: ["HTML", "CSS", "JavaScript", "TypeScript", "React / Next.js", "Tailwind"] },
   { label: "E-commerce",        items: ["Shopify / Liquid", "PayPal"] },
   { label: "CMS & Backend",     items: ["Sanity", "Supabase", "WordPress"] },
-  { label: "Design",            items: ["Figma", "Adobe Suite", "Brand Identity", "UI/UX"] },
+  { label: "Design",            items: ["Adobe Suite", "Brand Identity", "UI/UX"] },
   { label: "Infra & SEO",       items: ["Git", "Vercel", "DNS / SSL / Hosting", "Technical SEO"] },
   { label: "Motion & Graphics", items: ["p5.js", "WebGL", "Framer Motion", "Generative Art"] },
 ];
