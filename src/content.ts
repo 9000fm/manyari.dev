@@ -127,7 +127,7 @@ export const EXPERIENCE: Job[] = [
     company: "Independent",
     location: "",
     period: "2023 - Present",
-    blurb: "Web design and development for independent brands and small teams, delivered end to end: interface, storefront, checkout, and the client's admin panel. Hosting, domains, email, and maintenance after launch.",
+    blurb: "Web design and development for independent brands and small teams, delivered end to end: interface, storefront, checkout, and the client's admin panel. Hosting, domains, and maintenance after launch.",
   },
   {
     title: "UI Designer",

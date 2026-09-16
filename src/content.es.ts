@@ -70,7 +70,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "",
     period: "2023 - Presente",
     blurb:
-      "Diseño y desarrollo web para marcas independientes y equipos pequeños, de principio a fin: interfaz, tienda, checkout y el panel de administración del cliente. Hosting, dominios, correo y mantenimiento después del lanzamiento.",
+      "Diseño y desarrollo web para marcas independientes y equipos pequeños, de principio a fin: interfaz, tienda, checkout y el panel de administración del cliente. Hosting, dominios y mantenimiento después del lanzamiento.",
   },
   "Design In DC2025 - 2026": {
     title: "Diseñador UI",
