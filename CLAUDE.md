@@ -39,7 +39,7 @@ src/
     layout.tsx            # minimal shell, metadata from ME, Vercel Analytics
     not-found.tsx         # the 404, "this page does not exist" in the site frame
     globals.css           # tailwind import + box-sizing reset only (18 lines, zero animation)
-    opengraph-image.tsx · robots.ts · sitemap.ts · icon.svg · icon.png · favicon.ico
+    opengraph-image.tsx · robots.ts · sitemap.ts · icon.svg · favicon.ico (the 512px PNG is public/icon-512.png, see layout.tsx)
     v11a-sidebar/page.tsx # THE SITE. Monobook-style layout CSS + composition
     _cv/CvSheet.tsx       # the printed CV, reads content.ts; not a route (see CV PDFs)
     _brutalist/           # shared internals for the v11 family (underscore = not a route)

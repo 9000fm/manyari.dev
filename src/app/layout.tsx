@@ -15,6 +15,10 @@ export const metadata: Metadata = {
   // stop Chrome/Google offering to translate the page (the bar covers content
   // and breaks in-page anchor jumps on mobile)
   other: { google: "notranslate" },
+  // icon.svg and favicon.ico stay in app/ (file convention). The 512px PNG lives in
+  // public/ on purpose: as app/icon.png it trips a Turbopack panic in next build
+  // ("Dependency tracking is disabled"), seen locally and on Vercel, Sep 2026.
+  icons: { apple: "/icon-512.png" },
   openGraph: {
     title: socialTitle,
     description,
