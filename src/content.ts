@@ -134,7 +134,7 @@ export const EXPERIENCE: Job[] = [
     company: "Design In DC",
     location: "United States (remote)",
     period: "2025 - 2026",
-    blurb: "Contract interface design for a Washington DC agency. A year and a half of web layouts and mockups for the agency's client projects.",
+    blurb: "Contract interface design for a Washington DC agency: web layouts and mockups for the agency's client projects.",
   },
   {
     title: "Freelance Graphic Designer",

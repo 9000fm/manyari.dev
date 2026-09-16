@@ -77,7 +77,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "Estados Unidos (remoto)",
     period: "2025 - 2026",
     blurb:
-      "Diseño de interfaces por contrato para una agencia de Washington DC. Año y medio de layouts web y mockups para los proyectos de clientes de la agencia.",
+      "Diseño de interfaces por contrato para una agencia de Washington DC: layouts web y mockups para los proyectos de clientes de la agencia.",
   },
   "Independent2020 - Present": {
     company: "Independiente",
