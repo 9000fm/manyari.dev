@@ -13,9 +13,8 @@ Live at https://manyari.dev.
 ## Layout
 
 - `src/content.ts` holds all site content. `src/content.es.ts` is the Spanish mirror.
-- `src/app/page.tsx` re-exports `src/app/v11a-sidebar/page.tsx`, the live site.
+- `src/app/page.tsx` is the site.
 - `src/app/_brutalist/` holds the shared sections, CSS, and client islands: globe, mobile nav, hover previews.
-- `src/app/v01-*` to `v12-*` are the other layouts from the direction study. They still build and are kept as an archive.
 
 ## Development
 

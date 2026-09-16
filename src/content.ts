@@ -183,35 +183,7 @@ export const SERVICES = [
   "SEO & Performance",
 ] as const;
 
-// Short tags for the top ticker - keep it simple / scannable.
-export const TICKER = [
-  "Web Design",
-  "E-commerce",
-  "CMS",
-  "SEO",
-  "Hosting",
-  "Brand Identity",
-] as const;
-
 export const LANGUAGES = [
   { lang: "Spanish", level: "Native" },
   { lang: "English", level: "Fluent" },
-] as const;
-
-export const VARIANTS = [
-  { slug: "v11a-sidebar",   n: "A",  name: "Brutalist · Sidebar",  vibe: "Wikipedia left TOC (recommended)" },
-  { slug: "v11b-wide",      n: "B",  name: "Brutalist · Wide",     vibe: "Zoomed single column" },
-  { slug: "v11c-split",     n: "C",  name: "Brutalist · Split",    vibe: "Identity left, content right" },
-  { slug: "v01-swiss",      n: "01", name: "Swiss Editorial",     vibe: "Grotesk + grid + hairline rules" },
-  { slug: "v02-warm70s",    n: "02", name: "Warm 70s",            vibe: "Cream/rust, chunky display serif" },
-  { slug: "v03-newspaper",  n: "03", name: "Newspaper",           vibe: "NYT-style broadsheet, masthead" },
-  { slug: "v04-win95",      n: "04", name: "Windows 95",          vibe: "Teal desktop chrome, taskbar" },
-  { slug: "v05-macos7",     n: "05", name: "Mac OS 7",            vibe: "Pixel chrome, 1-bit, dotted patterns" },
-  { slug: "v06-terminal",   n: "06", name: "Terminal CRT",        vibe: "Green on black, blinking cursor" },
-  { slug: "v07-y2k",        n: "07", name: "Y2K Chrome",          vibe: "Chrome gradient, electric blue" },
-  { slug: "v08-riso",       n: "08", name: "Riso Zine",           vibe: "Pink + blue, off-register, halftone" },
-  { slug: "v09-bauhaus",    n: "09", name: "Bauhaus",             vibe: "Primary shapes, geometric sans" },
-  { slug: "v10-midcentury", n: "10", name: "Mid-Century Atomic",  vibe: "Mustard/teal, star dividers" },
-  { slug: "v11-brutalist",  n: "11", name: "Brutalist Raw HTML",  vibe: "Times + blue underlined links" },
-  { slug: "v12-cassette",   n: "12", name: "Cassette Futurism",   vibe: "Amber on black, ASCII frames" },
 ] as const;

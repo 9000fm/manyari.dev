@@ -45,6 +45,7 @@ next-env.d.ts
 
 # private notes, never public
 CLAUDE.md
+AGENTS.md
 NEXT_STEPS.md
 FABLE5-image-trail-brief.md
 

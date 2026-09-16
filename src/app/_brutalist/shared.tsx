@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, TICKER, EXPERIENCE } from "@/content";
+import { ME, PROJECTS, SKILLS, EXPERIENCE } from "@/content";
 import {
   ME_ES, PROJECTS_ES, EXPERIENCE_ES, SKILLS_ES,
   UI_ES,
@@ -64,16 +64,6 @@ export const SHARED_CSS = `
   @keyframes brutBlink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .brutCursor { animation: none; } }
 
-  /* infinite seamless ticker - NOT used by the live page (v11a), which uses the
-     static .topline instead. Still rendered by the frozen v11b/v11c variants. */
-  .brutMarq { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; padding: 6px 0; margin: 0 0 24px; overflow: hidden; }
-  .brutMarqTrack { display: inline-flex; white-space: nowrap; letter-spacing: 0.05em; animation: brutScroll 105s linear infinite; }
-  .brutMarq:hover .brutMarqTrack { animation-play-state: paused; }
-  .brutMarqTrack span { flex-shrink: 0; font-size: var(--t-small); }
-  .brutMarqSep { margin: 0 10px; color: #444; letter-spacing: 0; }
-  @keyframes brutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) { .brutMarqTrack { animation: none; } }
-
   /* services */
 
   /* tools */
@@ -107,31 +97,6 @@ export const SHARED_CSS = `
     .brutExpMeta span { display: inline; margin-right: 12px; }
   }
 `;
-
-/** Infinite, seamless services ticker. Pure CSS - two identical halves, translateX(-50%).
- *  The live page (v11a) deliberately does NOT use this, see commit 08a4246; it is
- *  kept for the frozen v11b-wide and v11c-split variants, which still render it. */
-export function Marquee(): ReactElement {
-  const tags = [ME.role, ...TICKER];
-  const unit = (rk: string) => (
-    <span key={rk}>
-      {tags.map((t, i) => (
-        <span key={i}>{t}{"  •  "}</span>
-      ))}
-      <a href="#contact">Available now</a>
-      {"  •  "}
-    </span>
-  );
-  // 8 identical units; translateX(-50%) moves 4 => seamless loop. Pauses on hover so the link is clickable.
-  return (
-    <div className="brutMarq">
-      <div className="brutMarqTrack">
-        {[0, 1, 2, 3].map((n) => unit(`a${n}`))}
-        {[0, 1, 2, 3].map((n) => unit(`b${n}`))}
-      </div>
-    </div>
-  );
-}
 
 /** Section anchor list, reused by the sidebar TOC. */
 export const NAV_SECTIONS = [
