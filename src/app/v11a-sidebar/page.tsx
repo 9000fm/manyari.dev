@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { ME } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "../_brutalist/shared";
 import LangSwitch from "../_brutalist/LangSwitch";
@@ -9,8 +8,6 @@ import WelcomeBanner from "../_brutalist/WelcomeBanner";
 import WorkHoverLazy from "../_brutalist/WorkHoverLazy";
 import SmoothScroll from "../_brutalist/SmoothScroll";
 import SmoothWheel from "../_brutalist/SmoothWheel";
-
-export const metadata: Metadata = { title: "flavio manyari - designer & developer" };
 
 // build-time "last updated" for the sidebar colophon - refreshes on each deploy
 const NOW = new Date();
