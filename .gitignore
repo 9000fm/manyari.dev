@@ -43,7 +43,8 @@ next-env.d.ts
 # claude
 .claude/
 
-# private personal notes
+# private notes, never public
+CLAUDE.md
 NEXT_STEPS.md
 FABLE5-image-trail-brief.md
 
