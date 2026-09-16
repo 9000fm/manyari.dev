@@ -22,40 +22,40 @@ export const ME_ES = {
   role: "Diseñador y Desarrollador Web",
   available: "Disponible",
   about:
-    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y construyo sitios de e-commerce y productos digitales, desde la idea inicial hasta el lanzamiento. La mayor parte de mi trabajo se mueve entre el diseño y el desarrollo, así que suelo estar en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
+    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y desarrollo sitios de e-commerce y productos digitales, desde la primera versión hasta el lanzamiento. Mi trabajo está entre el diseño y el código, así que sigo cada proyecto de principio a fin. He lanzado tiendas e interfaces para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
   // El About sin el saludo ni el cierre: el resumen del CV impreso (src/app/_cv/CvSheet.tsx).
   summary:
-    "Diseño y construyo sitios de e-commerce y productos digitales, desde la idea inicial hasta el lanzamiento. La mayor parte de mi trabajo se mueve entre el diseño y el desarrollo, así que suelo estar en todo el proceso. He lanzado tiendas, interfaces y plataformas para clientes en Estados Unidos, Europa y Latinoamérica.",
+    "Diseño y desarrollo sitios de e-commerce y productos digitales, desde la primera versión hasta el lanzamiento. Mi trabajo está entre el diseño y el código, así que sigo cada proyecto de principio a fin. He lanzado tiendas e interfaces para clientes en Estados Unidos, Europa y Latinoamérica.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
 export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string }> = {
   tonydecay: {
-    role: "Marca y desarrollo",
+    role: "Tienda de láminas: marca, tienda y checkout",
     blurb:
       "Tienda de prints del ilustrador Tony Decay, hecha de principio a fin: marca, tienda, pago con PayPal, inventario y un panel de pedidos que el artista maneja solo.",
     plateCap: "Foundation Series, la página de la colección de quince láminas.",
   },
   silverback: {
-    role: "Rediseño de tienda",
+    role: "Tienda Shopify: portada y páginas de producto",
     blurb:
-      "Renovación de la tienda Shopify de una marca de ropa de combate: portada nueva, secciones reorganizadas y una tienda y páginas de producto más limpias.",
-    plateCap: "La portada después del rediseño.",
+      "Tienda Shopify de una marca de ropa de combate: portada, secciones, navegación y páginas de producto.",
+    plateCap: "La portada.",
   },
   superself: {
-    role: "Marca, sitio y tienda",
+    role: "Sello que cofundé: marca, sitio y tienda",
     blurb:
       "Sitio y marca para mi sello de música electrónica - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
-    role: "Diseño y desarrollo",
+    role: "Portafolio y archivo de fotografía: diseño y desarrollo",
     blurb:
       "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
     plateCap: "La grilla de fotos, de borde a borde.",
   },
   digeart: {
-    role: "Producto propio",
+    role: "App de descubrimiento musical: proyecto propio, diseño, desarrollo y mantenimiento",
     blurb:
       "Una app de descubrimiento de música electrónica underground que suena mientras navegas: catálogo curado a mano, cola, atajos de teclado, likes y playlists. Mantenida desde el lanzamiento.",
     plateCap: "Grilla de descubrimiento curada a mano.",
@@ -70,7 +70,7 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     location: "",
     period: "2023 - Presente",
     blurb:
-      "Diseño y construyo sitios web y tiendas online para clientes y equipos pequeños en Estados Unidos, Europa y Latinoamérica, desde el primer boceto hasta el lanzamiento, preparados para que ellos mismos actualicen su contenido. También me encargo del hosting, los dominios, el correo y el mantenimiento.",
+      "Diseño y desarrollo web para marcas independientes y equipos pequeños, de principio a fin: interfaz, tienda, checkout y el panel de administración del cliente. Hosting, dominios, correo y mantenimiento después del lanzamiento.",
   },
   "Design In DC2025 - 2026": {
     title: "Diseñador UI",

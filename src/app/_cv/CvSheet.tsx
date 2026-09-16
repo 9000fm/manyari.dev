@@ -163,17 +163,17 @@ const CSS = `
   .grid { display: grid; grid-template-columns: 1fr 236px; gap: 34px; margin-top: 16px; }
   .cv h2 { font-variant: small-caps; letter-spacing: 0.05em; font-weight: normal; font-size: 18px;
         border-bottom: 1px solid #000; padding-bottom: 3px; margin: 0 0 9px; }
-  .cv section { margin-bottom: 18px; break-inside: avoid; }
+  .cv section { margin-bottom: 15px; break-inside: avoid; }
 
-  .item { margin-bottom: 11px; break-inside: avoid; }
+  .item { margin-bottom: 9px; break-inside: avoid; }
   .itemTop { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
   .itemRole { font-weight: bold; font-size: 14.5px; }
   .itemDates { font-size: 12.5px; color: #666; white-space: nowrap; }
   .itemOrg { font-size: 13px; color: #555; font-style: italic; }
-  .item p { margin: 4px 0 0; font-size: 13px; line-height: 1.42; color: #222; }
+  .item p { margin: 4px 0 0; font-size: 13px; line-height: 1.36; color: #222; }
 
   .work { list-style: none; padding: 0; margin: 0; }
-  .work li { font-size: 13px; line-height: 1.42; margin-bottom: 7px; break-inside: avoid; }
+  .work li { font-size: 13px; line-height: 1.36; margin-bottom: 5px; break-inside: avoid; }
   .workMeta { font-size: 12px; color: #555; }
 
   .skill { margin-bottom: 8px; font-size: 13px; }

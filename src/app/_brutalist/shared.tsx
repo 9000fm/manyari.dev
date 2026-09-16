@@ -27,9 +27,11 @@ export const SHARED_CSS = `
   .brut h1, .brut h2 { font-variant: small-caps; letter-spacing: 0.04em; font-weight: normal; }
   .brut h2 { font-size: var(--t-head); margin: 32px 0 14px; padding-bottom: 5px; border-bottom: 1px solid currentColor; }
   .brut h2:first-child { margin-top: 0; }
-  .brutAboutRow { display: flex; align-items: flex-start; }
-  .brutDropCap { font-size: 4em; line-height: 0.85; font-weight: bold; padding: 6px 10px 0 0; flex-shrink: 0; }
+  /* Classic drop cap: three lines tall, the paragraph wraps around it, its foot on
+     the third baseline. A plain float, tuned by eye for Times at 18px / 1.6
+     (initial-letter was tried and Chromium did not apply it to the span). */
   .brutAboutText { margin: 0; }
+  .brutDropCap { float: left; font-weight: bold; font-size: 5.3em; line-height: 0.78; padding: 0.04em 0.1em 0 0; }
   /* Selected Work - "figura arriba" (lab-work option A): plate full width on
      top like a paper figure, text below, hairline rules between entries. */
   .brutWork { list-style: none; }
@@ -146,10 +148,10 @@ export function Sections(): ReactElement {
     <>
       <section id="about" className="brutAbout">
         <h2 data-es={UI_ES.about}>About</h2>
-        <div className="brutAboutRow">
+        <p className="brutAboutText">
           <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
-          <p className="brutAboutText" data-es={ME_ES.about.slice(1)}>{ME.about.slice(1)}</p>
-        </div>
+          <span data-es={ME_ES.about.slice(1)}>{ME.about.slice(1)}</span>
+        </p>
       </section>
 
       <p className="brutAst" />
