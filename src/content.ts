@@ -44,7 +44,7 @@ export const PROJECTS: Project[] = [
     slug: "digeart",
     title: "Digeart",
     year: 2026,
-    role: "Music discovery app: own project, design, build, and upkeep",
+    role: "Music discovery app: own project, design, build, and maintenance",
     url: "https://digeart.online",
     tag: "personal",
     blurb: "A discovery app for underground electronic music that plays as you browse: a hand-curated catalog, queue, keyboard shortcuts, likes and playlists. Maintained since launch.",
