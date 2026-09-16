@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ME } from "../content";
+import { ME_ES } from "../content.es";
 
 // Titles and descriptions read ME so they stay in step with the page and the
 // share card (opengraph-image.tsx); the lowercase social title is deliberate.
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" translate="no">
+    <html lang="en" translate="no" data-title-en={ME.siteTitle} data-title-es={ME_ES.siteTitle}>
       <body>
         {children}
         <Analytics />

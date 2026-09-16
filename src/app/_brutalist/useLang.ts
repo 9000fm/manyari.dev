@@ -61,6 +61,9 @@ function announce(next: Lang) {
 }
 
 function swapText(next: Lang) {
+  // The tab title is not a data-es element: layout.tsx hangs both editions on <html>.
+  const title = document.documentElement.dataset[next === "es" ? "titleEs" : "titleEn"];
+  if (title) document.title = title;
   document.querySelectorAll<HTMLElement>("[data-es]").forEach((el) => {
     const to = next === "es" ? el.dataset.es : el.dataset.en;
     if (to !== undefined) el.textContent = to;

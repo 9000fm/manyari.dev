@@ -18,6 +18,7 @@ import { PROJECTS, SKILLS } from "./content";
 type BySlug<T> = Record<(typeof PROJECTS)[number]["slug"], T>;
 
 export const ME_ES = {
+  siteTitle: "Portafolio de Flavio Manyari",
   role: "Diseñador y Desarrollador Web",
   available: "Disponible",
   about:
