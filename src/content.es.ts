@@ -38,7 +38,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   silverback: {
     role: "Rediseño de tienda",
     blurb:
-      "Refresh de la tienda Shopify de una marca de ropa de combate: portada nueva, secciones reorganizadas y una tienda y páginas de producto más limpias.",
+      "Renovación de la tienda Shopify de una marca de ropa de combate: portada nueva, secciones reorganizadas y una tienda y páginas de producto más limpias.",
     plateCap: "La portada después del rediseño.",
   },
   superself: {

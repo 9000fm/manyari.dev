@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repo.
 
 ## Project
 
-**manyari.dev** - personal portfolio for Flavio Manyari, freelance designer and developer in Lima.
+**manyari.dev** - personal portfolio for Flavio Manyari, freelance designer and developer.
 
 The direction study is over. `v11a-sidebar` won and is live at `/`.
 The other 14 variants still build and are still routed, kept as a reference archive rather than as candidates.
