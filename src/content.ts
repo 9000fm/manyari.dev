@@ -54,7 +54,7 @@ export const PROJECTS: Project[] = [
     role: "Illustrator storefront: identity, shop, and checkout",
     url: "https://tonydecay.com",
     tag: "client",
-    blurb: "Visual identity and print store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
+    blurb: "Visual identity and online store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
     plate: "/plates/tonydecay.png",
     plateAlt: "The Foundation Series shop page of tonydecay.com, showing the grid of fifteen art prints beside the collection heading.",
     plateCap: "Foundation Series, the fifteen-print collection page.",
@@ -68,7 +68,7 @@ export const PROJECTS: Project[] = [
     role: "Music discovery platform: product design and development",
     url: "https://digeart.online",
     tag: "personal",
-    blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained by me.",
+    blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained independently.",
     plate: "/plates/digeart.png",
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
     plateCap: "Hand-curated discovery grid.",
@@ -107,7 +107,7 @@ export const PROJECTS: Project[] = [
     slug: "micaela",
     title: "Micaela Lucía",
     year: 2025,
-    role: "Photography portfolio: design and development",
+    role: "Photography portfolio: website design and development",
     url: "https://micaelalucia.com",
     tag: "client",
     blurb: "Portfolio and archive for a photographer - full-width documentary photography, a minimal interface, and a grid that grows with her archive. Designed, built, and deployed.",
@@ -133,8 +133,8 @@ export const EXPERIENCE: Job[] = [
     title: "Designer & Developer",
     company: "Independent",
     location: "",
-    period: "2023 - Present",
-    blurb: "Web design and development for independent brands and small teams, delivered end to end: interface, storefront, checkout, and the client's admin panel. Hosting, domains, and maintenance after launch.",
+    period: "2020 - Present",
+    blurb: "Independent design work since 2020, expanding into web design and development in 2023. My work includes brand identity, interfaces, e-commerce, deployment, and ongoing maintenance.",
   },
   {
     title: "UI Designer",
@@ -143,13 +143,7 @@ export const EXPERIENCE: Job[] = [
     period: "2025 - 2026",
     blurb: "Contract interface design for a Washington DC agency: web layouts and mockups for the agency's client projects.",
   },
-  {
-    title: "Freelance Graphic Designer",
-    company: "Independent",
-    location: "",
-    period: "2020 - Present",
-    blurb: "Graphic design since 2020: brand identity, corporate print, and event flyers.",
-  },
+
 ];
 
 export type SkillGroup = { label: string; items: string[] };

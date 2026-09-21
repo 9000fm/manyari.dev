@@ -51,7 +51,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
-    role: "Portafolio de fotografía: diseño y desarrollo",
+    role: "Portafolio de fotografía: diseño y desarrollo web",
     blurb:
       "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
     plateCap: "La grilla de fotos, de borde a borde.",
@@ -59,20 +59,20 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   digeart: {
     role: "Plataforma de descubrimiento musical: diseño y desarrollo de producto",
     blurb:
-      "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida por mí.",
+      "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida de forma independiente.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
 };
 
 /** Experience, keyed by company + period to match the React key used in Sections(). */
 export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
-  "Independent2023 - Present": {
+  "Independent2020 - Present": {
     company: "Independiente",
     title: "Diseñador y Desarrollador",
     location: "",
-    period: "2023 - Presente",
+    period: "2020 - Presente",
     blurb:
-      "Diseño y desarrollo web para marcas independientes y equipos pequeños, de principio a fin: interfaz, tienda, checkout y el panel de administración del cliente. Hosting, dominios y mantenimiento después del lanzamiento.",
+      "Trabajo de diseño independiente desde 2020, al que incorporé el diseño y desarrollo web en 2023. Mi trabajo incluye identidad de marca, interfaces, e-commerce, publicación y mantenimiento continuo.",
   },
   "Design In DC2025 - 2026": {
     title: "Diseñador UI",
@@ -80,14 +80,6 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     period: "2025 - 2026",
     blurb:
       "Diseño de interfaces por contrato para una agencia de Washington DC: layouts web y mockups para los proyectos de clientes de la agencia.",
-  },
-  "Independent2020 - Present": {
-    company: "Independiente",
-    title: "Diseñador Gráfico Freelance",
-    location: "",
-    period: "2020 - Presente",
-    blurb:
-      "Diseño gráfico desde 2020: identidad de marca, impresos corporativos y flyers de eventos.",
   },
 };
 
@@ -163,7 +155,7 @@ export const UI_ES = {
 
   // contact
   contactLead: "Cuéntame qué necesitas.",
-  contactBased: "Español e inglés. Disponible para freelance o tiempo completo.",
+  contactBased: "Español e inglés. Disponible para proyectos freelance y trabajo remoto.",
 
   // welcome banner
   bannerLead: "Actualmente disponible para trabajo freelance y remoto.",
