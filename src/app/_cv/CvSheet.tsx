@@ -173,7 +173,7 @@ const CSS = `
   .item p { margin: 4px 0 0; font-size: 13px; line-height: 1.36; color: #222; }
 
   .work { list-style: none; padding: 0; margin: 0; }
-  .work li { font-size: 13px; line-height: 1.36; margin-bottom: 5px; break-inside: avoid; }
+  .work li { font-size: 13px; line-height: 1.33; margin-bottom: 5px; break-inside: avoid; }
   .workMeta { font-size: 12px; color: #555; }
 
   .skill { margin-bottom: 8px; font-size: 13px; }

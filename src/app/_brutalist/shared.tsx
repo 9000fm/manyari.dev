@@ -109,13 +109,17 @@ export const NAV_SECTIONS = [
 
 /** The document body: About -> References. */
 export function Sections(): ReactElement {
+  const [aboutBeforeContact, aboutAfterContact] = ME.about.split(ME.aboutContactLabel);
+  const [aboutBeforeContactEs, aboutAfterContactEs] = ME_ES.about.split(ME_ES.aboutContactLabel);
   return (
     <>
       <section id="about" className="brutAbout">
         <h2 data-es={UI_ES.about}>About</h2>
         <p className="brutAboutText">
           <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
-          <span data-es={ME_ES.about.slice(1)}>{ME.about.slice(1)}</span>
+          <span data-es={aboutBeforeContactEs.slice(1)}>{aboutBeforeContact.slice(1)}</span>
+          <a href="#contact" data-es={ME_ES.aboutContactLabel}>{ME.aboutContactLabel}</a>
+          <span data-es={aboutAfterContactEs}>{aboutAfterContact}</span>
         </p>
       </section>
 

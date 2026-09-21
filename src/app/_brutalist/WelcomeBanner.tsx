@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { UI_ES } from "@/content.es";
+import { BANNER } from "@/content";
 
 // Availability notice. Shows on every load; the × dismisses it for the current
 // view only (no persistence) - reloading brings it back.
@@ -39,14 +40,14 @@ export default function WelcomeBanner() {
               language switch swaps textContent per [data-es] node, and a bare
               text node between two links cannot carry the attribute. */}
           <p className="welcomeText">
-            <b data-es={UI_ES.bannerLead}>Open to work.</b>{" "}
+            <b data-es={UI_ES.bannerLead}>{BANNER.lead}</b>{" "}
             <span data-es={UI_ES.bannerRest1}>
-              I&apos;m looking for frontend, e-commerce and product-focused roles. See my
+              {BANNER.beforeWork}
             </span>{" "}
-            <a href="#work" data-es={UI_ES.bannerWork}>work</a>
-            <span data-es={UI_ES.bannerRest2}>, or</span>{" "}
-            <a href="#contact" data-es={UI_ES.bannerContact}>get in touch</a>
-            <span data-es={UI_ES.bannerEnd}>.</span>
+            <a href="#work" data-es={UI_ES.bannerWork}>{BANNER.work}</a>
+            <span data-es={UI_ES.bannerRest2}>{BANNER.betweenLinks}</span>{" "}
+            <a href="#contact" data-es={UI_ES.bannerContact}>{BANNER.contact}</a>
+            <span data-es={UI_ES.bannerEnd}>{BANNER.end}</span>
           </p>
         </div>
       </div>

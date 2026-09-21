@@ -1,6 +1,6 @@
 export const ME = {
   name: "Flavio Manyari",
-  role: "Web Designer & Developer",
+  role: "Designer & Developer",
   location: "Lima, PE",
   email: "flavio@manyari.dev",
   available: "Available",
@@ -9,16 +9,26 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Welcome. My name is Flavio, and this is my website. I design and build e-commerce sites and digital products, from the first layout to launch. Most of my work sits between design and development, so I tend to stay involved in the whole process. I've shipped stores and interfaces for clients in the US, Europe, and Latin America. Get in touch if you have something in mind.",
-  // The About minus its greeting and closing line. The printed CV uses it as
+    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance. My experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client projects and personal projects. For projects, collaborations, or job opportunities, feel free to get in touch.",
+  aboutContactLabel: "get in touch",
+  // The professional profile from About. The printed CV uses it as
   // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
   summary:
-    "I design and build e-commerce sites and digital products, from the first layout to launch. Most of my work sits between design and development, so I tend to stay involved in the whole process. I've shipped stores and interfaces for clients in the US, Europe, and Latin America.",
+    "Designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance. My experience includes e-commerce, brand websites, and digital products.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
     whatsapp: "https://wa.me/51990028077",
   },
+} as const;
+
+export const BANNER = {
+  lead: "Available for freelance and remote work.",
+  beforeWork: "View",
+  work: "selected projects",
+  betweenLinks: " or",
+  contact: "contact me",
+  end: ".",
 } as const;
 
 export type Project = {
@@ -47,7 +57,7 @@ export const PROJECTS: Project[] = [
     role: "Print store: brand, store, and checkout",
     url: "https://tonydecay.com",
     tag: "client",
-    blurb: "Print store for illustrator Tony Decay, built end to end: brand, shop, PayPal checkout, inventory, and an order panel the artist runs himself.",
+    blurb: "Visual identity and print store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
     plate: "/plates/tonydecay.png",
     plateAlt: "The Foundation Series shop page of tonydecay.com, showing the grid of fifteen art prints beside the collection heading.",
     plateCap: "Foundation Series, the fifteen-print collection page.",
@@ -61,7 +71,7 @@ export const PROJECTS: Project[] = [
     role: "Music discovery app: own project, design, build, and maintenance",
     url: "https://digeart.online",
     tag: "personal",
-    blurb: "A discovery app for underground electronic music that plays as you browse: a hand-curated catalog, queue, keyboard shortcuts, likes and playlists. Maintained since launch.",
+    blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained by me.",
     plate: "/plates/digeart.png",
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
     plateCap: "Hand-curated discovery grid.",
@@ -75,7 +85,7 @@ export const PROJECTS: Project[] = [
     role: "Shopify store: storefront and product pages",
     url: "https://silverbackstripes.com",
     tag: "client",
-    blurb: "Shopify store for a combat-sports apparel brand: homepage, sections, navigation, and product pages.",
+    blurb: "Shopify store for a martial arts apparel brand. Design and development of the homepage, product pages, and mobile navigation.",
     plate: "/plates/silverback.png",
     plateAlt: "The silverbackstripes.com homepage hero, with the headline Earn Your Stripes over a photograph of a grappling session.",
     plateCap: "Homepage.",

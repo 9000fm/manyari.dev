@@ -19,27 +19,28 @@ type BySlug<T> = Record<(typeof PROJECTS)[number]["slug"], T>;
 
 export const ME_ES = {
   siteTitle: "Portafolio de Flavio Manyari",
-  role: "Diseñador y Desarrollador Web",
+  role: "Diseñador y Desarrollador",
   available: "Disponible",
   about:
-    "Bienvenido. Mi nombre es Flavio, y esta es mi página web. Diseño y desarrollo sitios de e-commerce y productos digitales, desde la primera versión hasta el lanzamiento. Mi trabajo está entre el diseño y el código, así que sigo cada proyecto de principio a fin. He lanzado tiendas e interfaces para clientes en Estados Unidos, Europa y Latinoamérica. Escríbeme si tienes algo en mente.",
-  // El About sin el saludo ni el cierre: el resumen del CV impreso (src/app/_cv/CvSheet.tsx).
+    "Hola, soy Flavio, diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto. Mi experiencia incluye e-commerce, sitios web para marcas y productos digitales. Este portafolio reúne una selección de proyectos para clientes junto con proyectos propios. Para proyectos, colaboraciones u oportunidades laborales, puedes ponerte en contacto conmigo.",
+  aboutContactLabel: "contacto",
+  // El perfil profesional del About, sin saludo, referencia al portafolio ni cierre.
   summary:
-    "Diseño y desarrollo sitios de e-commerce y productos digitales, desde la primera versión hasta el lanzamiento. Mi trabajo está entre el diseño y el código, así que sigo cada proyecto de principio a fin. He lanzado tiendas e interfaces para clientes en Estados Unidos, Europa y Latinoamérica.",
+    "Diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto. Mi experiencia incluye e-commerce, sitios web para marcas y productos digitales.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
 export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string }> = {
   tonydecay: {
-    role: "Tienda de láminas: marca, tienda y checkout",
+    role: "Tienda de ilustraciones impresas: marca, tienda y pagos",
     blurb:
-      "Tienda de prints del ilustrador Tony Decay, hecha de principio a fin: marca, tienda, pago con PayPal, inventario y un panel de pedidos que el artista maneja solo.",
-    plateCap: "Foundation Series, la página de la colección de quince láminas.",
+      "Identidad visual y tienda de ilustraciones impresas para el ilustrador Tony Decay. Me encargué del diseño y del desarrollo, con pagos integrados y un panel desde el que el artista administra sus ventas y envíos.",
+    plateCap: "Foundation Series, la página de la colección de quince ilustraciones impresas.",
   },
   silverback: {
     role: "Tienda Shopify: portada y páginas de producto",
     blurb:
-      "Tienda Shopify de una marca de ropa de combate: portada, secciones, navegación y páginas de producto.",
+      "Tienda Shopify de ropa para artes marciales. Diseño y desarrollo de la portada, las páginas de producto y la navegación móvil.",
     plateCap: "La portada.",
   },
   superself: {
@@ -57,7 +58,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   digeart: {
     role: "App de descubrimiento musical: proyecto propio, diseño, desarrollo y mantenimiento",
     blurb:
-      "Una app de descubrimiento de música electrónica underground que suena mientras navegas: catálogo curado a mano, cola, atajos de teclado, likes y playlists. Mantenida desde el lanzamiento.",
+      "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida por mí.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
 };
@@ -120,7 +121,7 @@ export const LANGUAGES_ES: Record<string, { lang: string; level: string }> = {
 export const UI_ES = {
   // section headings
   about: "Sobre mí",
-  work: "Trabajos seleccionados",
+  work: "Proyectos seleccionados",
   experience: "Experiencia",
   education: "Formación",
   skills: "Habilidades",
@@ -129,7 +130,7 @@ export const UI_ES = {
 
   // sidebar TOC labels (lowercase, they render as-is)
   tocAbout: "sobre mí",
-  tocWork: "trabajo",
+  tocWork: "proyectos",
   tocExperience: "experiencia",
   tocEducation: "formación",
   tocSkills: "habilidades",
@@ -150,13 +151,13 @@ export const UI_ES = {
   colophon: "Esta página se editó por última vez en",
 
   // topline
-  availableForWork: "Disponible para trabajar",
+  availableForWork: "Disponible para proyectos",
 
   // work section
   fig: "Fig.",
-  clientWork: "Trabajo de cliente",
+  clientWork: "Proyecto para clientes",
   ownBrand: "Marca propia",
-  personalProject: "Proyecto personal",
+  personalProject: "Proyecto propio",
 
   // skills section
   languagesLabel: "Idiomas:",
@@ -167,11 +168,11 @@ export const UI_ES = {
   contactBased: "Español e inglés. Disponible para freelance o tiempo completo.",
 
   // welcome banner
-  bannerLead: "Disponible",
-  bannerRest1: "para trabajos de frontend, e-commerce y producto digital. Mira mi",
-  bannerWork: "trabajo más reciente",
-  bannerRest2: " en esta página, o",
-  bannerContact: "escríbeme",
+  bannerLead: "Disponible para trabajo freelance y remoto.",
+  bannerRest1: "Ver",
+  bannerWork: "proyectos seleccionados",
+  bannerRest2: " ·",
+  bannerContact: "Contacto",
   bannerEnd: ".",
   dismiss: "Cerrar aviso",
 
