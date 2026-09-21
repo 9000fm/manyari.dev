@@ -31,6 +31,7 @@ export const SHARED_CSS = `
      the third baseline. A plain float, tuned by eye for Times at 18px / 1.6
      (initial-letter was tried and Chromium did not apply it to the span). */
   .brutAboutText { margin: 0; }
+  .brutAboutText + .brutAboutText { margin-top: 1em; }
   .brutDropCap { float: left; font-weight: bold; font-size: 5.3em; line-height: 0.78; padding: 0.04em 0.1em 0 0; }
   /* Selected Work - "figura arriba" (lab-work option A): plate full width on
      top like a paper figure, text below, hairline rules between entries. */
@@ -109,15 +110,20 @@ export const NAV_SECTIONS = [
 
 /** The document body: About -> References. */
 export function Sections(): ReactElement {
-  const [aboutBeforeContact, aboutAfterContact] = ME.about.split(ME.aboutContactLabel);
-  const [aboutBeforeContactEs, aboutAfterContactEs] = ME_ES.about.split(ME_ES.aboutContactLabel);
+  const [aboutIntro, aboutDetails] = ME.about.split("\n\n");
+  const [aboutIntroEs, aboutDetailsEs] = ME_ES.about.split("\n\n");
+  const [aboutBeforeContact, aboutAfterContact] = aboutDetails.split(ME.aboutContactLabel);
+  const [aboutBeforeContactEs, aboutAfterContactEs] = aboutDetailsEs.split(ME_ES.aboutContactLabel);
   return (
     <>
       <section id="about" className="brutAbout">
         <h2 data-es={UI_ES.about}>About</h2>
         <p className="brutAboutText">
           <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
-          <span data-es={aboutBeforeContactEs.slice(1)}>{aboutBeforeContact.slice(1)}</span>
+          <span data-es={aboutIntroEs.slice(1)}>{aboutIntro.slice(1)}</span>
+        </p>
+        <p className="brutAboutText">
+          <span data-es={aboutBeforeContactEs}>{aboutBeforeContact}</span>
           <a href="#contact" data-es={ME_ES.aboutContactLabel}>{ME.aboutContactLabel}</a>
           <span data-es={aboutAfterContactEs}>{aboutAfterContact}</span>
         </p>

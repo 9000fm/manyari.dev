@@ -1,6 +1,7 @@
 export const ME = {
   name: "Flavio Manyari",
   role: "Designer & Developer",
+  topline: "Design · Development · E-commerce · Digital Products · Independent & Remote",
   location: "Lima, PE",
   email: "flavio@manyari.dev",
   available: "Available",
@@ -9,7 +10,7 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance. My experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client projects and personal projects. For projects, collaborations, or job opportunities, feel free to get in touch.",
+    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance.\n\nMy experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client work and personal projects. For projects, collaborations, or job opportunities, feel free to get in touch.",
   aboutContactLabel: "get in touch",
   // The professional profile from About. The printed CV uses it as
   // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
@@ -23,12 +24,8 @@ export const ME = {
 } as const;
 
 export const BANNER = {
-  lead: "Available for freelance and remote work.",
-  beforeWork: "View",
-  work: "selected projects",
-  betweenLinks: " or",
-  contact: "contact me",
-  end: ".",
+  lead: "Currently available for freelance and remote work.",
+  contact: "Contact →",
 } as const;
 
 export type Project = {
@@ -54,7 +51,7 @@ export const PROJECTS: Project[] = [
     slug: "tonydecay",
     title: "Tony Decay",
     year: 2026,
-    role: "Print store: brand, store, and checkout",
+    role: "Illustrator storefront: identity, shop, and checkout",
     url: "https://tonydecay.com",
     tag: "client",
     blurb: "Visual identity and print store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
@@ -68,7 +65,7 @@ export const PROJECTS: Project[] = [
     slug: "digeart",
     title: "Digeart",
     year: 2026,
-    role: "Music discovery app: own project, design, build, and maintenance",
+    role: "Music discovery platform: product design and development",
     url: "https://digeart.online",
     tag: "personal",
     blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained by me.",
@@ -82,7 +79,7 @@ export const PROJECTS: Project[] = [
     slug: "silverback",
     title: "Silverback Stripes",
     year: 2026,
-    role: "Shopify store: storefront and product pages",
+    role: "E-commerce site: Shopify design and development",
     url: "https://silverbackstripes.com",
     tag: "client",
     blurb: "Shopify store for a martial arts apparel brand. Design and development of the homepage, product pages, and mobile navigation.",
@@ -96,10 +93,10 @@ export const PROJECTS: Project[] = [
     slug: "superself",
     title: "Superself.online",
     year: 2025,
-    role: "Label I co-founded: brand, site, and shop",
+    role: "Independent record label: identity, website, and catalog",
     url: "https://superself.online",
     tag: "self",
-    blurb: "Site and brand for an electronic music label I co-founded - a playful wireframe interface, generative visuals, and a shop. Built end to end, in three languages.",
+    blurb: "Site and brand for my electronic music label. A digital identity inspired by the aesthetics of the early internet, with generative visuals, a release catalog, and merchandise. Designed and developed end to end, in three languages.",
     plate: "/plates/superself.png",
     plateAlt: "The superself.online interface, a white wireframe corridor drawn in one-point perspective on black, with a text menu at the top left.",
     plateCap: "The label's main interface, drawn in one-point perspective.",
@@ -110,7 +107,7 @@ export const PROJECTS: Project[] = [
     slug: "micaela",
     title: "Micaela Lucía",
     year: 2025,
-    role: "Photography portfolio and archive: design and build",
+    role: "Photography portfolio: design and development",
     url: "https://micaelalucia.com",
     tag: "client",
     blurb: "Portfolio and archive for a photographer - full-width documentary photography, a minimal interface, and a grid that grows with her archive. Designed, built, and deployed.",
@@ -133,7 +130,7 @@ export type Job = {
 // Reverse chronological: the current role first, then by end date.
 export const EXPERIENCE: Job[] = [
   {
-    title: "Freelance Web Developer & Designer",
+    title: "Designer & Developer",
     company: "Independent",
     location: "",
     period: "2023 - Present",

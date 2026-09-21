@@ -36,18 +36,10 @@ export default function WelcomeBanner() {
           >
             ×
           </button>
-          {/* Split into spans so each run of text is its own element: the
-              language switch swaps textContent per [data-es] node, and a bare
-              text node between two links cannot carry the attribute. */}
+          {/* The language switch translates each text segment independently. */}
           <p className="welcomeText">
             <b data-es={UI_ES.bannerLead}>{BANNER.lead}</b>{" "}
-            <span data-es={UI_ES.bannerRest1}>
-              {BANNER.beforeWork}
-            </span>{" "}
-            <a href="#work" data-es={UI_ES.bannerWork}>{BANNER.work}</a>
-            <span data-es={UI_ES.bannerRest2}>{BANNER.betweenLinks}</span>{" "}
             <a href="#contact" data-es={UI_ES.bannerContact}>{BANNER.contact}</a>
-            <span data-es={UI_ES.bannerEnd}>{BANNER.end}</span>
           </p>
         </div>
       </div>

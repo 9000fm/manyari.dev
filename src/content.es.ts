@@ -20,9 +20,10 @@ type BySlug<T> = Record<(typeof PROJECTS)[number]["slug"], T>;
 export const ME_ES = {
   siteTitle: "Portafolio de Flavio Manyari",
   role: "Diseñador y Desarrollador",
+  topline: "Diseño · Desarrollo · E-commerce · Productos digitales · Independiente y remoto",
   available: "Disponible",
   about:
-    "Hola, soy Flavio, diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto. Mi experiencia incluye e-commerce, sitios web para marcas y productos digitales. Este portafolio reúne una selección de proyectos para clientes junto con proyectos propios. Para proyectos, colaboraciones u oportunidades laborales, puedes ponerte en contacto conmigo.",
+    "Hola, soy Flavio, diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto.\n\nMi experiencia incluye e-commerce, sitios web para marcas y productos digitales. Este portafolio reúne una selección de trabajos para clientes y proyectos propios. Para proyectos, colaboraciones u oportunidades laborales, puedes ponerte en contacto conmigo.",
   aboutContactLabel: "contacto",
   // El perfil profesional del About, sin saludo, referencia al portafolio ni cierre.
   summary:
@@ -32,31 +33,31 @@ export const ME_ES = {
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
 export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string }> = {
   tonydecay: {
-    role: "Tienda de ilustraciones impresas: marca, tienda y pagos",
+    role: "Tienda de ilustraciones impresas: identidad visual, tienda y pagos",
     blurb:
       "Identidad visual y tienda de ilustraciones impresas para el ilustrador Tony Decay. Me encargué del diseño y del desarrollo, con pagos integrados y un panel desde el que el artista administra sus ventas y envíos.",
     plateCap: "Foundation Series, la página de la colección de quince ilustraciones impresas.",
   },
   silverback: {
-    role: "Tienda Shopify: portada y páginas de producto",
+    role: "Sitio de e-commerce: diseño y desarrollo en Shopify",
     blurb:
       "Tienda Shopify de ropa para artes marciales. Diseño y desarrollo de la portada, las páginas de producto y la navegación móvil.",
     plateCap: "La portada.",
   },
   superself: {
-    role: "Sello que cofundé: marca, sitio y tienda",
+    role: "Sello discográfico independiente: identidad visual, sitio web y catálogo",
     blurb:
-      "Sitio y marca para mi sello de música electrónica - una interfaz wireframe juguetona, visuales generativos y una tienda. Hecho de principio a fin, en tres idiomas.",
+      "Sitio y marca para mi sello de música electrónica. Una identidad digital inspirada en la estética de internet temprano, con visuales generativos, catálogo de lanzamientos y merchandising. Diseñado y desarrollado de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
   micaela: {
-    role: "Portafolio y archivo de fotografía: diseño y desarrollo",
+    role: "Portafolio de fotografía: diseño y desarrollo",
     blurb:
       "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
     plateCap: "La grilla de fotos, de borde a borde.",
   },
   digeart: {
-    role: "App de descubrimiento musical: proyecto propio, diseño, desarrollo y mantenimiento",
+    role: "Plataforma de descubrimiento musical: diseño y desarrollo de producto",
     blurb:
       "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida por mí.",
     plateCap: "Grilla de descubrimiento curada a mano.",
@@ -67,7 +68,7 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
 export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
   "Independent2023 - Present": {
     company: "Independiente",
-    title: "Desarrollador y Diseñador Web Freelance",
+    title: "Diseñador y Desarrollador",
     location: "",
     period: "2023 - Presente",
     blurb:
@@ -150,9 +151,6 @@ export const UI_ES = {
   status: "Estado:",
   colophon: "Esta página se editó por última vez en",
 
-  // topline
-  availableForWork: "Disponible para proyectos",
-
   // work section
   fig: "Fig.",
   clientWork: "Proyecto para clientes",
@@ -168,12 +166,8 @@ export const UI_ES = {
   contactBased: "Español e inglés. Disponible para freelance o tiempo completo.",
 
   // welcome banner
-  bannerLead: "Disponible para trabajo freelance y remoto.",
-  bannerRest1: "Ver",
-  bannerWork: "proyectos seleccionados",
-  bannerRest2: " ·",
-  bannerContact: "Contacto",
-  bannerEnd: ".",
+  bannerLead: "Actualmente disponible para trabajo freelance y remoto.",
+  bannerContact: "Contacto →",
   dismiss: "Cerrar aviso",
 
   // 404 (src/app/not-found.tsx)

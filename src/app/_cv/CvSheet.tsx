@@ -158,14 +158,14 @@ const CSS = `
   .role { font-style: italic; font-size: 15px; color: #333; margin: 4px 0 0; }
   .contact { font-size: 13px; color: #444; margin: 8px 0 0; line-height: 1.5; }
   .contact a { color: #0645ad; }
-  .summary { font-size: 13.5px; line-height: 1.45; margin: 10px 0 0; border-top: 1px solid #ccc; padding-top: 10px; }
+  .summary { font-size: 13.5px; line-height: 1.4; margin: 10px 0 0; border-top: 1px solid #ccc; padding-top: 7px; }
 
-  .grid { display: grid; grid-template-columns: 1fr 236px; gap: 34px; margin-top: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 236px; gap: 34px; margin-top: 9px; }
   .cv h2 { font-variant: small-caps; letter-spacing: 0.05em; font-weight: normal; font-size: 18px;
         border-bottom: 1px solid #000; padding-bottom: 3px; margin: 0 0 9px; }
-  .cv section { margin-bottom: 15px; break-inside: avoid; }
+  .cv section { margin-bottom: 12px; break-inside: avoid; }
 
-  .item { margin-bottom: 9px; break-inside: avoid; }
+  .item { margin-bottom: 5px; break-inside: avoid; }
   .itemTop { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
   .itemRole { font-weight: bold; font-size: 14.5px; }
   .itemDates { font-size: 12.5px; color: #666; white-space: nowrap; }
@@ -173,7 +173,7 @@ const CSS = `
   .item p { margin: 4px 0 0; font-size: 13px; line-height: 1.36; color: #222; }
 
   .work { list-style: none; padding: 0; margin: 0; }
-  .work li { font-size: 13px; line-height: 1.33; margin-bottom: 5px; break-inside: avoid; }
+  .work li { font-size: 13px; line-height: 1.33; margin-bottom: 3px; break-inside: avoid; }
   .workMeta { font-size: 12px; color: #555; }
 
   .skill { margin-bottom: 8px; font-size: 13px; }

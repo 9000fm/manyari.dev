@@ -45,7 +45,7 @@ const LAYOUT_CSS = `
 
   /* static top line (replaced the scrolling ticker) - non-moving, document-like */
   .topline { text-align: center; font-size: var(--t-micro); color: #444; background: ${GREY_PANEL}; border-bottom: 1px solid ${BLUE_LINE}; padding: 9px 18px; letter-spacing: 0.02em; }
-  .topline a { color: #0645ad; }
+
   /* language switch: wiki chrome, not a control. The active language is plain
      dark text like the rest of the topline; the other one is a blue link. */
   .langSwitch { white-space: nowrap; }
@@ -225,13 +225,7 @@ export default function BrutalistSidebar() {
       <SmoothWheel />
 
       <div className="wrap">
-        <div className="topline">
-          <span data-es={ME_ES.role}>{ME.role}</span>
-          {" · "}
-          <a href="#contact" data-es={UI_ES.availableForWork}>Available for work</a>
-          {" · "}
-          <span>{ME.location}</span>
-        </div>
+        <div className="topline" data-es={ME_ES.topline}>{ME.topline}</div>
 
         <WelcomeBanner />
 
