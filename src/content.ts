@@ -10,12 +10,12 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance.\n\nMy experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client work and personal projects. For projects, collaborations, or job opportunities, feel free to get in touch.",
-  aboutContactLabel: "get in touch",
+    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launching and maintaining each project.\n\nMy experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client work and personal projects. For projects, collaborations, or job opportunities, feel free to reach out.",
+  aboutContactLabel: "reach out",
   // The professional profile from About. The printed CV uses it as
   // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
   summary:
-    "Designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launch and ongoing maintenance. My experience includes e-commerce, brand websites, and digital products.",
+    "Designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launching and maintaining each project. My experience includes e-commerce, brand websites, and digital products.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
