@@ -36,6 +36,7 @@ export type Project = {
   url: string | null;
   tag: string;
   blurb: string;
+  technologies: string[];
   // 1-bit Atkinson-dithered plate, shown as a figure in Selected Work.
   // plateW/plateH are the real pixel size so the box is reserved and nothing
   // shifts while it loads (same reasoning as .identSphere for the globe).
@@ -55,6 +56,7 @@ export const PROJECTS: Project[] = [
     url: "https://tonydecay.com",
     tag: "client",
     blurb: "Visual identity and online store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
+    technologies: ["Next.js", "TypeScript", "Supabase", "PayPal"],
     plate: "/plates/tonydecay.png",
     plateAlt: "The Foundation Series shop page of tonydecay.com, showing the grid of fifteen art prints beside the collection heading.",
     plateCap: "Foundation Series, the fifteen-print collection page.",
@@ -69,6 +71,7 @@ export const PROJECTS: Project[] = [
     url: "https://digeart.online",
     tag: "personal",
     blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained independently.",
+    technologies: ["Next.js", "TypeScript", "Supabase", "NextAuth"],
     plate: "/plates/digeart.png",
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
     plateCap: "Hand-curated discovery grid.",
@@ -83,6 +86,7 @@ export const PROJECTS: Project[] = [
     url: "https://silverbackstripes.com",
     tag: "client",
     blurb: "Shopify store for a martial arts apparel brand. Design and development of the homepage, product pages, and mobile navigation.",
+    technologies: ["Shopify", "Liquid", "CSS", "JavaScript"],
     plate: "/plates/silverback.png",
     plateAlt: "The silverbackstripes.com homepage hero, with the headline Earn Your Stripes over a photograph of a grappling session.",
     plateCap: "Homepage.",
@@ -97,6 +101,7 @@ export const PROJECTS: Project[] = [
     url: "https://superself.online",
     tag: "self",
     blurb: "Site and brand for my electronic music label. A digital identity inspired by the aesthetics of the early internet, with generative visuals, a release catalog, and merchandise. Designed and developed end to end, in three languages.",
+    technologies: ["Next.js", "TypeScript", "Supabase", "Redis"],
     plate: "/plates/superself.png",
     plateAlt: "The superself.online interface, a white wireframe corridor drawn in one-point perspective on black, with a text menu at the top left.",
     plateCap: "The label's main interface, drawn in one-point perspective.",
@@ -111,6 +116,7 @@ export const PROJECTS: Project[] = [
     url: "https://micaelalucia.com",
     tag: "client",
     blurb: "Portfolio and archive for a photographer - full-width documentary photography, a minimal interface, and a grid that grows with her archive. Designed, built, and deployed.",
+    technologies: ["Next.js", "TypeScript", "Sanity", "Tailwind"],
     plate: "/plates/micaela.png",
     plateAlt: "The micaelalucia.com portfolio, an edge-to-edge masonry grid of documentary and archival photographs under a light header.",
     plateCap: "The photo grid, edge to edge.",

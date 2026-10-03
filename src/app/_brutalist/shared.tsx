@@ -47,6 +47,12 @@ export const SHARED_CSS = `
   .brutPlate figcaption { font-size: var(--t-micro); color: #555; line-height: 1.45; padding: 4px 2px 1px; }
   .brutWorkHead { margin: 0 0 2px; }
   .brutWorkBlurb { margin: 0; font-size: var(--t-small); opacity: 0.85; }
+  .brutWork > li[id] { scroll-margin-top: 16px; }
+  .brutWorkTech { margin: 8px 0 0; font-size: var(--t-small); line-height: 1.45; color: #333; }
+  .brutWorkTechLabel { display: block; margin-bottom: 2px; font-variant: small-caps; letter-spacing: 0.05em; color: #555; }
+  .brutWorkTechItems { display: block; }
+  .brutWorkTechItems strong { font-weight: bold; }
+  @media (max-width: 899px) { .brutWork > li[id] { scroll-margin-top: 72px; } }
   .brutAst { text-align: center; margin: 32px 0; letter-spacing: 1em; color: #888; font-size: var(--t-micro); }
   /* letter-spacing adds a trailing 1em after the last asterisk; pull it back
      so the glyphs sit on true centre */
@@ -135,7 +141,7 @@ export function Sections(): ReactElement {
         <h2 data-es={UI_ES.work}>Selected Work</h2>
         <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
           {PROJECTS.map((p, i) => (
-            <li key={p.slug}>
+            <li key={p.slug} id={"project-" + p.slug}>
               {/* The plate deliberately contains no <a>: WorkHover maps each row
                   to its project via the first anchor inside the <li>, so a link
                   here would silently kill the hover previews for the whole list. */}
@@ -169,6 +175,14 @@ export function Sections(): ReactElement {
                 {")"}
               </p>
               <p className="brutWorkBlurb" data-es={esProj(p.slug)?.blurb}>{p.blurb}</p>
+              <p className="brutWorkTech">
+                <span className="brutWorkTechLabel" data-es="Tecnologías">Built with</span>{" "}
+                <span className="brutWorkTechItems">
+                  {p.technologies.map((tech, index) => (
+                    <span key={tech}>{index > 0 ? " · " : null}<strong>{tech}</strong></span>
+                  ))}
+                </span>
+              </p>
             </li>
           ))}
         </ol>

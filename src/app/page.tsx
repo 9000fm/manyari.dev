@@ -1,4 +1,4 @@
-import { ME } from "@/content";
+import { ME, PROJECTS } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "./_brutalist/shared";
 import LangSwitch from "./_brutalist/LangSwitch";
 import { UI_ES, ME_ES } from "@/content.es";
@@ -100,6 +100,9 @@ const LAYOUT_CSS = `
   html[lang="es"] .wikiToc:not([open]) summary::after { content: " [mostrar]"; }
   .wikiToc ol { list-style: decimal outside; margin: 8px 0 0; padding-left: 26px; }
   .wikiToc li { display: list-item; padding: 2px 0; }
+  .wikiToc .wikiProjectToc { list-style: none; margin: 4px 0 2px; padding-left: 8px; }
+  .wikiProjectToc li { list-style: none; }
+  .wikiProjectTocNum { display: inline-block; min-width: 1.7em; color: #202122; }
 
   /* sidebar toolbox + colophon - fills the space under Contents on desktop */
   .sideTools { margin-top: 20px; }
@@ -254,7 +257,19 @@ export default function BrutalistSidebar() {
               <summary data-es={UI_ES.contents}>Contents</summary>
               <ol>
                 {NAV_SECTIONS.map((s) => (
-                  <li key={s.id}><a href={`#${s.id}`} data-es={s.labelEs}>{s.label}</a></li>
+                  <li key={s.id}>
+                    <a href={"#" + s.id} data-es={s.labelEs}>{s.label}</a>
+                    {s.id === "work" ? (
+                      <ol className="wikiProjectToc">
+                        {PROJECTS.map((p, i) => (
+                          <li key={p.slug}>
+                            <span className="wikiProjectTocNum">2.{i + 1}</span>
+                            <a href={"#project-" + p.slug}>{p.title}</a>
+                          </li>
+                        ))}
+                      </ol>
+                    ) : null}
+                  </li>
                 ))}
               </ol>
             </details>
