@@ -1,6 +1,6 @@
 export const ME = {
   name: "Flavio Manyari",
-  role: "Designer & Developer",
+  role: "Web Developer & Designer",
   topline: "Design · Development · E-commerce · Digital Products · Independent & Remote",
   location: "Lima, PE",
   email: "flavio@manyari.dev",
@@ -10,12 +10,12 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Hi, I'm Flavio, a designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launching and maintaining each project.\n\nMy experience includes e-commerce, brand websites, and digital products. This portfolio brings together a selection of client work and personal projects. For projects, collaborations, or job opportunities, feel free to reach out.",
+    "Hi, I'm Flavio, a designer and web developer from Lima, Peru. I've worked with clients in Peru, the US, and Australia, designing interfaces, building websites, e-commerce stores, and applications, integrating APIs, and improving existing platforms.\n\nAlongside client work, I develop my own projects, including a music discovery application. My interest in music and design has also led me to explore generative art and real-time visuals.\n\nThis portfolio brings together a selection of my professional and personal work. For new projects, collaborations, or job opportunities, feel free to reach out.",
   aboutContactLabel: "reach out",
   // The professional profile from About. The printed CV uses it as
   // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
   summary:
-    "Designer and developer with experience working on web projects for independent brands and clients in the US, Europe, and Latin America. I work in both design and development and tend to stay involved throughout the process, from defining the visual direction and interface to launching and maintaining each project. My experience includes e-commerce, brand websites, and digital products.",
+    "Web developer and designer from Lima, Peru. I have worked with clients in Peru, the US, and Australia, building websites, online stores, and applications. My development experience builds on a background in graphic and interface design. Alongside client work, I design, launch, and maintain my own projects. My creative practice also includes generative art and real-time visuals.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -125,6 +125,37 @@ export const PROJECTS: Project[] = [
   },
 ];
 
+// The CV has its own selected work; shared projects retain their portfolio copy.
+export type CvProject = Pick<Project, "slug" | "title" | "url" | "role" | "blurb"> & { context?: string };
+
+export const CV_PROJECTS: CvProject[] = [
+  ...PROJECTS.filter((p) => ["tonydecay", "digeart", "silverback"].includes(p.slug)),
+  {
+    slug: "civiclick",
+    title: "CiviClick",
+    url: "https://civiclick.com",
+    context: "2026",
+    role: "Landing page design & prototyping",
+    blurb: "Designed and prototyped a landing page in HTML/CSS/JS for a civic engagement SaaS platform. Responsive review and handoff for WordPress implementation. Project for Design In DC.",
+  },
+  {
+    slug: "brisol",
+    title: "Brisol",
+    url: "https://brisol.pe",
+    context: "brisol.pe · 2026",
+    role: "WordPress maintenance",
+    blurb: "WordPress site maintenance and recovery: file and database review, plugin updates, backups, and removal of unauthorized content.",
+  },
+  {
+    slug: "ecolution",
+    title: "Ecolution Industries",
+    url: "https://ecolutionsolar.com.au",
+    context: "Australia · 2025",
+    role: "WordPress design & development",
+    blurb: "Redesigned the WordPress website of an Australian solar energy company. Reorganized the site structure and content, and designed its pages.",
+  },
+];
+
 export type Job = {
   title: string;
   company: string;
@@ -143,11 +174,11 @@ export const EXPERIENCE: Job[] = [
     blurb: "Independent design work since 2020, expanding into web design and development in 2023. My work includes brand identity, interfaces, e-commerce, deployment, and ongoing maintenance.",
   },
   {
-    title: "UI Designer",
-    company: "Design In DC",
-    location: "United States (remote)",
+    title: "Freelance UI Designer",
+    company: "Projects for Design In DC",
+    location: "",
     period: "2025 - 2026",
-    blurb: "Contract interface design for a Washington DC agency: web layouts and mockups for the agency's client projects.",
+    blurb: "Designed interfaces and web prototypes for agency client projects. Prepared design proposals and reviewed responsive layouts for implementation.",
   },
 
 ];

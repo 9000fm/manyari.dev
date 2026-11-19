@@ -43,6 +43,8 @@ export const SHARED_CSS = `
      the palette (.side border, GREY_PANEL), so this adds no new colours.
      Cap at the PNG's natural 440px so the 1-bit dither never CSS-upscales. */
   .brutPlate { max-width: 440px; margin: 0 0 10px; padding: 3px; border: 1px solid #c8ccd1; background: #f6f7f9; }
+  .brutPlate a[href] { display: block; }
+  .brutPlate a[href]:focus-visible { outline: 2px solid #0645ad; outline-offset: 2px; }
   .brutPlate img { display: block; width: 100%; height: auto; }
   .brutPlate figcaption { font-size: var(--t-micro); color: #555; line-height: 1.45; padding: 4px 2px 1px; }
   .brutWorkHead { margin: 0 0 2px; }
@@ -116,10 +118,10 @@ export const NAV_SECTIONS = [
 
 /** The document body: About -> References. */
 export function Sections(): ReactElement {
-  const [aboutIntro, aboutDetails] = ME.about.split("\n\n");
-  const [aboutIntroEs, aboutDetailsEs] = ME_ES.about.split("\n\n");
-  const [aboutBeforeContact, aboutAfterContact] = aboutDetails.split(ME.aboutContactLabel);
-  const [aboutBeforeContactEs, aboutAfterContactEs] = aboutDetailsEs.split(ME_ES.aboutContactLabel);
+  const [aboutIntro, aboutDetails, aboutContact] = ME.about.split("\n\n");
+  const [aboutIntroEs, aboutDetailsEs, aboutContactEs] = ME_ES.about.split("\n\n");
+  const [aboutBeforeContact, aboutAfterContact] = aboutContact.split(ME.aboutContactLabel);
+  const [aboutBeforeContactEs, aboutAfterContactEs] = aboutContactEs.split(ME_ES.aboutContactLabel);
   return (
     <>
       <section id="about" className="brutAbout">
@@ -128,6 +130,7 @@ export function Sections(): ReactElement {
           <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
           <span data-es={aboutIntroEs.slice(1)}>{aboutIntro.slice(1)}</span>
         </p>
+        <p className="brutAboutText" data-es={aboutDetailsEs}>{aboutDetails}</p>
         <p className="brutAboutText">
           <span data-es={aboutBeforeContactEs}>{aboutBeforeContact}</span>
           <a href="#contact" data-es={ME_ES.aboutContactLabel}>{ME.aboutContactLabel}</a>
@@ -142,20 +145,19 @@ export function Sections(): ReactElement {
         <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
           {PROJECTS.map((p, i) => (
             <li key={p.slug} id={"project-" + p.slug}>
-              {/* The plate deliberately contains no <a>: WorkHover maps each row
-                  to its project via the first anchor inside the <li>, so a link
-                  here would silently kill the hover previews for the whole list. */}
               {p.plate ? (
                 <figure className="brutPlate">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={p.plate}
-                    alt={p.plateAlt ?? ""}
-                    width={p.plateW}
-                    height={p.plateH}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
+                  <a href={p.url ?? undefined} target={p.url ? "_blank" : undefined} rel={p.url ? "noopener noreferrer" : undefined} aria-label={p.url ? p.title : undefined}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.plate}
+                      alt={p.plateAlt ?? ""}
+                      width={p.plateW}
+                      height={p.plateH}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  </a>
                   <figcaption data-es={esProj(p.slug)?.plateCap}>{p.plateCap}</figcaption>
                 </figure>
               ) : null}

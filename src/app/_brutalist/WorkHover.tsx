@@ -54,7 +54,7 @@ export default function WorkHover() {
     // map each work row to its project by matching the link href to PROJECTS.url
     const byLi = new Map<HTMLLIElement, Project>();
     for (const li of items) {
-      const href = li.querySelector("a")?.getAttribute("href");
+      const href = li.querySelector(".brutWorkHead a")?.getAttribute("href");
       const proj = href ? PROJECTS.find((p) => p.url === href) : undefined;
       if (proj) byLi.set(li, proj);
     }

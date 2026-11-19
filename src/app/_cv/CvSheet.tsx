@@ -9,8 +9,8 @@
  * content.es.ts, so the PDF cannot drift from the site the way it did in 2026.
  */
 
-import { EDUCATION, EXPERIENCE, LANGUAGES, ME, PROJECTS, SKILLS } from "../../content";
-import { EDUCATION_ES, EXPERIENCE_ES, LANGUAGES_ES, ME_ES, PROJECTS_ES, SKILLS_ES, UI_ES } from "../../content.es";
+import { EDUCATION, EXPERIENCE, LANGUAGES, ME, CV_PROJECTS, SKILLS } from "../../content";
+import { EDUCATION_ES, EXPERIENCE_ES, LANGUAGES_ES, ME_ES, CV_PROJECTS_ES, SKILLS_ES, UI_ES } from "../../content.es";
 
 export type CvLang = "en" | "es";
 
@@ -18,12 +18,6 @@ const UI = {
   en: { experience: "Experience", work: "Selected Work", skills: "Skills", education: "Education", languages: "Languages" },
   es: { experience: UI_ES.experience, work: UI_ES.work, skills: UI_ES.skills, education: UI_ES.education, languages: UI_ES.languages },
 } as const;
-
-// The phone number lives only in the WhatsApp link; print it from there.
-function phoneFromWhatsapp(href: string): string {
-  const d = href.replace(/\D/g, "");
-  return `+${d.slice(0, 2)} ${d.slice(2, 5)} ${d.slice(5, 8)} ${d.slice(8)}`;
-}
 
 export default function CvSheet({ lang }: { lang: CvLang }) {
   const es = lang === "es";
@@ -41,9 +35,9 @@ export default function CvSheet({ lang }: { lang: CvLang }) {
       blurb: x?.blurb ?? j.blurb,
     };
   });
-  const work = PROJECTS.map((p) => {
-    const x = es ? PROJECTS_ES[p.slug] : undefined;
-    return { title: p.title, host: p.url ? new URL(p.url).host : "", role: x?.role ?? p.role, blurb: x?.blurb ?? p.blurb };
+  const work = CV_PROJECTS.map((p) => {
+    const x = es ? CV_PROJECTS_ES[p.slug] : undefined;
+    return { title: p.title, context: p.context ?? (p.url ? new URL(p.url).host : ""), role: x?.role ?? p.role, blurb: x?.blurb ?? p.blurb };
   });
   const skills = SKILLS.map((g) => ({ label: es ? SKILLS_ES[g.label] : g.label, items: g.items.join(", ") }));
   const education = EDUCATION.map((e) => {
@@ -70,7 +64,7 @@ export default function CvSheet({ lang }: { lang: CvLang }) {
           <h1>{ME.name}</h1>
           <p className="role">{role}</p>
           <p className="contact">
-            <a href={`mailto:${ME.email}`}>{ME.email}</a> · {phoneFromWhatsapp(ME.socials.whatsapp)} · {ME.location}
+            <a href={`mailto:${ME.email}`}>{ME.email}</a> · {ME.location}
             <br />
             <a href="https://manyari.dev">manyari.dev</a> · <a href={ME.socials.github}>{github}</a> ·{" "}
             <a href={linkedin}>linkedin</a>
@@ -101,7 +95,7 @@ export default function CvSheet({ lang }: { lang: CvLang }) {
               <ul className="work">
                 {work.map((w) => (
                   <li key={w.title}>
-                    <strong>{w.title}</strong> <span className="workMeta">{w.host} · {w.role}</span>
+                    <strong>{w.title}</strong> <span className="workMeta">{w.context} · {w.role}</span>
                     <br />
                     {w.blurb}
                   </li>

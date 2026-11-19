@@ -19,15 +19,15 @@ type BySlug<T> = Record<(typeof PROJECTS)[number]["slug"], T>;
 
 export const ME_ES = {
   siteTitle: "Portafolio de Flavio Manyari",
-  role: "Diseñador y Desarrollador",
+  role: "Desarrollador web y diseñador",
   topline: "Diseño · Desarrollo · E-commerce · Productos digitales · Independiente y remoto",
   available: "Disponible",
   about:
-    "Hola, soy Flavio, diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto.\n\nMi experiencia incluye e-commerce, sitios web para marcas y productos digitales. Este portafolio reúne una selección de trabajos para clientes y proyectos propios. Para proyectos, colaboraciones u oportunidades laborales, puedes ponerte en contacto conmigo.",
-  aboutContactLabel: "contacto",
+    "Hola, soy Flavio, diseñador y desarrollador web de Lima, Perú. He trabajado con clientes de Perú, Estados Unidos y Australia, diseñando interfaces, desarrollando sitios web, tiendas online y aplicaciones, integrando APIs y mejorando plataformas existentes.\n\nAdemás del trabajo con clientes, desarrollo mis propios proyectos, como una aplicación para descubrir música. Mi interés por la música y el diseño también me ha llevado a explorar el arte generativo y los visuales en tiempo real.\n\nEste portafolio reúne una selección de mi trabajo profesional y personal. Para nuevos proyectos, colaboraciones u oportunidades laborales, no dudes en ponerte en contacto.",
+  aboutContactLabel: "ponerte en contacto",
   // El perfil profesional del About, sin saludo, referencia al portafolio ni cierre.
   summary:
-    "Diseñador y desarrollador con experiencia en proyectos web para marcas independientes y clientes de Estados Unidos, Europa y Latinoamérica. Trabajo tanto en diseño como en desarrollo, y suelo involucrarme en todo el proceso: desde definir la dirección visual y la interfaz hasta la publicación y mantenimiento del proyecto. Mi experiencia incluye e-commerce, sitios web para marcas y productos digitales.",
+    "Desarrollador web y diseñador de Lima, Perú. He trabajado con clientes de Perú, Estados Unidos y Australia, desarrollando sitios web, tiendas online y aplicaciones. Mi experiencia en desarrollo se suma a una trayectoria en diseño gráfico e interfaces. Combino el trabajo para clientes con proyectos propios que diseño, publico y mantengo. Mi práctica creativa también abarca el arte generativo y los visuales en tiempo real.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
@@ -64,6 +64,22 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
   },
 };
 
+export const CV_PROJECTS_ES: Record<string, { role: string; blurb: string }> = {
+  ...PROJECTS_ES,
+  civiclick: {
+    role: "Landing y prototipado web",
+    blurb: "Diseño y prototipo de la landing en HTML/CSS/JS para una plataforma SaaS de participación ciudadana. Revisión responsive y entrega para su implementación en WordPress. Proyecto para Design In DC.",
+  },
+  brisol: {
+    role: "Mantenimiento WordPress",
+    blurb: "Mantenimiento y recuperación de un sitio WordPress: revisión de archivos y base de datos, actualización de plugins, copias de seguridad y corrección de contenido no autorizado.",
+  },
+  ecolution: {
+    role: "Diseño y desarrollo WordPress",
+    blurb: "Rediseño del sitio web de una empresa australiana de energía solar en WordPress. Reorganización de la estructura y los contenidos del sitio, y diseño de sus páginas.",
+  },
+};
+
 /** Experience, keyed by company + period to match the React key used in Sections(). */
 export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
   "Independent2020 - Present": {
@@ -74,12 +90,12 @@ export const EXPERIENCE_ES: Record<string, { title: string; location: string; pe
     blurb:
       "Trabajo de diseño independiente desde 2020, al que incorporé el diseño y desarrollo web en 2023. Mi trabajo incluye identidad de marca, interfaces, e-commerce, publicación y mantenimiento continuo.",
   },
-  "Design In DC2025 - 2026": {
-    title: "Diseñador UI",
-    location: "Estados Unidos (remoto)",
+  "Projects for Design In DC2025 - 2026": {
+    company: "Proyectos para Design In DC",
+    title: "Diseñador UI freelance",
+    location: "",
     period: "2025 - 2026",
-    blurb:
-      "Diseño de interfaces por contrato para una agencia de Washington DC: layouts web y mockups para los proyectos de clientes de la agencia.",
+    blurb: "Diseño de interfaces y prototipos web para clientes de la agencia. Preparación de propuestas y revisión responsive para su implementación.",
   },
 };
 
