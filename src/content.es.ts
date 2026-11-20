@@ -62,23 +62,25 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
       "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida de forma independiente.",
     plateCap: "Grilla de descubrimiento curada a mano.",
   },
-};
 
-export const CV_PROJECTS_ES: Record<string, { role: string; blurb: string }> = {
-  ...PROJECTS_ES,
   civiclick: {
     role: "Landing y prototipado web",
     blurb: "Diseño y prototipo de la landing en HTML/CSS/JS para una plataforma SaaS de participación ciudadana. Revisión responsive y entrega para su implementación en WordPress. Proyecto para Design In DC.",
+    plateCap: "Prototipo de la portada preparado para su implementación en WordPress.",
   },
   brisol: {
     role: "Mantenimiento WordPress",
     blurb: "Mantenimiento y recuperación de un sitio WordPress: revisión de archivos y base de datos, actualización de plugins, copias de seguridad y corrección de contenido no autorizado.",
+    plateCap: "El sitio WordPress de Brisol, en el que realicé mantenimiento.",
   },
   ecolution: {
     role: "Diseño y desarrollo WordPress",
     blurb: "Rediseño del sitio web de una empresa australiana de energía solar en WordPress. Reorganización de la estructura y los contenidos del sitio, y diseño de sus páginas.",
+    plateCap: "Ecolution Industries, Australia. Rediseño web, 2025.",
   },
 };
+
+export const CV_PROJECTS_ES = PROJECTS_ES;
 
 /** Experience, keyed by company + period to match the React key used in Sections(). */
 export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
@@ -131,6 +133,7 @@ export const UI_ES = {
   // section headings
   about: "Sobre mí",
   work: "Proyectos seleccionados",
+  projects: "Proyectos",
   experience: "Experiencia",
   education: "Formación",
   skills: "Habilidades",

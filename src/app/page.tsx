@@ -27,9 +27,9 @@ const LAYOUT_CSS = `
   .brut { padding: 28px 26px; box-sizing: border-box; font-size: var(--t-body); }
   /* the page frame - a defined window/PDF edge so the ticker ends at the page limit */
   .wrap { max-width: 1160px; margin: 0 auto; padding: 0; background: #e9ebef; border: 1px solid #7c828b; box-shadow: 0 8px 40px rgba(0,0,0,0.55); }
-  .grid { display: grid; gap: 32px; grid-template-columns: 1fr; margin: 0; padding: 14px 26px 44px; }
+  .grid { display: grid; gap: 32px; grid-template-columns: minmax(0, 1fr); margin: 0; padding: 14px 26px 44px; }
 
-  .side { display: flex; flex-direction: column; padding-top: 2px; }
+  .side { min-width: 0; display: flex; flex-direction: column; padding-top: 2px; }
   .side h1 { font-size: var(--t-name); line-height: 0.98; margin: 0; }
   .identRow { display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .identText { min-width: 0; }
@@ -152,8 +152,13 @@ const LAYOUT_CSS = `
   /* mobile sticky header (FM + burger) - hidden on desktop */
   .mnav { display: none; }
 
+  @media (max-width: 360px) {
+    .brut .grid { padding-inline: 12px; }
+    .brut .content { padding-inline: 12px; }
+    .brut .welcome { margin-inline: 12px; padding-inline: 32px; }
+  }
   @media (min-width: 900px) {
-    .grid { grid-template-columns: 264px 1fr; }
+    .grid { grid-template-columns: 264px minmax(0, 1fr); }
     .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; background: #f0f2f5; border: 1px solid #c8ccd1; }
     .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
     .identSphere { align-self: center; }
@@ -169,10 +174,11 @@ const LAYOUT_CSS = `
     .content { padding: 16px 22px 36px; }
     /* shrinks with the viewport so MANYARI never runs under the globe (<380px) */
     :root { --t-name: clamp(26px, 9vw, 34px); }
-    .identRow { align-items: center; }
-    .identText { padding-left: 8px; }
-    .identSphere { width: 168px; height: 168px; }
-    .identSphere canvas { width: 168px !important; height: 168px !important; }
+    .identRow { align-items: center; flex-wrap: wrap; }
+    .identText { padding-left: 8px; flex: 1 1 140px; }
+    .identSphere { width: min(168px, 100%); height: auto; aspect-ratio: 1; overflow: clip; }
+    .identSphere canvas { width: 100% !important; height: 100% !important; }
+    .side, .content, .welcomeText { overflow-wrap: anywhere; }
     /* The sidebar is the TOP of the page on mobile, so what is not identity or
        contents comes out of it. The language button lives over the document and
        is unaffected. */
@@ -256,14 +262,14 @@ export default function BrutalistSidebar() {
             <details className="wikiToc" id="wikiToc" suppressHydrationWarning>
               <summary data-es={UI_ES.contents}>Contents</summary>
               <ol>
-                {NAV_SECTIONS.map((s) => (
+                {NAV_SECTIONS.map((s, sectionIndex) => (
                   <li key={s.id}>
                     <a href={"#" + s.id} data-es={s.labelEs}>{s.label}</a>
                     {s.id === "work" ? (
                       <ol className="wikiProjectToc">
                         {PROJECTS.map((p, i) => (
                           <li key={p.slug}>
-                            <span className="wikiProjectTocNum">2.{i + 1}</span>
+                            <span className="wikiProjectTocNum">{sectionIndex + 1}.{i + 1}</span>
                             <a href={"#project-" + p.slug}>{p.title}</a>
                           </li>
                         ))}
@@ -281,7 +287,7 @@ export default function BrutalistSidebar() {
             <script
               dangerouslySetInnerHTML={{
                 __html:
-                  'try{if(matchMedia("(min-width:900px)").matches)document.getElementById("wikiToc").open=true}catch(e){}',
+                  'try{const q=matchMedia("(min-width:900px) and (hover:hover) and (pointer:fine)");const sync=()=>{document.getElementById("wikiToc").open=q.matches};sync();q.addEventListener("change",sync)}catch(e){}',
               }}
             />
 

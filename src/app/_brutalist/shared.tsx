@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ME, PROJECTS, SKILLS, EXPERIENCE } from "@/content";
+import { ME, PROJECTS, SKILLS, EXPERIENCE, type Project } from "@/content";
 import {
   ME_ES, PROJECTS_ES, EXPERIENCE_ES, SKILLS_ES,
   UI_ES,
@@ -110,11 +110,62 @@ export const SHARED_CSS = `
 /** Section anchor list, reused by the sidebar TOC. */
 export const NAV_SECTIONS = [
   { id: "about", label: "about", labelEs: UI_ES.tocAbout },
-  { id: "work", label: "work", labelEs: UI_ES.tocWork },
+  { id: "work", label: "projects", labelEs: UI_ES.tocWork },
   { id: "experience", label: "experience", labelEs: UI_ES.tocExperience },
   { id: "tools", label: "skills", labelEs: UI_ES.tocSkills },
   { id: "contact", label: "contact", labelEs: UI_ES.tocContact },
 ] as const;
+
+function ProjectList({ projects }: { projects: Project[] }) {
+  return (
+    <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
+      {projects.map((p, i) => (
+        <li key={p.slug} id={"project-" + p.slug}>
+          {p.plate ? (
+            <figure className="brutPlate">
+              <a href={p.url ?? undefined} target={p.url ? "_blank" : undefined} rel={p.url ? "noopener noreferrer" : undefined} aria-label={p.url ? p.title : undefined}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.plate}
+                  alt={p.plateAlt ?? ""}
+                  width={p.plateW}
+                  height={p.plateH}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </a>
+              <figcaption data-es={esProj(p.slug)?.plateCap}>{p.plateCap}</figcaption>
+            </figure>
+          ) : null}
+          <p className="brutWorkHead">
+            {p.url ? (
+              <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: "bold" }}>
+                {p.title}
+              </a>
+            ) : (
+              <strong>{p.title}</strong>
+            )}
+            <span className="brutFootnote">[{i + 1}]</span>
+            {" - "}
+            <em data-es={esProj(p.slug)?.role}>{p.role}</em>
+            {" ("}
+            {p.year}
+            {")"}
+          </p>
+          <p className="brutWorkBlurb" data-es={esProj(p.slug)?.blurb}>{p.blurb}</p>
+          <p className="brutWorkTech">
+            <span className="brutWorkTechLabel" data-es="Tecnologías">{p.slug === "brisol" ? "Technologies" : "Built with"}</span>{" "}
+            <span className="brutWorkTechItems">
+              {p.technologies.map((tech, index) => (
+                <span key={tech}>{index > 0 ? " · " : null}<strong>{tech}</strong></span>
+              ))}
+            </span>
+          </p>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 /** The document body: About -> References. */
 export function Sections(): ReactElement {
@@ -141,53 +192,8 @@ export function Sections(): ReactElement {
       <p className="brutAst" />
 
       <section id="work">
-        <h2 data-es={UI_ES.work}>Selected Work</h2>
-        <ol className="brutWork" style={{ margin: 0, padding: 0 }}>
-          {PROJECTS.map((p, i) => (
-            <li key={p.slug} id={"project-" + p.slug}>
-              {p.plate ? (
-                <figure className="brutPlate">
-                  <a href={p.url ?? undefined} target={p.url ? "_blank" : undefined} rel={p.url ? "noopener noreferrer" : undefined} aria-label={p.url ? p.title : undefined}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.plate}
-                      alt={p.plateAlt ?? ""}
-                      width={p.plateW}
-                      height={p.plateH}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption data-es={esProj(p.slug)?.plateCap}>{p.plateCap}</figcaption>
-                </figure>
-              ) : null}
-              <p className="brutWorkHead">
-                {p.url ? (
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: "bold" }}>
-                    {p.title}
-                  </a>
-                ) : (
-                  <strong>{p.title}</strong>
-                )}
-                <span className="brutFootnote">[{i + 1}]</span>
-                {" - "}
-                <em data-es={esProj(p.slug)?.role}>{p.role}</em>
-                {" ("}
-                {p.year}
-                {")"}
-              </p>
-              <p className="brutWorkBlurb" data-es={esProj(p.slug)?.blurb}>{p.blurb}</p>
-              <p className="brutWorkTech">
-                <span className="brutWorkTechLabel" data-es="Tecnologías">Built with</span>{" "}
-                <span className="brutWorkTechItems">
-                  {p.technologies.map((tech, index) => (
-                    <span key={tech}>{index > 0 ? " · " : null}<strong>{tech}</strong></span>
-                  ))}
-                </span>
-              </p>
-            </li>
-          ))}
-        </ol>
+        <h2 data-es={UI_ES.projects}>Projects</h2>
+        <ProjectList projects={PROJECTS} />
 
         <p className="brutRefsLabel" data-es={UI_ES.references}>References</p>
         <ol className="brutRefs">

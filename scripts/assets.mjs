@@ -55,6 +55,7 @@ async function newPage(browser, proj) {
     locale: "en-US",
     timezoneId: "America/Lima",
     colorScheme: proj.colorScheme ?? "light",
+    reducedMotion: proj.reducedMotion ?? "no-preference",
   });
   const page = await ctx.newPage();
   page.setDefaultTimeout(20000);
@@ -98,7 +99,9 @@ async function freezeVideos(page) {
 async function waitCanvas(page) {
   await page.waitForFunction(
     () => {
-      const c = document.querySelector("canvas");
+      const c = [...document.querySelectorAll("canvas")]
+        .filter((canvas) => canvas.getBoundingClientRect().width > 0)
+        .sort((a, b) => b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
       if (!c) return false;
       try {
         const ctx = c.getContext("2d");
@@ -160,6 +163,7 @@ async function tapIf(page, sel) {
 
 async function runSteps(page, steps = []) {
   for (const s of steps) {
+    if (s.waitFor) await page.locator(s.waitFor).waitFor({ state: s.state ?? "visible", timeout: 25000 });
     if (s.goto) await page.goto(s.goto, { waitUntil: "load" });
     if (s.click) await tap(page, s.click);
     if (s.tapIf) await tapIf(page, s.tapIf);
@@ -204,7 +208,25 @@ async function probe() {
   await browser.close();
 }
 
+// Reject visible images that have not decoded instead of publishing partial captures.
+async function readyImages(page) {
+  await page.waitForFunction(() => [...document.images].every((img) => {
+    const box = img.getBoundingClientRect();
+    const style = getComputedStyle(img);
+    const visible = box.width > 0 && box.height > 0 && box.bottom > 0 && box.top < innerHeight
+      && box.right > 0 && box.left < innerWidth && style.visibility !== "hidden" && style.opacity !== "0";
+    return !visible || (img.complete && img.naturalWidth > 0);
+  }), null, { timeout: 15000 });
+  await page.evaluate(async () => {
+    await Promise.allSettled([...document.images].filter((img) => img.complete && img.naturalWidth > 0).map((img) => img.decode()));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+}
+
 async function capture() {
+  if (projects.some((p) => p.slug === "civiclick" && !p.url)) {
+    throw new Error("Set CIVICLICK_CAPTURE_URL to the delivered prototype URL before capturing CiviClick.");
+  }
   const browser = await launch();
   const meta = { at: new Date().toISOString(), browser: browser.version(), viewport: VIEWPORT, out: OUT, failed: [] };
   // one broken selector must not kill a 10-minute run: log it, skip that shot, keep going
@@ -232,17 +254,20 @@ async function capture() {
         await runSteps(page, f.steps);
         await page.waitForTimeout(f.settle ?? proj.settle ?? 600);
         const file = path.join(dir, "frames", `${String(n + 1).padStart(2, "0")}-${f.name}.png`);
-        await page.screenshot({ path: file, ...SHOT });
+        await page.mouse.move(0, 0);
+        await readyImages(page);
+        await page.screenshot({ path: file, ...SHOT, animations: proj.animations ?? SHOT.animations });
         n += 1;
       });
     }
-    for (const c of proj.plates) {
+    for (const c of flag("no-plates") ? [] : proj.plates) {
       await attempt(`${proj.slug} plate ${c.name}`, async () => {
         await open(page, proj, c.url ?? proj.url);
         await runSteps(page, c.steps);
         await hide(page, c.hide ?? []);
         await page.waitForTimeout(c.settle ?? proj.settle ?? 600);
         const file = path.join(dir, `plate-${c.name}.png`);
+        await readyImages(page);
         if (c.selector) await page.locator(c.selector).first().screenshot({ path: file, ...SHOT });
         else await page.screenshot({ path: file, clip: c.clip, ...SHOT }); // clip is viewport-relative
       });
@@ -261,8 +286,8 @@ function run(cmd, a) {
   if (r.status !== 0) throw new Error(`${cmd} ${a.join(" ")} -> exit ${r.status}`);
 }
 
-// cover-crop to 16:10, then 480x300 (the hover card's exact box)
-const VF = "scale=480:300:force_original_aspect_ratio=increase:flags=lanczos,crop=480:300";
+// cover-crop to 16:10, then 720x450 (the hover card's exact box)
+const VF = "scale=720:450:force_original_aspect_ratio=increase:flags=lanczos,crop=720:450";
 
 function encodePreview(seq, out) {
   for (const crf of [22, 25, 28]) {
@@ -276,7 +301,7 @@ function encodePreview(seq, out) {
     ]);
     const kb = fs.statSync(out).size / 1024;
     console.log(`${path.basename(path.dirname(out))}: crf ${crf} -> ${kb.toFixed(0)} KB`);
-    if (kb <= 250) break;
+    if (kb <= 500) break;
   }
 }
 
@@ -296,7 +321,7 @@ async function build() {
     fs.rmSync(b, { recursive: true, force: true });
     fs.mkdirSync(path.join(b, "seq"), { recursive: true });
     fs.mkdirSync(path.join(b, "old"));
-    for (const c of proj.plates) {
+    for (const c of flag("no-plates") ? [] : proj.plates) {
       if (!fs.existsSync(path.join(raw, `plate-${c.name}.png`))) {
         console.log(`${proj.slug}: plate ${c.name} was not captured, skipped`);
         continue;
@@ -425,7 +450,7 @@ function apply() {
   fs.writeFileSync(ctsPath, cts); // only digits change, line endings preserved
 }
 
-// Against the local dev server: every plate at its natural size, every preview playing at 480x300, no console errors.
+// Against the local dev server: every plate at its natural size, every preview playing at 720x450, no console errors.
 async function verify() {
   const base = opt("base", "http://localhost:4444");
   const browser = await launch();
@@ -461,7 +486,7 @@ async function verify() {
       .$eval(".workHoverMedia video", (el) => ({ src: el.getAttribute("src"), ready: el.readyState, paused: el.paused, size: [el.videoWidth, el.videoHeight] }))
       .catch(() => null);
     console.log(v);
-    if (!v || v.ready < 2 || v.paused || v.size[0] !== 480 || v.size[1] !== 300) throw new Error("preview not playing at 480x300");
+    if (!v || v.ready < 2 || v.paused || v.size[0] !== 720 || v.size[1] !== 450) throw new Error("preview not playing at 720x450");
   }
   if (errors.length) throw new Error(`console errors:\n${errors.join("\n")}`);
   await browser.close();

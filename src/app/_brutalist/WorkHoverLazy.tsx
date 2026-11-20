@@ -1,20 +1,27 @@
 "use client";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { useMountOnInteraction } from "./useMountOnInteraction";
 
-// Code-split, client-only. The Selected Work hover/tap preview is a pure
-// interaction layer (a fixed, hidden card) - nothing renders until a user
-// hovers or taps a row, so it has no place in the critical render path.
 const WorkHover = dynamic(() => import("./WorkHover"), { ssr: false });
 
-/**
- * Mounts WorkHover on the first user interaction (pointer / touch / scroll), so
- * its JS + listener setup never runs during a non-interactive load (Lighthouse,
- * prerender). By the time a user actually hovers a Work row they've already moved
- * the pointer into the page, so it's armed. The card is `position: fixed` and
- * starts hidden, so deferring it causes no layout shift.
- */
+// Keep the preview deferred, but preserve the first tap while its chunk loads.
 export default function WorkHoverLazy() {
   const ready = useMountOnInteraction();
-  return ready ? <WorkHover /> : null;
+  const [tapRequest, setTapRequest] = useState<{ slug: string; id: number } | null>(null);
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      if (matchMedia("(min-width:900px) and (hover:hover) and (pointer:fine)").matches) return;
+      const target = event.target instanceof Element ? event.target : null;
+      const row = target?.closest<HTMLLIElement>(".brutWork > li");
+      if (!row) return;
+      if (target?.closest("a") && !target.closest(".brutPlate a")) return;
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      setTapRequest(previous => ({ slug: row.id.replace("project-", ""), id: (previous?.id ?? 0) + 1 }));
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+  return ready || tapRequest ? <WorkHover tapRequest={tapRequest} /> : null;
 }

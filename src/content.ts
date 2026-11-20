@@ -94,6 +94,51 @@ export const PROJECTS: Project[] = [
     plateH: 275,
   },
   {
+    slug: "civiclick",
+    title: "CiviClick",
+    year: 2026,
+    tag: "client",
+    url: "https://civiclick.com",
+    role: "Landing page design & prototyping",
+    blurb: "Designed and prototyped a landing page in HTML/CSS/JS for a civic engagement SaaS platform. Responsive review and handoff for WordPress implementation. Project for Design In DC.",
+    technologies: ["HTML","CSS","JavaScript"],
+    plate: "/plates/civiclick.png",
+    plateAlt: "The CiviClick landing page prototype, with its headline and a circular composition of the US Capitol and product screens.",
+    plateCap: "Homepage prototype prepared for WordPress implementation.",
+    plateW: 440,
+    plateH: 275,
+  },
+  {
+    slug: "brisol",
+    title: "Brisol",
+    year: 2026,
+    tag: "client",
+    url: "https://brisol.pe",
+    role: "WordPress maintenance",
+    blurb: "WordPress site maintenance and recovery: file and database review, plugin updates, backups, and removal of unauthorized content.",
+    technologies: ["WordPress","cPanel"],
+    plate: "/plates/brisol.png",
+    plateAlt: "The Brisol homepage, with a solar installation headline and an inquiry form.",
+    plateCap: "The WordPress site maintained for Brisol.",
+    plateW: 440,
+    plateH: 275,
+  },
+  {
+    slug: "ecolution",
+    title: "Ecolution Industries",
+    year: 2025,
+    tag: "client",
+    url: "https://ecolutionsolar.com.au",
+    role: "WordPress design & development",
+    blurb: "Redesigned the WordPress website of an Australian solar energy company. Reorganized the site structure and content, and designed its pages.",
+    technologies: ["WordPress","Elementor"],
+    plate: "/plates/ecolution.png",
+    plateAlt: "The Ecolution Industries homepage, showing solar panels and an estimate request form.",
+    plateCap: "Ecolution Industries, Australia. Website redesign, 2025.",
+    plateW: 440,
+    plateH: 275,
+  },
+  {
     slug: "superself",
     title: "Superself.online",
     year: 2025,
@@ -125,36 +170,16 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// The CV has its own selected work; shared projects retain their portfolio copy.
-export type CvProject = Pick<Project, "slug" | "title" | "url" | "role" | "blurb"> & { context?: string };
+// The website shows all projects; the CV keeps its approved six-project selection.
+const CV_PROJECT_SLUGS = ["tonydecay", "digeart", "silverback", "civiclick", "brisol", "ecolution"];
 
-export const CV_PROJECTS: CvProject[] = [
-  ...PROJECTS.filter((p) => ["tonydecay", "digeart", "silverback"].includes(p.slug)),
-  {
-    slug: "civiclick",
-    title: "CiviClick",
-    url: "https://civiclick.com",
-    context: "2026",
-    role: "Landing page design & prototyping",
-    blurb: "Designed and prototyped a landing page in HTML/CSS/JS for a civic engagement SaaS platform. Responsive review and handoff for WordPress implementation. Project for Design In DC.",
-  },
-  {
-    slug: "brisol",
-    title: "Brisol",
-    url: "https://brisol.pe",
-    context: "brisol.pe · 2026",
-    role: "WordPress maintenance",
-    blurb: "WordPress site maintenance and recovery: file and database review, plugin updates, backups, and removal of unauthorized content.",
-  },
-  {
-    slug: "ecolution",
-    title: "Ecolution Industries",
-    url: "https://ecolutionsolar.com.au",
-    context: "Australia · 2025",
-    role: "WordPress design & development",
-    blurb: "Redesigned the WordPress website of an Australian solar energy company. Reorganized the site structure and content, and designed its pages.",
-  },
-];
+export type CvProject = Pick<Project, "slug" | "title" | "url" | "role" | "blurb"> & { context?: string };
+const CV_CONTEXT: Record<string, string> = {
+  civiclick: "2026",
+  brisol: "brisol.pe · 2026",
+  ecolution: "Australia · 2025",
+};
+export const CV_PROJECTS: CvProject[] = PROJECTS.filter((p) => CV_PROJECT_SLUGS.includes(p.slug)).map((p) => ({ ...p, context: CV_CONTEXT[p.slug] }));
 
 export type Job = {
   title: string;
