@@ -123,25 +123,33 @@ const LAYOUT_CSS = `
   /* interlanguage button, Vector 2022 shape: hairline box, language glyph, the
      name of the edition it takes you to. Sits flush with the right edge of the
      text column and clears the first heading. */
-  .langBar { display: flex; justify-content: flex-end; margin: 0 0 10px; }
-  .langBtn { display: inline-flex; align-items: center; justify-content: center; font: inherit;
+  .langBar { position: relative; display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .langBtn { display: grid; grid-template-columns: auto 1fr; column-gap: 7px; row-gap: 0;
+    align-content: center; justify-items: start; width: 144px; max-width: 100%; min-height: 52px; font: inherit;
+    color: #0645ad; white-space: nowrap; overflow: hidden;
     background: #f8f9fa; border: 1px solid #a2a9b1; border-radius: 2px;
-    padding: 3px 9px; cursor: pointer; line-height: 1.35;
+    padding: 4px 10px; cursor: pointer; line-height: 1.35;
     transition: background 0.12s ease, border-color 0.12s ease; }
   .langBtn:hover, .langBtn.langBtnOpen { background: #eaecf0; border-color: #72777d; }
   .langBtn:focus-visible { outline: 2px solid #0645ad; outline-offset: 1px; }
   .langBtnIcon { font-size: var(--t-small); color: #202122; letter-spacing: 0.02em; }
 
-  /* Panel of editions, placed at the pointer rather than pinned to the button,
-     so on a phone the choices land under the thumb that opened them. */
-  .langPop { position: fixed; z-index: 240; min-width: 132px;
+  .langBtnLabel { grid-row: 1; grid-column: 1 / -1; color: #54595d; font-size: var(--t-micro); line-height: 1.15; }
+  .langBtnCurrent { display: inline-flex; align-items: center; justify-content: space-between; width: 100%; gap: 9px; font-size: var(--t-small); }
+  .langBtnCurrent::after { content: ""; width: 6px; height: 6px; margin: -3px 2px 0 0;
+    border-bottom: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+  .langBtn.langBtnOpen { border-bottom-color: transparent; border-radius: 2px 2px 0 0; }
+  .langPop { position: absolute; inset: calc(100% - 1px) 0 auto auto; z-index: 240; width: 144px; max-width: calc(100vw - 64px);
     background: #fff; border: 1px solid #a2a9b1; box-shadow: 0 6px 18px rgba(0,0,0,0.22);
     padding: 7px 0 6px; font-size: var(--t-small); }
-  .langPopLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em;
+  .langPopLabel { display: none; font-variant: small-caps; letter-spacing: 0.06em;
     font-weight: bold; font-size: var(--t-micro); color: #555; padding: 0 12px 4px;
     margin-bottom: 3px; border-bottom: 1px solid #eaecf0; }
   .langPop button { display: block; width: 100%; text-align: left; font: inherit;
     background: none; border: 0; padding: 5px 12px; cursor: pointer; }
+  .langPop button { min-height: 34px; }
+  .langPop button::before { display: inline-block; content: ""; width: 1.2em; }
+  .langPop button[aria-current="true"]::before { content: "✓"; }
   .langPop .langOff { color: #0645ad; }
   .langPop .langOff:hover { background: #eaecf0; }
   .langPop .langOn { color: #202122; font-weight: bold; cursor: default; }

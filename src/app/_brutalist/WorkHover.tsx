@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { useLang } from "./useLang";
 import { PROJECTS, type Project } from "@/content";
 
@@ -22,6 +22,19 @@ const PREVIEWS: Record<string, Preview> = {
   digeart:    { type: "video", src: "/previews/digeart.mp4",    poster: "/previews/digeart.jpg" },
 };
 
+const PREVIEW_SIZES = {
+  desktop: { width: 720, height: 450 },
+  phone: { width: 390, height: 760 },
+  tablet: { width: 768, height: 900 },
+} as const;
+
+const PHONE_WIDTH = "(max-width:599px)";
+function subscribePhoneWidth(listener: () => void) {
+  const query = window.matchMedia(PHONE_WIDTH);
+  query.addEventListener("change", listener);
+  return () => query.removeEventListener("change", listener);
+}
+
 const DESKTOP_INPUT = "(min-width:900px) and (hover:hover) and (pointer:fine)";
 function subscribeInput(listener: () => void) {
   const query = window.matchMedia(DESKTOP_INPUT);
@@ -32,6 +45,9 @@ function subscribeInput(listener: () => void) {
 export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; id: number } | null }) {
   const fine = useSyncExternalStore(subscribeInput, () => window.matchMedia(DESKTOP_INPUT).matches, () => true);
   const touch = !fine;
+  const phone = useSyncExternalStore(subscribePhoneWidth, () => window.matchMedia(PHONE_WIDTH).matches, () => false);
+  const format = fine ? "desktop" : phone ? "phone" : "tablet";
+  const dimensions = PREVIEW_SIZES[format];
   const lang = useLang();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const handledTapRef = useRef<number | null>(null);
@@ -246,7 +262,10 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
     };
   }, [touch, shown]);
 
-  const preview = active ? PREVIEWS[active.slug] : undefined;
+  const desktopPreview = active ? PREVIEWS[active.slug] : undefined;
+  const preview: Preview | undefined = active && desktopPreview && touch
+    ? { type: "video", src: "/previews/" + format + "/" + active.slug + ".mp4", poster: "/previews/" + format + "/" + active.slug + ".jpg" }
+    : desktopPreview;
 
   return (
     <>
@@ -269,9 +288,14 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
         role={touch && shown ? "dialog" : undefined}
         aria-modal={touch && shown ? true : undefined}
         aria-label={touch && shown ? active?.title : undefined}
+        style={{
+          "--preview-ratio": dimensions.width / dimensions.height,
+          "--preview-max-width": Math.min(dimensions.width, DESKTOP_PREVIEW_WIDTH) + "px",
+        } as CSSProperties}
         inert={!shown}
       >
         <div className="workHoverInner">
+          {touch && <div className="workHoverHeading">{active?.title}</div>}
           <a className="workHoverMedia"
             href={touch && shown ? active?.url ?? undefined : undefined}
             target="_blank" rel="noopener noreferrer"
@@ -281,7 +305,7 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
           >
             {preview?.type === "video" ? (
               <video
-                key={active?.slug}
+                key={`${active?.slug}-${format}`}
                 src={preview.src}
                 poster={preview.poster}
                 muted
@@ -325,8 +349,8 @@ const CSS = `
   }
   .workHoverCard.centered {
     left: 50%; top: 50%; transform: translate(-50%, -50%);
-    /* Leave room for the frame, viewport margins and two lines of notice text. */
-    width: min(720px, calc(100vw - 32px), calc((100dvh - 44px - var(--t-micro) * 2.9) * 1.6));
+    /* Fit the real capture without cropping, including title and notice. */
+    width: min(var(--preview-max-width), calc(100vw - 24px), calc((100dvh - 120px) * var(--preview-ratio)));
   }
   /* only capture taps while the peek is actually visible - otherwise the
      hidden fixed card silently blocks taps at screen centre (nav / TOC) */
@@ -347,15 +371,25 @@ const CSS = `
   .workHoverMedia video, .workHoverMedia img {
     width: 100%; height: 100%; object-fit: cover; display: block;
   }
+  .workHoverCard.centered .workHoverInner {
+    border-color: #a2a9b1; background: #f8f9fa; color: #202122;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .workHoverHeading {
+    height: 44px; line-height: 43px; padding: 0 52px 0 12px;
+    border-bottom: 1px solid #c8ccd1; font-size: var(--t-small);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .workHoverCard.centered .workHoverMedia { aspect-ratio: var(--preview-ratio); }
   .workHoverNotice {
     margin: 0; padding: 4px 8px; border-top: 1px solid #7c828b;
     background: #f6f7f9; color: #555; font-size: var(--t-micro);
     line-height: 1.45; text-align: center; cursor: auto;
   }
   .workHoverClose {
-    position: absolute; top: 6px; right: 6px; z-index: 1;
+    position: absolute; top: 0; right: 0; z-index: 1;
     width: 44px; height: 44px; display: grid; place-items: center;
-    border: 1px solid #7c828b; background: #f6f7f9; color: #202122;
+    border: 0; border-left: 1px solid #c8ccd1; background: #f8f9fa; color: #202122;
     font: inherit; font-size: var(--t-head); cursor: pointer;
   }
   .workHoverClose:focus-visible, .workHoverMedia:focus-visible { outline: 2px solid #0645ad; outline-offset: -3px; }
