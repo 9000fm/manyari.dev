@@ -323,7 +323,9 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
           </a>
           {touch && (
             <p className="workHoverNotice" id="workHoverNotice">
-              {lang === "es" ? "Toca para abrir en otra pestaña ↗" : "Tap to open in a new tab ↗"}
+              {phone
+                ? (lang === "es" ? "Abrir en otra pestaña ↗" : "Open in new tab ↗")
+                : (lang === "es" ? "Toca para abrir en otra pestaña ↗" : "Tap to open in a new tab ↗")}
             </p>
           )}
           {touch && shown && (
@@ -332,6 +334,11 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
               onClick={() => closeRef.current()}>
               <span aria-hidden="true">×</span>
             </button>
+          )}
+          {touch && phone && shown && (
+            <button type="button" className="workHoverHome"
+              aria-label={lang === "es" ? "Cerrar con el botón de inicio" : "Close with the home button"}
+              onClick={() => closeRef.current()} />
           )}
         </div>
       </div>
@@ -400,6 +407,165 @@ const CSS = `
   .workHoverBackdrop {
     position: fixed; inset: 0; z-index: 205;
     background: rgba(0,0,0,0.42); pointer-events: auto;
+  }
+  @media (max-width: 599px) {
+    .workHoverBackdrop { background: #1e1d1ca0; }
+    .workHoverCard.centered {
+      --rim: clamp(9px, 3.5dvh, 19px);
+      --cap: clamp(16px, 5.9dvh, 39px);
+      --chin: clamp(44px, 8.8dvh, 51px);
+      --space: 104px;
+      --case-radius: clamp(10px, 4dvh, 26px);
+      --video-width: max(16px, min(390px, calc(100vw - 39px - 2 * var(--rim)),
+        calc((100dvh - var(--space) - var(--cap) - var(--chin)) * 0.513157895)));
+      width: calc(var(--video-width) + 2 * var(--rim));
+      top: calc(50% + 3px);
+    }
+    .workHoverCard.centered .workHoverInner {
+      isolation: isolate;
+      display: flow-root;
+      overflow: visible;
+      padding: 0 var(--rim) var(--chin);
+      border: 0;
+      border-radius: var(--case-radius);
+      background: linear-gradient(128deg, #373739, #e0e0df 13%, #707171 27%, #aaa 54%,
+        #575758 79%, #dadada 93%, #4a4a4b);
+      box-shadow: inset 0 0 0 1px #bdbdbe, inset 0 0 0 3px #a9a9a9,
+        0 2px 0 #515152, 0 4px 0 -1px #101011, 0 11px 14px -6px #000c, 0 24px 38px -11px #000b;
+      cursor: auto;
+    }
+    .workHoverCard.centered .workHoverInner::before,
+    .workHoverCard.centered .workHoverInner::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+    .workHoverCard.centered .workHoverInner::before {
+      z-index: -1;
+      inset: 4px;
+      border-radius: calc(var(--case-radius) - 3px);
+      border: 1px solid #0a0a0b;
+      background: linear-gradient(152deg, #444446 0%, #161617 11%, #161617 21%,
+        #101011 21.5%, #050506 78%, #151516);
+      box-shadow: inset 0 1px 3px #ffffff62, inset 0 -2px 2px #000;
+    }
+    .workHoverCard.centered .workHoverInner::after {
+      z-index: -2;
+      inset: -2px -2px 0;
+      background:
+        linear-gradient(0deg, #343436, #a9a9a9 70%, #666) 80% top / 17% 3px no-repeat,
+        linear-gradient(90deg, #383839, #b1b1b2 60%, #171718) left 16% / 3px 4% no-repeat,
+        radial-gradient(ellipse at right, #868687, #323233 62%, transparent 71%) left 26% / 5px 8px no-repeat,
+        radial-gradient(ellipse at right, #868687, #323233 62%, transparent 71%) left 32% / 5px 8px no-repeat;
+    }
+    .workHoverCard.centered .workHoverHeading {
+      position: relative;
+      height: var(--cap);
+      padding: 0;
+      border: 0;
+      overflow: visible;
+      font-size: 0;
+      line-height: 0;
+      color: transparent;
+    }
+    .workHoverCard.centered .workHoverHeading::before,
+    .workHoverCard.centered .workHoverHeading::after {
+      content: "";
+      position: absolute;
+      top: calc(50% + 1px);
+      translate: -50% -50%;
+    }
+    .workHoverCard.centered .workHoverHeading::before {
+      left: 50%;
+      width: clamp(12px, 21%, 44px);
+      height: clamp(3px, 16%, 6px);
+      border-radius: 10px;
+      background: repeating-linear-gradient(90deg, #070708 0 1px, #3a3a3a 1px 2px);
+      box-shadow: 0 0 0 1px #050505, 0 1px 0 1px #ffffff33;
+    }
+    .workHoverCard.centered .workHoverHeading::after {
+      left: 33%;
+      width: clamp(2px, 2.2%, 6px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 36% 39%, #697282 0%, #252d3b 28%, #09090a 70%);
+      box-shadow: 0 0 0 1px #28282b;
+    }
+    .workHoverCard.centered .workHoverMedia {
+      background: #0a0a0b;
+      overflow: hidden;
+      outline: 1px solid #373737;
+      outline-offset: 1px;
+      box-shadow: 0 0 0 1px #000, 0 0 2px 2px #ffffff11;
+    }
+    .workHoverCard.centered .workHoverMedia video { object-fit: contain; }
+    .workHoverCard.centered .workHoverMedia:focus-visible {
+      outline: 2px solid #96c3ff;
+      outline-offset: -3px;
+    }
+    .workHoverCard.centered .workHoverNotice {
+      position: absolute;
+      width: max-content;
+      max-width: calc(100vw - 20px);
+      left: 50%;
+      top: calc(100% + 11px);
+      translate: -50% 0;
+      padding: 3px 8px;
+      background: #f8f9fa;
+      color: #202122;
+      border: 1px solid #a2a9b1;
+      white-space: normal;
+      text-wrap: balance;
+      line-height: 1.25;
+      font-family: "Times New Roman", Times, serif;
+    }
+    .workHoverCard.centered .workHoverClose {
+      inset: auto 0 calc(100% + 6px) auto;
+      border: 1px solid #a2a9b1;
+      box-shadow: 0 2px 4px #0003;
+    }
+    .workHoverCard.centered .workHoverClose span { line-height: 1; }
+    .workHoverHome {
+      position: absolute;
+      left: 50%;
+      bottom: calc(var(--chin) / 2);
+      translate: -50% 50%;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .workHoverHome::before, .workHoverHome::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      aspect-ratio: 1;
+      pointer-events: none;
+    }
+    .workHoverHome::before {
+      width: calc(var(--chin) * .7);
+      border-radius: 50%;
+      background: radial-gradient(circle at 48% 95%, #343435, #181819 40%, #070708 82%);
+      box-shadow: inset 0 2px 3px #000, inset 0 -1px 1px #ffffff3b,
+        0 0 0 1px #000, 0 1px 0 1px #ffffff27;
+    }
+    .workHoverHome::after {
+      width: calc(var(--chin) * .24);
+      border-radius: 3px;
+      border: 1px solid #a0a0a1;
+    }
+    .workHoverHome:focus-visible {
+      outline: 2px solid #96c3ff;
+      outline-offset: -3px;
+      border-radius: 50%;
+    }
+    @media (max-height: 240px) {
+      .workHoverCard.centered { --space: 72px; top: calc(50% - 5px); }
+      .workHoverCard.centered .workHoverClose { inset: 0 auto auto calc(100% + 7px); }
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .workHoverInner { transition: opacity 0.12s ease; transform: none; }
