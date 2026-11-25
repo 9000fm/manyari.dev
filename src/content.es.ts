@@ -111,7 +111,7 @@ export const EDUCATION_ES: Record<string, { title: string; detail: string }> = {
 /** Website display labels, keyed by the shared CV categories. */
 export const SKILLS_ES: Record<(typeof SKILLS)[number]["label"], string> = {
   "Frontend Development": "Desarrollo web",
-  "Data & APIs": "Bases de datos e integraciones",
+  "Backend, Databases & APIs": "Backend, bases de datos y APIs",
   "E-commerce & CMS": "E-commerce y CMS",
   "Development Tools": "Herramientas e infraestructura",
   "Design & Creative Coding": "Diseño y tecnología creativa",

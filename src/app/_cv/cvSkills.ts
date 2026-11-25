@@ -5,7 +5,7 @@ export const CV_SKILLS = [
     itemsEs: "HTML, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS, Framer Motion, GSAP, diseño responsive",
   },
   {
-    label: "Data & APIs", labelEs: "Datos y APIs",
+    label: "Backend, Databases & APIs", labelEs: "Backend, bases de datos y APIs",
     items: "Python, Flask, Django, Supabase, MySQL, MongoDB, REST API integration, authentication flows",
     itemsEs: "Python, Flask, Django, Supabase, MySQL, MongoDB, integración de APIs REST, flujos de autenticación",
   },
@@ -26,7 +26,7 @@ export const CV_SKILLS = [
   },
   {
     label: "Professional Skills", labelEs: "Habilidades profesionales",
-    items: "Teamwork, client communication, problem-solving, adaptability, attention to detail, project ownership",
-    itemsEs: "Trabajo en equipo, comunicación con clientes, resolución de problemas, adaptabilidad, atención al detalle, gestión integral de proyectos",
+    items: "Teamwork, client communication, problem-solving, attention to detail",
+    itemsEs: "Trabajo en equipo, comunicación con clientes, resolución de problemas, atención al detalle",
   },
 ] as const;

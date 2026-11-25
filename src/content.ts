@@ -199,7 +199,7 @@ export type SkillGroup = { label: string; items: string[] };
 // Website display labels; preserve the approved CV categories and shared skill items.
 export const SKILL_LABELS: Record<string, string> = {
   "Frontend Development": "Web Development",
-  "Data & APIs": "Databases & Integrations",
+  "Backend, Databases & APIs": "Backend, Databases & APIs",
   "E-commerce & CMS": "E-commerce & CMS",
   "Development Tools": "Tools & Infrastructure",
   "Design & Creative Coding": "Design & Creative Technology",
