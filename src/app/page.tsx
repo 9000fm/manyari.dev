@@ -1,6 +1,5 @@
 import { ME, PROJECTS } from "@/content";
 import { SHARED_CSS, Sections, NAV_SECTIONS } from "./_brutalist/shared";
-import LangSwitch from "./_brutalist/LangSwitch";
 import { UI_ES, ME_ES } from "@/content.es";
 import WireSphere from "./_brutalist/WireSphere";
 import MobileNav from "./_brutalist/MobileNav";
@@ -38,6 +37,7 @@ const LAYOUT_CSS = `
   .identSphere { flex-shrink: 0; width: 215px; height: 215px; display: flex; align-items: center; justify-content: center; }
   .sideMeta { color: #444; font-size: var(--t-small); margin: 6px 0 0; }
   .sideMeta a { text-decoration: underline; }
+  .sideCv { font-size: var(--t-small); line-height: 1.6; margin: 5px 0 0; }
 
   /* content = the white "article" box with the Monobook blue border */
   .content { min-width: 0; background: #fff; border: 1px solid ${BLUE_LINE}; padding: 18px 30px 40px; }
@@ -154,6 +154,12 @@ const LAYOUT_CSS = `
   .langPop .langOff:hover { background: #eaecf0; }
   .langPop .langOn { color: #202122; font-weight: bold; cursor: default; }
   .langPop button:focus-visible { outline: 2px solid #0645ad; outline-offset: -2px; }
+  .aboutHead { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid currentColor; margin:0 0 14px; padding:0 0 5px; }
+  .brut .aboutHead h2 { flex:1; min-width:0; margin:0; padding:0; border:0; }
+  .aboutHead .langBar { flex:none; margin:0; }
+  .aboutHead .langBtn { display:flex; width:auto; min-height:0; gap:5px; padding:2px 0 2px 8px; border:0; border-left:1px solid #a2a9b1; background:transparent; }
+  .aboutHead .langBtnLabel { display:none; }
+  .aboutHead .langBtnCurrent { width:auto; gap:6px; }
   @media (prefers-reduced-motion: reduce) { .langBtn { transition: none; } }
   .sideColophon { margin-top: 16px; padding-top: 12px; border-top: 1px solid #c8ccd1; font-size: var(--t-micro); color: #5f5f5f; line-height: 1.7; }
 
@@ -261,6 +267,7 @@ export default function BrutalistSidebar() {
                   <br />
                   <span data-es={UI_ES.status}>Status:</span> <strong data-es={ME_ES.available}>{ME.available}</strong>
                 </p>
+                <p className="sideCv"><a href="/Flavio-Manyari-CV-ATS.pdf" data-es-href="/Flavio-Manyari-CV-ATS-ES.pdf" download data-es="[ Descargar CV ↓ ]">[ Download CV ↓ ]</a></p>
               </div>
               <div className="identSphere">
                 <WireSphere size={215} />
@@ -317,13 +324,6 @@ export default function BrutalistSidebar() {
 
           <div className="content">
             <div className="inner">
-              {/* Vector 2022 puts the interlanguage control here: a bordered
-                  button at the top right of the article, above the first
-                  heading. With two languages a dropdown would be theatre, so
-                  the button names the edition you get by pressing it. */}
-              <div className="langBar">
-                <LangSwitch variant="button" />
-              </div>
               <Sections />
             </div>
           </div>

@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import LangSwitch from "./LangSwitch";
 import { ME, PROJECTS, SKILLS, EXPERIENCE, type Project } from "@/content";
 import {
   ME_ES, PROJECTS_ES, EXPERIENCE_ES, SKILLS_ES,
@@ -176,7 +177,10 @@ export function Sections(): ReactElement {
   return (
     <>
       <section id="about" className="brutAbout">
-        <h2 data-es={UI_ES.about}>About</h2>
+        <div className="aboutHead">
+          <h2 data-es={UI_ES.about}>About</h2>
+          <div className="langBar"><LangSwitch variant="button" /></div>
+        </div>
         <p className="brutAboutText">
           <span className="brutDropCap" data-es={ME_ES.about.charAt(0)}>{ME.about.charAt(0)}</span>
           <span data-es={aboutIntroEs.slice(1)}>{aboutIntro.slice(1)}</span>
@@ -265,7 +269,8 @@ export function Sections(): ReactElement {
           <a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
           {" · "}
           <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          {" · "}
+        </p>
+        <p className="brutChannels">
           <a href="/Flavio-Manyari-CV-ATS.pdf" data-es-href="/Flavio-Manyari-CV-ATS-ES.pdf" target="_blank" rel="noopener noreferrer" data-es={`${UI_ES.downloadCv} ↗︎`}>Download CV {"↗︎"}</a>
         </p>
         <p className="brutBased" data-es={UI_ES.contactBased}>
