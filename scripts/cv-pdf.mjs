@@ -1,82 +1,91 @@
-// Prints the CV PDFs from src/app/_cv/CvSheet.tsx through a temporary /cv route
-// on the running dev server, then removes the route again.
-//
-//   npx next dev -p 4444              (in another terminal, port 3000 belongs to digeart)
-//   node scripts/cv-pdf.mjs [--base http://localhost:4444]
-//
-// Writes public/Flavio-Manyari-CV.pdf (EN) and public/Flavio-Manyari-CV-ES.pdf (ES),
-// A4 with 14mm margins, and reports the page count: both must be 1.
+// Prints both CV layouts in English and Spanish from the shared React content.
+// All files are generated and checked before any public PDF is replaced.
+// Usage: node scripts/cv-pdf.mjs [--png <directory>]
 
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const require = createRequire(import.meta.url);
+const ts = require("typescript");
+const React = require("react");
+const { renderToStaticMarkup } = require("react-dom/server");
+const preflight = fs.readFileSync(require.resolve("tailwindcss/preflight.css"), "utf8");
 const args = process.argv.slice(2);
-const i = args.indexOf("--base");
-const BASE = i >= 0 ? args[i + 1] : "http://localhost:4444";
 const p = args.indexOf("--png");
-const PNG = p >= 0 ? path.resolve(args[p + 1]) : ""; // optional: full-page PNG of each sheet for a quick visual check
-const ROUTE = path.join(ROOT, "src", "app", "cv");
-const JOBS = [
-  { route: "/cv", file: "Flavio-Manyari-CV.pdf", lang: "en" },
-  { route: "/cv/es", file: "Flavio-Manyari-CV-ES.pdf", lang: "es" },
+if (p >= 0 && !args[p + 1]) throw new Error("--png requires a directory");
+const PNG = p >= 0 ? path.resolve(args[p + 1]) : "";
+
+// The CV components use local TSX and React only. Compile them in this process
+// so printing never creates, overwrites, or deletes a Next.js route.
+for (const ext of [".ts", ".tsx"]) {
+  require.extensions[ext] = (module, filename) => {
+    const source = fs.readFileSync(filename, "utf8");
+    const { outputText } = ts.transpileModule(source, {
+      compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+      fileName: filename,
+    });
+    module._compile(outputText, filename);
+  };
+}
+
+const CvSheet = require(path.join(ROOT, "src/app/_cv/CvSheet.tsx")).default;
+const CvSingleColumn = require(path.join(ROOT, "src/app/_cv/CvSingleColumn.tsx")).default;
+const jobs = [
+  { lang: "en", layout: "editorial", component: CvSheet, file: "Flavio-Manyari-CV.pdf" },
+  { lang: "es", layout: "editorial", component: CvSheet, file: "Flavio-Manyari-CV-ES.pdf" },
+  { lang: "en", layout: "ats", component: CvSingleColumn, file: "Flavio-Manyari-CV-ATS.pdf" },
+  { lang: "es", layout: "ats", component: CvSingleColumn, file: "Flavio-Manyari-CV-ATS-ES.pdf" },
 ];
-
-// the PDF's document title comes from the page <title>, so each temp route sets its own
-const pageSource = (lang) =>
-  lang === "es"
-    ? 'import CvSheet from "../../_cv/CvSheet";\nexport const metadata = { title: "Flavio Manyari - CV" };\nexport default function Page() {\n  return (\n    <div lang="es">\n      <CvSheet lang="es" />\n    </div>\n  );\n}\n'
-    : 'import CvSheet from "../_cv/CvSheet";\nexport const metadata = { title: "Flavio Manyari - CV" };\nexport default function Page() {\n  return <CvSheet lang="en" />;\n}\n';
-
+const MARGIN_MM = 11;
+const PRINT_WIDTH = Math.floor((210 - 2 * MARGIN_MM) * 96 / 25.4);
+const PRINT_HEIGHT = Math.floor((297 - 2 * MARGIN_MM) * 96 / 25.4);
+const margin = `${MARGIN_MM}mm`;
 const pageCount = (pdf) => (fs.readFileSync(pdf).toString("latin1").match(/\/Type\s*\/Page[^s]/g) || []).length;
+const html = (job) => {
+  const body = renderToStaticMarkup(React.createElement(job.component, { lang: job.lang }));
+  const title = `Flavio Manyari - CV ${job.layout === "ats" ? "ATS" : "Editorial"} - ${job.lang.toUpperCase()}`;
+  return `<!doctype html><html lang="${job.lang}"><head><meta charset="utf-8"><title>${title}</title><style>${preflight}\n*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style></head><body>${body}</body></html>`;
+};
 
 async function main() {
-  const up = await fetch(BASE, { signal: AbortSignal.timeout(5000) }).catch(() => null);
-  if (!up) {
-    console.error(`no dev server at ${BASE}. Start it first: npx next dev -p 4444`);
-    process.exit(1);
-  }
-  if (fs.existsSync(ROUTE)) throw new Error(`${ROUTE} already exists; remove it before printing`);
-  fs.mkdirSync(path.join(ROUTE, "es"), { recursive: true });
-  fs.writeFileSync(path.join(ROUTE, "page.tsx"), pageSource("en"));
-  fs.writeFileSync(path.join(ROUTE, "es", "page.tsx"), pageSource("es"));
-  const browser = await chromium.launch();
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "manyari-cv-"));
+  const realTempRoot = fs.realpathSync(os.tmpdir());
+  const realTemp = fs.realpathSync(temp);
+  if (path.dirname(realTemp).toLowerCase() !== realTempRoot.toLowerCase() || !path.basename(realTemp).startsWith("manyari-cv-")) throw new Error("Unexpected temporary directory");
+  let browser;
   try {
-    const page = await browser.newPage();
-    // printable A4 at 14mm margins: 182 x 269 mm = 688 x 1017 CSS px, so the
-    // measured sheet height matches what the PDF will wrap to
-    await page.setViewportSize({ width: 688, height: 1017 });
-    for (const j of JOBS) {
-      const out = path.join(ROOT, "public", j.file);
-      // first request compiles the temp route, give it time
-      await page.goto(BASE + j.route, { waitUntil: "networkidle", timeout: 120000 });
-      await page.waitForSelector("article.sheet", { timeout: 60000 });
+    if (PNG) fs.mkdirSync(PNG, { recursive: true });
+    browser = await chromium.launch();
+    const page = await browser.newPage({ viewport: { width: PRINT_WIDTH, height: PRINT_HEIGHT } });
+    await page.emulateMedia({ media: "print" });
+    for (const job of jobs) {
+      await page.setContent(html(job), { waitUntil: "load" });
       await page.evaluate(() => document.fonts.ready);
-      await page.emulateMedia({ media: "print" });
-      // A4 minus 14mm margins is 269mm tall = 1017 CSS px; the sheet must fit in that
-      const h = await page.evaluate(() => Math.ceil(document.querySelector("article.sheet").getBoundingClientRect().height));
-      console.log(`${j.lang}: sheet ${h} px tall (usable 1017)`);
-      if (PNG) await page.screenshot({ path: path.join(PNG, `cv-${j.lang}.png`), fullPage: true }); // --png <dir>: proof sheet
-      await page.pdf({
-        path: out,
-        format: "A4",
-        printBackground: true,
-        preferCSSPageSize: true,
-        margin: { top: "14mm", right: "14mm", bottom: "14mm", left: "14mm" },
-      });
-      const n = pageCount(out);
-      console.log(`${j.file}: ${(fs.statSync(out).size / 1024).toFixed(0)} KB, ${n} page(s)${n === 1 ? "" : "  <-- must be 1, tighten CvSheet.tsx"}`);
+      const height = await page.locator("article.sheet").evaluate((sheet) => Math.ceil(sheet.getBoundingClientRect().height));
+      console.log(`${job.layout} ${job.lang}: ${height}px de ${PRINT_HEIGHT}px`);
+      if (height > PRINT_HEIGHT) throw new Error(`${job.layout} ${job.lang}: content exceeds one page`);
+      if (PNG) await page.screenshot({ path: path.join(PNG, `cv-${job.layout}-${job.lang}.png`), fullPage: true });
+      const target = path.join(temp, job.file);
+      await page.pdf({ path: target, format: "A4", printBackground: true, preferCSSPageSize: true, tagged: true, margin: { top: margin, right: margin, bottom: margin, left: margin } });
+      if (pageCount(target) !== 1) throw new Error(`${job.file}: PDF must have one page`);
+    }
+    for (const job of jobs) {
+      fs.copyFileSync(path.join(temp, job.file), path.join(ROOT, "public", job.file));
+      console.log(`${job.file}: generado`);
     }
   } finally {
-    await browser.close();
-    fs.rmSync(ROUTE, { recursive: true, force: true });
+    if (browser) await browser.close();
+    for (const job of jobs) {
+      const file = path.join(temp, job.file);
+      if (fs.existsSync(file)) fs.unlinkSync(file);
+    }
+    fs.rmdirSync(temp);
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  fs.rmSync(ROUTE, { recursive: true, force: true });
-  process.exit(1);
-});
+main().catch((error) => { console.error(error); process.exitCode = 1; });

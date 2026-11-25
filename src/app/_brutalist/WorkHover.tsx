@@ -18,7 +18,6 @@ const PREVIEWS: Record<string, Preview> = {
   tonydecay:  { type: "video", src: "/previews/tonydecay.mp4",  poster: "/previews/tonydecay.jpg" },
   silverback: { type: "video", src: "/previews/silverback.mp4", poster: "/previews/silverback.jpg" },
   superself:  { type: "video", src: "/previews/superself.mp4",  poster: "/previews/superself.jpg" },
-  micaela:    { type: "video", src: "/previews/micaela.mp4",    poster: "/previews/micaela.jpg" },
   digeart:    { type: "video", src: "/previews/digeart.mp4",    poster: "/previews/digeart.jpg" },
 };
 
@@ -52,6 +51,7 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const handledTapRef = useRef<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const reduceRef = useRef(false);
   const closeRef = useRef<() => void>(() => {});
   const [active, setActive] = useState<Project | null>(null); // current row (content)
@@ -101,12 +101,19 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
     let sideRight = true; // side of cursor, locked per hover
     let visible = false;
     let raf = 0;
-    let hideTimer = 0;
-    let hasCursor = false; // no hit-testing until the mouse has really moved
-    let scrollRaf = 0;
-    closeRef.current = () => {
+    let lastPoint: { x: number; y: number } | null = null;
+    let currentRow: HTMLLIElement | null = null;
+    let dismissedRow: HTMLLIElement | null = null;
+    const hide = () => {
+      if (!visible) return;
       visible = false;
+      cancelAnimationFrame(raf);
+      raf = 0;
       setShown(false);
+    };
+    closeRef.current = () => {
+      dismissedRow = currentRow; // Escape stays dismissed until the pointer leaves the image band.
+      hide();
     };
 
     const apply = () => {
@@ -134,10 +141,44 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
       if (!raf) raf = requestAnimationFrame(loop);
     };
 
-    const onMove = (e: MouseEvent) => {
-      hasCursor = true;
+    // Only a real mouse position change can activate the preview. Scrolling a
+    // project beneath a stationary pointer must never open a video.
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      if (lastPoint?.x === e.clientX && lastPoint.y === e.clientY) return;
+      lastPoint = { x: e.clientX, y: e.clientY };
+      const target = e.target instanceof Element ? e.target : null;
+      const row = target?.closest<HTMLLIElement>(".brutWork > li") ?? null;
+      const project = row ? byLi.get(row) : undefined;
+      const image = row?.querySelector<HTMLImageElement>(".brutPlate img");
+      const bounds = image?.getBoundingClientRect();
+      const rowBounds = row?.getBoundingClientRect();
+      // Allow the full horizontal strip beside the image, but never the
+      // caption, project heading, description, technologies or row spacing.
+      const inImageBand = !!(row && project && bounds && rowBounds &&
+        e.clientY >= bounds.top && e.clientY < bounds.bottom &&
+        e.clientX >= rowBounds.left && e.clientX < rowBounds.right);
+      if (!inImageBand || !row || !project) {
+        currentRow = null;
+        dismissedRow = null;
+        hide();
+        return;
+      }
+      if (dismissedRow === row) return;
+      dismissedRow = null;
       tx = e.clientX;
       ty = e.clientY;
+      if (!visible || currentRow !== row) {
+        cx = tx;
+        cy = ty;
+        const w = cardRef.current?.offsetWidth || DESKTOP_PREVIEW_WIDTH;
+        sideRight = tx + GAP + w + PAD <= window.innerWidth;
+        currentRow = row;
+        visible = true;
+        setActive(project);
+        setShown(true);
+        apply();
+      }
       if (reduceRef.current) {
         cx = tx;
         cy = ty;
@@ -147,77 +188,32 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
       }
     };
 
-    const openAt = (proj: Project) => {
-      // fresh appear: snap to cursor + lock side so it never flips mid-hover.
-      // moving between rows (already visible): glide instead of teleport.
-      if (!visible) {
-        cx = tx;
-        cy = ty;
-        const w = cardRef.current?.offsetWidth || DESKTOP_PREVIEW_WIDTH;
-        sideRight = tx + GAP + w + PAD <= window.innerWidth;
+    // Scroll only dismisses. It never hit-tests or activates a new row.
+    const onScroll = () => hide();
+    const onPointerOut = (e: PointerEvent) => {
+      if (e.relatedTarget === null) {
+        currentRow = null;
+        dismissedRow = null;
+        lastPoint = null;
+        hide();
       }
-      visible = true;
-      setActive(proj);
-      setShown(true);
-      if (reduceRef.current) apply();
-      else kick();
     };
-
-    for (const [li, proj] of byLi) {
-      const enter = (e: MouseEvent) => {
-        hasCursor = true;
-        window.clearTimeout(hideTimer);
-        tx = e.clientX;
-        ty = e.clientY;
-        openAt(proj);
-      };
-      const leave = () => {
-        // small delay so crossing the gap between rows doesn't blink
-        window.clearTimeout(hideTimer);
-        hideTimer = window.setTimeout(() => {
-          visible = false;
-          setShown(false);
-        }, 90);
-      };
-      li.addEventListener("mouseenter", enter);
-      li.addEventListener("mousemove", onMove);
-      li.addEventListener("mouseleave", leave);
-      cleanups.push(() => {
-        li.removeEventListener("mouseenter", enter);
-        li.removeEventListener("mousemove", onMove);
-        li.removeEventListener("mouseleave", leave);
-      });
-    }
-
-    // Re-sync on scroll. Chrome refires enter/leave while content scrolls under
-    // a static cursor; Firefox and Safari do not, which left the card stuck
-    // with a stale project. Hit-test the last cursor spot ourselves so all
-    // three behave the same: swap to the row now under the cursor, or close.
-    const onScroll = () => {
-      if (!hasCursor || scrollRaf) return;
-      scrollRaf = requestAnimationFrame(() => {
-        scrollRaf = 0;
-        const li = document.elementFromPoint(tx, ty)?.closest?.(".brutWork > li");
-        const proj = li ? byLi.get(li as HTMLLIElement) : undefined;
-        if (proj) {
-          window.clearTimeout(hideTimer);
-          openAt(proj);
-        } else if (visible) {
-          visible = false;
-          setShown(false);
-        }
-      });
-    };
-    window.addEventListener("resize", apply);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerout", onPointerOut, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    window.addEventListener("wheel", onScroll, { passive: true });
+    window.addEventListener("resize", hide);
+    window.addEventListener("blur", hide);
     cleanups.push(() => {
-      window.removeEventListener("resize", apply);
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(scrollRaf);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerout", onPointerOut);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("wheel", onScroll);
+      window.removeEventListener("resize", hide);
+      window.removeEventListener("blur", hide);
     });
 
     return () => {
-      window.clearTimeout(hideTimer);
       cancelAnimationFrame(raf);
       cleanups.forEach((c) => c());
     };
@@ -266,6 +262,15 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
   const preview: Preview | undefined = active && desktopPreview && touch
     ? { type: "video", src: "/previews/" + format + "/" + active.slug + ".mp4", poster: "/previews/" + format + "/" + active.slug + ".jpg" }
     : desktopPreview;
+  const previewHref = touch && shown ? active?.url ?? undefined : undefined;
+
+  // Hidden videos must not continue decoding/playing in the background.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (shown && !reduce) void video.play().catch(() => {});
+    else video.pause();
+  }, [shown, reduce, preview?.src]);
 
   return (
     <>
@@ -297,7 +302,7 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
         <div className="workHoverInner">
           {touch && <div className="workHoverHeading">{active?.title}</div>}
           <a className="workHoverMedia"
-            href={touch && shown ? active?.url ?? undefined : undefined}
+            href={previewHref}
             target="_blank" rel="noopener noreferrer"
             tabIndex={touch && shown ? 0 : -1}
             aria-describedby={touch && shown ? "workHoverNotice" : undefined}
@@ -305,12 +310,13 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
           >
             {preview?.type === "video" ? (
               <video
+                ref={videoRef}
                 key={`${active?.slug}-${format}`}
                 src={preview.src}
                 poster={preview.poster}
                 muted
                 loop
-                autoPlay={!reduce}
+                autoPlay={shown && !reduce}
                 playsInline
                 preload="none"
               />
@@ -321,13 +327,16 @@ export default function WorkHover({ tapRequest }: { tapRequest: { slug: string; 
               <span className="workHoverPh">&#9654; preview</span>
             )}
           </a>
-          {touch && (
+          {touch && (phone ? (
+            <a className="workHoverNotice" id="workHoverNotice"
+              href={previewHref} target="_blank" rel="noopener noreferrer">
+              {lang === "es" ? "Abrir en otra pestaña ↗" : "Open in new tab ↗"}
+            </a>
+          ) : (
             <p className="workHoverNotice" id="workHoverNotice">
-              {phone
-                ? (lang === "es" ? "Abrir en otra pestaña ↗" : "Open in new tab ↗")
-                : (lang === "es" ? "Toca para abrir en otra pestaña ↗" : "Tap to open in a new tab ↗")}
+              {lang === "es" ? "Toca para abrir en otra pestaña ↗" : "Tap to open in a new tab ↗"}
             </p>
-          )}
+          ))}
           {touch && shown && (
             <button ref={closeButtonRef} type="button" className="workHoverClose"
               aria-label={lang === "es" ? "Cerrar vista previa" : "Close preview"}
@@ -519,6 +528,8 @@ const CSS = `
       line-height: 1.25;
       font-family: "Times New Roman", Times, serif;
     }
+    .workHoverCard.centered a.workHoverNotice { cursor: pointer; text-decoration: none; }
+    .workHoverCard.centered a.workHoverNotice:focus-visible { outline: 2px solid #0645ad; outline-offset: -3px; }
     .workHoverCard.centered .workHoverClose {
       inset: auto 0 calc(100% + 6px) auto;
       border: 1px solid #a2a9b1;

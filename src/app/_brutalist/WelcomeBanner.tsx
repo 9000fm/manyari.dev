@@ -36,6 +36,7 @@ export default function WelcomeBanner() {
           >
             ×
           </button>
+          <span className="welcomeIcon" aria-hidden="true">☞</span>
           {/* The language switch translates each text segment independently. */}
           <p className="welcomeText">
             <b data-es={UI_ES.bannerLead}>{BANNER.lead}</b>{" "}

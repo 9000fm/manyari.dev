@@ -1,7 +1,9 @@
+import { CV_SKILLS } from "./app/_cv/cvSkills";
+
 export const ME = {
   name: "Flavio Manyari",
   role: "Web Developer & Designer",
-  topline: "Design · Development · E-commerce · Digital Products · Independent & Remote",
+  topline: "Web Development · Visual Design · E-commerce · Digital Products · Remote",
   location: "Lima, PE",
   email: "flavio@manyari.dev",
   available: "Available",
@@ -10,12 +12,11 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Hi, I'm Flavio, a designer and web developer from Lima, Peru. I've worked with clients in Peru, the US, and Australia, designing interfaces, building websites, e-commerce stores, and applications, integrating APIs, and improving existing platforms.\n\nAlongside client work, I develop my own projects, including a music discovery application. My interest in music and design has also led me to explore generative art and real-time visuals.\n\nThis portfolio brings together a selection of my professional and personal work. For new projects, collaborations, or job opportunities, feel free to reach out.",
+    "Hi, I'm Flavio, a web developer and designer from Lima, Peru, with experience working with clients in Peru, the US, and Australia. I specialize in designing and developing websites, online stores, and web applications, with professional experience in programming, graphic design, and UI/UX.\n\nOutside of client work, I dedicate part of my time to my own digital projects. My creative interests include electronic music production, generative art, and audiovisual design.\n\nThis portfolio brings together a selection of my professional and personal work. For new projects, collaborations, or job opportunities, feel free to reach out.",
   aboutContactLabel: "reach out",
-  // The professional profile from About. The printed CV uses it as
-  // its summary (src/app/_cv/CvSheet.tsx). Keep it in step with `about`.
+  // CV summary; independent of the website About.
   summary:
-    "Web developer and designer from Lima, Peru. I have worked with clients in Peru, the US, and Australia, building websites, online stores, and applications. My development experience builds on a background in graphic and interface design. Alongside client work, I design, launch, and maintain my own projects. My creative practice also includes generative art and real-time visuals.",
+    "Web developer and designer with experience delivering websites, e-commerce platforms and digital products for clients in Peru, the US and Australia. I work independently and alongside agency teams, covering UI/UX, frontend development, API integration and technical troubleshooting. Outside of client work, I develop my own digital products and explore generative art, electronic music and audiovisual design.",
   socials: {
     github: "https://github.com/9000fm",
     linkedin: "https://www.linkedin.com/in/flavio-manyari-bab9a9215/",
@@ -52,14 +53,14 @@ export const PROJECTS: Project[] = [
     slug: "tonydecay",
     title: "Tony Decay",
     year: 2026,
-    role: "Illustrator storefront: identity, shop, and checkout",
+    role: "E-commerce and visual identity",
     url: "https://tonydecay.com",
     tag: "client",
-    blurb: "Visual identity and online store for illustrator Tony Decay. I handled the design and development, with integrated payments and a panel where the artist manages sales and shipments.",
+    blurb: "Designed and developed the artist's visual identity and online store, including payment integration and a custom dashboard for managing sales and shipments.",
     technologies: ["Next.js", "TypeScript", "Supabase", "PayPal"],
     plate: "/plates/tonydecay.png",
     plateAlt: "The Foundation Series shop page of tonydecay.com, showing the grid of fifteen art prints beside the collection heading.",
-    plateCap: "Foundation Series, the fifteen-print collection page.",
+    plateCap: "Landing page featuring the Foundation Series art print collection.",
     plateW: 440,
     plateH: 275,
   },
@@ -67,14 +68,14 @@ export const PROJECTS: Project[] = [
     slug: "digeart",
     title: "Digeart",
     year: 2026,
-    role: "Music discovery platform: product design and development",
+    role: "Independent web application",
     url: "https://digeart.online",
     tag: "personal",
-    blurb: "Music discovery platform for listeners and producers. It brings together electronic music, mixes, and sampling material in a hand-curated catalog, and lets users create playlists. Designed, developed, and maintained independently.",
-    technologies: ["Next.js", "TypeScript", "Supabase", "NextAuth"],
+    blurb: "Music discovery platform built with Next.js, Supabase, and the YouTube API. It automatically updates its catalog from selected channels and includes an integrated player and user-created playlists.",
+    technologies: ["Next.js", "TypeScript", "Supabase", "YouTube API", "NextAuth"],
     plate: "/plates/digeart.png",
     plateAlt: "The digeart.online discovery grid, showing rows of underground record label artwork under a search field.",
-    plateCap: "Hand-curated discovery grid.",
+    plateCap: "Music discovery interface with a searchable catalog of tracks.",
     plateW: 440,
     plateH: 275,
   },
@@ -82,14 +83,14 @@ export const PROJECTS: Project[] = [
     slug: "silverback",
     title: "Silverback Stripes",
     year: 2026,
-    role: "E-commerce site: Shopify design and development",
+    role: "Shopify e-commerce",
     url: "https://silverbackstripes.com",
     tag: "client",
-    blurb: "Shopify store for a martial arts apparel brand. Design and development of the homepage, product pages, and mobile navigation.",
+    blurb: "E-commerce design and development for a martial arts apparel brand, with custom Shopify layouts and responsive navigation.",
     technologies: ["Shopify", "Liquid", "CSS", "JavaScript"],
     plate: "/plates/silverback.png",
     plateAlt: "The silverbackstripes.com homepage hero, with the headline Earn Your Stripes over a photograph of a grappling session.",
-    plateCap: "Homepage.",
+    plateCap: "Shopify storefront for a martial arts apparel brand.",
     plateW: 440,
     plateH: 275,
   },
@@ -99,12 +100,12 @@ export const PROJECTS: Project[] = [
     year: 2026,
     tag: "client",
     url: "https://civiclick.com",
-    role: "Landing page design & prototyping",
-    blurb: "Designed and prototyped a landing page in HTML/CSS/JS for a civic engagement SaaS platform. Responsive review and handoff for WordPress implementation. Project for Design In DC.",
+    role: "Frontend prototyping",
+    blurb: "Responsive landing page design and frontend prototyping for a civic engagement SaaS platform. Developed in HTML, CSS, and JavaScript for Design In DC.",
     technologies: ["HTML","CSS","JavaScript"],
     plate: "/plates/civiclick.png",
     plateAlt: "The CiviClick landing page prototype, with its headline and a circular composition of the US Capitol and product screens.",
-    plateCap: "Homepage prototype prepared for WordPress implementation.",
+    plateCap: "Landing page prototype for the civic engagement platform.",
     plateW: 440,
     plateH: 275,
   },
@@ -114,12 +115,12 @@ export const PROJECTS: Project[] = [
     year: 2026,
     tag: "client",
     url: "https://brisol.pe",
-    role: "WordPress maintenance",
-    blurb: "WordPress site maintenance and recovery: file and database review, plugin updates, backups, and removal of unauthorized content.",
+    role: "WordPress recovery and security",
+    blurb: "WordPress maintenance and technical support, covering website recovery, security improvements, database troubleshooting, and contact form integration.",
     technologies: ["WordPress","cPanel"],
     plate: "/plates/brisol.png",
     plateAlt: "The Brisol homepage, with a solar installation headline and an inquiry form.",
-    plateCap: "The WordPress site maintained for Brisol.",
+    plateCap: "Solar installation services and the customer inquiry form.",
     plateW: 440,
     plateH: 275,
   },
@@ -129,12 +130,12 @@ export const PROJECTS: Project[] = [
     year: 2025,
     tag: "client",
     url: "https://ecolutionsolar.com.au",
-    role: "WordPress design & development",
-    blurb: "Redesigned the WordPress website of an Australian solar energy company. Reorganized the site structure and content, and designed its pages.",
+    role: "Corporate website redesign",
+    blurb: "Redesigned and restructured a corporate WordPress website for an Australian solar energy company, focusing on page design and content organization.",
     technologies: ["WordPress","Elementor"],
     plate: "/plates/ecolution.png",
     plateAlt: "The Ecolution Industries homepage, showing solar panels and an estimate request form.",
-    plateCap: "Ecolution Industries, Australia. Website redesign, 2025.",
+    plateCap: "Redesigned homepage for an Australian solar energy company.",
     plateW: 440,
     plateH: 275,
   },
@@ -149,7 +150,7 @@ export const PROJECTS: Project[] = [
     technologies: ["Next.js", "TypeScript", "Supabase", "Redis"],
     plate: "/plates/superself.png",
     plateAlt: "The superself.online interface, a white wireframe corridor drawn in one-point perspective on black, with a text menu at the top left.",
-    plateCap: "The label's main interface, drawn in one-point perspective.",
+    plateCap: "Homepage of the independent electronic music label.",
     plateW: 440,
     plateH: 275,
   },
@@ -177,32 +178,38 @@ export type Job = {
 // Reverse chronological: the current role first, then by end date.
 export const EXPERIENCE: Job[] = [
   {
-    title: "Designer & Developer",
+    title: "Web Developer & Designer",
     company: "Independent",
     location: "",
     period: "2020 - Present",
-    blurb: "Independent design work since 2020, expanding into web design and development in 2023. My work includes brand identity, interfaces, e-commerce, deployment, and ongoing maintenance.",
+    blurb: "Independent design work since 2020, expanding into web design and development in 2023. My work includes UI/UX, websites, e-commerce, third-party integrations, deployment, and maintenance.",
   },
   {
-    title: "Freelance UI Designer",
+    title: "UI Designer",
     company: "Projects for Design In DC",
     location: "",
     period: "2025 - 2026",
-    blurb: "Designed interfaces and web prototypes for agency client projects. Prepared design proposals and reviewed responsive layouts for implementation.",
+    blurb: "Web design and prototyping for agency clients, including responsive layouts, UI design, and development handoff.",
   },
 
 ];
 
 export type SkillGroup = { label: string; items: string[] };
 
-export const SKILLS: SkillGroup[] = [
-  { label: "Frontend",          items: ["HTML", "CSS", "JavaScript", "TypeScript", "React / Next.js", "Tailwind"] },
-  { label: "E-commerce",        items: ["Shopify / Liquid", "PayPal"] },
-  { label: "CMS & Backend",     items: ["Sanity", "Supabase", "WordPress"] },
-  { label: "Design",            items: ["Adobe Suite", "Brand Identity", "UI/UX"] },
-  { label: "Infra & SEO",       items: ["Git", "Vercel", "DNS / SSL / Hosting", "Technical SEO"] },
-  { label: "Motion & Graphics", items: ["p5.js", "WebGL", "Framer Motion", "Generative Art"] },
-];
+// Website display labels; preserve the approved CV categories and shared skill items.
+export const SKILL_LABELS: Record<string, string> = {
+  "Frontend Development": "Web Development",
+  "Data & APIs": "Databases & Integrations",
+  "E-commerce & CMS": "E-commerce & CMS",
+  "Development Tools": "Tools & Infrastructure",
+  "Design & Creative Coding": "Design & Creative Technology",
+  "Professional Skills": "Professional Skills",
+};
+
+export const SKILLS: SkillGroup[] = CV_SKILLS.map((group) => ({
+  label: group.label,
+  items: group.items.split(", "),
+}));
 
 // He did not finish either UPC career (Industrial Engineering to 6th cycle,
 // Music Production to 8th), so no degree is claimed - framed as "studies".
@@ -234,4 +241,6 @@ export const SERVICES = [
 export const LANGUAGES = [
   { lang: "Spanish", level: "Native" },
   { lang: "English", level: "Fluent" },
+  { lang: "French", level: "Basic" },
+  { lang: "Portuguese", level: "Basic" },
 ] as const;

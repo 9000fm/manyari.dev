@@ -1,5 +1,5 @@
-import { ME, PROJECTS } from "@/content";
-import { SHARED_CSS, Sections, NAV_SECTIONS } from "./_brutalist/shared";
+import { ME } from "@/content";
+import { SHARED_CSS, Sections, NAV_SECTIONS, SocialLinks } from "./_brutalist/shared";
 import { UI_ES, ME_ES } from "@/content.es";
 import WireSphere from "./_brutalist/WireSphere";
 import MobileNav from "./_brutalist/MobileNav";
@@ -59,6 +59,8 @@ const LAYOUT_CSS = `
   .welcome { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdf3d7; border: 1px solid #e0cf95; padding: 12px 46px; margin: 14px 26px 0; font-size: var(--t-body); line-height: 1.5; color: #111; }
   .welcome b { font-weight: bold; }
   .welcomeText { margin: 0; }
+  .welcomeIcon { flex: 0 0 auto; margin-right: 12px; color: #2b261f; font: 31px/1 "DejaVu Sans", "Segoe UI Symbol", serif; }
+  @media (max-width: 420px) { .welcomeIcon { font-size: 23px; margin-right: 7px; } .brut .welcome { padding-left: 12px; } }
   /* padded out to a ~44px hit area (WCAG target size); glyph stays put */
   .welcomeX { position: absolute; top: 0; right: 0; background: none; border: none; font-size: var(--t-lead); line-height: 1; color: #6f6f6f; cursor: pointer; padding: 10px 12px; }
   .welcomeX:hover { color: #000; }
@@ -89,26 +91,21 @@ const LAYOUT_CSS = `
     .welcomeWrap.isLeaving .welcome { transform: none; }
   }
 
+  .sideAvailable { margin: 2px 0 8px; font-size: var(--t-meta); color: #3e4940; }
+  .sideAvailable::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #46744d; vertical-align: 0.08em; }
   /* numbered Contents [hide] box */
   .wikiToc { border: 1px solid #a2a9b1; background: ${GREY_PANEL}; display: inline-block; padding: 8px 18px 11px; margin: 18px 0 0; font-size: var(--t-small); }
   .wikiToc summary { cursor: pointer; font-weight: bold; list-style: none; user-select: none; }
   .wikiToc summary::-webkit-details-marker { display: none; }
-  .wikiToc summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: var(--t-micro); }
-  .wikiToc:not([open]) summary::after { content: " [show]"; }
+  .wikiToc > summary::after { content: " [hide]"; font-weight: normal; color: #0645ad; font-size: var(--t-micro); }
+  .wikiToc:not([open]) > summary::after { content: " [show]"; }
   /* pseudo-element text is CSS, not a text node, so data-es cannot reach it */
-  html[lang="es"] .wikiToc summary::after { content: " [ocultar]"; }
-  html[lang="es"] .wikiToc:not([open]) summary::after { content: " [mostrar]"; }
+  html[lang="es"] .wikiToc > summary::after { content: " [ocultar]"; }
+  html[lang="es"] .wikiToc:not([open]) > summary::after { content: " [mostrar]"; }
   .wikiToc ol { list-style: decimal outside; margin: 8px 0 0; padding-left: 26px; }
-  .wikiToc li { display: list-item; padding: 2px 0; }
-  .wikiToc .wikiProjectToc { list-style: none; margin: 4px 0 2px; padding-left: 8px; }
-  .wikiProjectToc li { list-style: none; }
-  .wikiProjectTocNum { display: inline-block; min-width: 1.7em; color: #202122; }
-
-  /* sidebar toolbox + colophon - fills the space under Contents on desktop */
-  .sideTools { margin-top: 20px; }
-  .sideToolsLabel { display: block; font-variant: small-caps; letter-spacing: 0.06em; font-weight: bold; font-size: var(--t-micro); color: #555; margin-bottom: 6px; }
-  .sideTools ul { list-style: none; margin: 0; padding: 0; font-size: var(--t-small); }
-  .sideTools li { padding: 2px 0; }
+  .wikiToc li { display: list-item; padding: 2px 0; overflow-wrap: anywhere; }
+  /* Compact profile links: before the TOC, no repeated email or CV. */
+  .sideTools { margin-top: 8px; font-size: var(--t-small); }
   .sideTools a { color: #0645ad; text-decoration: none; }
   .sideTools a:hover { text-decoration: underline; }
   /* #5f5f5f: 4.5:1+ on the grey sidebar panel (#6f6f6f failed AA at 4.48) */
@@ -173,11 +170,15 @@ const LAYOUT_CSS = `
   }
   @media (min-width: 900px) {
     .grid { grid-template-columns: 264px minmax(0, 1fr); }
-    .side { position: sticky; top: 18px; align-self: start; padding: 16px 16px 20px; background: #f0f2f5; border: 1px solid #c8ccd1; }
+    .side { align-self: start; padding: 16px 16px 20px; background: #f0f2f5; border: 1px solid #c8ccd1; }
     .identRow { flex-direction: column-reverse; align-items: stretch; gap: 16px; }
     .identSphere { align-self: center; }
     .identText { padding-left: 2px; }
     .wikiToc { margin-left: 0; }
+  }
+  /* Avoid an independent scrolling pane on short desktop viewports. */
+  @media (min-width: 900px) and (min-height: 860px) {
+    .side { position: sticky; top: 18px; }
   }
   @media (max-width: 899px) {
     /* land section headings below the fixed mobile navbar, not under it */
@@ -196,7 +197,7 @@ const LAYOUT_CSS = `
     /* The sidebar is the TOP of the page on mobile, so what is not identity or
        contents comes out of it. The language button lives over the document and
        is unaffected. */
-    .sideTools, .sideColophon { display: none; }
+    .sideColophon { display: none; }
     /* keep 46px sides: less than that and the centered text runs under the X */
     .welcome { padding: 11px 46px; margin: 12px 22px 0; }
 
@@ -264,9 +265,11 @@ export default function BrutalistSidebar() {
                 <p style={{ margin: "6px 0 4px", fontStyle: "italic", fontSize: "var(--t-small)" }} data-es={ME_ES.role + "."}>{ME.role}.</p>
                 <p className="sideMeta">
                   <a href={`mailto:${ME.email}`}>{ME.email}</a>
-                  <br />
-                  <span data-es={UI_ES.status}>Status:</span> <strong data-es={ME_ES.available}>{ME.available}</strong>
                 </p>
+                <p className="sideAvailable"><span data-es="Disponible para trabajar">Available for work</span></p>
+                <nav className="sideTools" aria-label="Social links">
+                  <SocialLinks />
+                </nav>
                 <p className="sideCv"><a href="/Flavio-Manyari-CV-ATS.pdf" data-es-href="/Flavio-Manyari-CV-ATS-ES.pdf" download data-es="[ Descargar CV ↓ ]">[ Download CV ↓ ]</a></p>
               </div>
               <div className="identSphere">
@@ -277,19 +280,9 @@ export default function BrutalistSidebar() {
             <details className="wikiToc" id="wikiToc" suppressHydrationWarning>
               <summary data-es={UI_ES.contents}>Contents</summary>
               <ol>
-                {NAV_SECTIONS.map((s, sectionIndex) => (
+                {NAV_SECTIONS.map((s) => (
                   <li key={s.id}>
                     <a href={"#" + s.id} data-es={s.labelEs}>{s.label}</a>
-                    {s.id === "work" ? (
-                      <ol className="wikiProjectToc">
-                        {PROJECTS.map((p, i) => (
-                          <li key={p.slug}>
-                            <span className="wikiProjectTocNum">{sectionIndex + 1}.{i + 1}</span>
-                            <a href={"#project-" + p.slug}>{p.title}</a>
-                          </li>
-                        ))}
-                      </ol>
-                    ) : null}
                   </li>
                 ))}
               </ol>
@@ -305,16 +298,6 @@ export default function BrutalistSidebar() {
                   'try{const q=matchMedia("(min-width:900px) and (hover:hover) and (pointer:fine)");const sync=()=>{document.getElementById("wikiToc").open=q.matches};sync();q.addEventListener("change",sync)}catch(e){}',
               }}
             />
-
-            <nav className="sideTools" aria-label="Toolbox">
-              <span className="sideToolsLabel" data-es={UI_ES.toolbox}>Toolbox</span>
-              <ul>
-                <li><a href="/Flavio-Manyari-CV-ATS.pdf" data-es-href="/Flavio-Manyari-CV-ATS-ES.pdf" target="_blank" rel="noopener noreferrer" data-es={UI_ES.downloadCv}>Download CV</a></li>
-                <li><a href={`mailto:${ME.email}`} data-es={UI_ES.email}>Email</a></li>
-                <li><a href={ME.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                <li><a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-              </ul>
-            </nav>
 
             {/* The colophon closes the whole sidebar. */}
             <p className="sideColophon" data-es={`${UI_ES.colophon} ${UPDATED_ES}.`}>

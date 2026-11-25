@@ -93,23 +93,6 @@ export const PROJECTS = [
     ],
   },
   {
-    slug: "micaela",
-    url: "https://micaelalucia.com",
-    settle: 800,
-    animations: "allow", // Keep the explicitly paused marquee positions when taking screenshots.
-    afterOpen: [{ evaluate: "document.getAnimations().filter(a => a.animationName === 'marquee-down').forEach(a => { a.pause(); a.currentTime = 0; })" }],
-    frames: [
-      {name: "home"},
-      {name: "fotografia",url: "https://micaelalucia.com/fotografia",settle: 2000},
-      {name: "memoria-latente",url: "https://micaelalucia.com/proyectos/memoria-latente",steps: [{scroll: "button[aria-label^=\"Ampliar\"]",offset: 60}],settle: 2000},
-    ],
-    plates: [
-      { name: "grid", caption: "The photo grid, edge to edge.", clip: { x: 0, y: 0, width: 1440, height: 900 } },
-      { name: "grid-scrolled", caption: "The photo grid, edge to edge.", steps: [{ scroll: 900 }], clip: { x: 0, y: 0, width: 1440, height: 900 } },
-      { name: "grid-noheader", caption: "The photo grid, edge to edge.", hide: ["header"], clip: { x: 0, y: 0, width: 1440, height: 900 } },
-    ],
-  },
-  {
     slug: "civiclick",
     // Set CIVICLICK_CAPTURE_URL to the delivered local prototype URL.
     // The current production site may differ from the authored prototype.

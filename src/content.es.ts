@@ -14,63 +14,64 @@
 // a Wikipedia article, no promotional language, no agency storytelling.
 
 import { PROJECTS, SKILLS } from "./content";
+import { CV_SKILLS } from "./app/_cv/cvSkills";
 
 type BySlug<T> = Record<(typeof PROJECTS)[number]["slug"], T>;
 
 export const ME_ES = {
   siteTitle: "Portafolio de Flavio Manyari",
   role: "Desarrollador web y diseñador",
-  topline: "Diseño · Desarrollo · E-commerce · Productos digitales · Independiente y remoto",
+  topline: "Desarrollo web · Diseño visual · E-commerce · Productos digitales · Remoto",
   available: "Disponible",
   about:
-    "Hola, soy Flavio, diseñador y desarrollador web de Lima, Perú. He trabajado con clientes de Perú, Estados Unidos y Australia, diseñando interfaces, desarrollando sitios web, tiendas online y aplicaciones, integrando APIs y mejorando plataformas existentes.\n\nAdemás del trabajo con clientes, desarrollo mis propios proyectos, como una aplicación para descubrir música. Mi interés por la música y el diseño también me ha llevado a explorar el arte generativo y los visuales en tiempo real.\n\nEste portafolio reúne una selección de mi trabajo profesional y personal. Para nuevos proyectos, colaboraciones u oportunidades laborales, no dudes en ponerte en contacto.",
+    "Hola, soy Flavio, desarrollador web y diseñador de Lima, Perú, con experiencia trabajando con clientes en Perú, Estados Unidos y Australia. Me especializo en el diseño y desarrollo de sitios web, tiendas online y aplicaciones web, con experiencia profesional tanto en programación como en diseño gráfico y UI/UX.\n\nAdemás del trabajo para clientes, dedico parte de mi tiempo a proyectos digitales propios. Mis intereses creativos incluyen la producción de música electrónica, el arte generativo y el diseño audiovisual.\n\nEste portafolio reúne una selección de mi trabajo profesional y personal. Para nuevos proyectos, colaboraciones u oportunidades laborales, no dudes en ponerte en contacto.",
   aboutContactLabel: "ponerte en contacto",
-  // El perfil profesional del About, sin saludo, referencia al portafolio ni cierre.
+  // Resumen del CV, independiente de la sección Acerca de.
   summary:
-    "Desarrollador web y diseñador de Lima, Perú. He trabajado con clientes de Perú, Estados Unidos y Australia, desarrollando sitios web, tiendas online y aplicaciones. Mi experiencia en desarrollo se suma a una trayectoria en diseño gráfico e interfaces. Combino el trabajo para clientes con proyectos propios que diseño, publico y mantengo. Mi práctica creativa también abarca el arte generativo y los visuales en tiempo real.",
+    "Desarrollador web y diseñador con experiencia en el desarrollo de sitios web, plataformas de e-commerce y productos digitales para clientes en Perú, Estados Unidos y Australia. Trabajo de forma independiente y junto a equipos de agencias, abarcando diseño UI/UX, desarrollo frontend, integración de APIs y resolución de problemas técnicos. Además del trabajo para clientes, desarrollo mis propios productos digitales y dedico tiempo al arte generativo, la música electrónica y el diseño audiovisual.",
 } as const;
 
 /** Project role lines and blurbs, keyed by slug so a new project cannot be missed. */
 export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string }> = {
   tonydecay: {
-    role: "Tienda de ilustraciones impresas: identidad visual, tienda y pagos",
+    role: "E-commerce e identidad visual",
     blurb:
-      "Identidad visual y tienda de ilustraciones impresas para el ilustrador Tony Decay. Me encargué del diseño y del desarrollo, con pagos integrados y un panel desde el que el artista administra sus ventas y envíos.",
-    plateCap: "Foundation Series, la página de la colección de quince ilustraciones impresas.",
+      "Diseño y desarrollo de la identidad visual y tienda online del artista, con integración de pagos y un panel de administración personalizado para gestionar ventas y envíos.",
+    plateCap: "Página de presentación de Foundation Series, una colección de ilustraciones impresas.",
   },
   silverback: {
-    role: "Sitio de e-commerce: diseño y desarrollo en Shopify",
+    role: "E-commerce en Shopify",
     blurb:
-      "Tienda Shopify de ropa para artes marciales. Diseño y desarrollo de la portada, las páginas de producto y la navegación móvil.",
-    plateCap: "La portada.",
+      "Diseño y desarrollo e-commerce para una marca de ropa de artes marciales, con secciones personalizadas en Shopify y navegación responsive.",
+    plateCap: "Tienda en Shopify de una marca de ropa de artes marciales.",
   },
   superself: {
     role: "Sello discográfico independiente: identidad visual, sitio web y catálogo",
     blurb:
       "Sitio y marca para mi sello de música electrónica. Una identidad digital inspirada en la estética de internet temprano, con visuales generativos, catálogo de lanzamientos y merchandising. Diseñado y desarrollado de principio a fin, en tres idiomas.",
-    plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
+    plateCap: "Portada del sello independiente de música electrónica.",
   },
   digeart: {
-    role: "Plataforma de descubrimiento musical: diseño y desarrollo de producto",
+    role: "Aplicación web independiente",
     blurb:
-      "Plataforma de descubrimiento musical para oyentes y productores. Reúne música electrónica, mezclas y material para samplear en un catálogo curado a mano, y permite crear playlists. Diseñada, desarrollada y mantenida de forma independiente.",
-    plateCap: "Grilla de descubrimiento curada a mano.",
+      "Plataforma de descubrimiento musical desarrollada con Next.js, Supabase y la API de YouTube. Actualiza su catálogo automáticamente a partir de canales seleccionados e incluye un reproductor integrado y playlists creadas por usuarios.",
+    plateCap: "Interfaz de descubrimiento musical con un catálogo de canciones y buscador.",
   },
 
   civiclick: {
-    role: "Landing y prototipado web",
-    blurb: "Diseño y prototipo de la landing en HTML/CSS/JS para una plataforma SaaS de participación ciudadana. Revisión responsive y entrega para su implementación en WordPress. Proyecto para Design In DC.",
-    plateCap: "Prototipo de la portada preparado para su implementación en WordPress.",
+    role: "Prototipado frontend",
+    blurb: "Diseño de landing page y prototipado frontend para una plataforma SaaS de participación ciudadana. Desarrollado con HTML, CSS y JavaScript para Design In DC.",
+    plateCap: "Prototipo de la página de inicio de la plataforma de participación ciudadana.",
   },
   brisol: {
-    role: "Mantenimiento WordPress",
-    blurb: "Mantenimiento y recuperación de un sitio WordPress: revisión de archivos y base de datos, actualización de plugins, copias de seguridad y corrección de contenido no autorizado.",
-    plateCap: "El sitio WordPress de Brisol, en el que realicé mantenimiento.",
+    role: "Recuperación y seguridad web",
+    blurb: "Mantenimiento y soporte técnico en WordPress, incluyendo recuperación del sitio, mejoras de seguridad, resolución de problemas en la base de datos e integración de formularios de contacto.",
+    plateCap: "Servicios de instalación solar y formulario de consultas para clientes.",
   },
   ecolution: {
-    role: "Diseño y desarrollo WordPress",
-    blurb: "Rediseño del sitio web de una empresa australiana de energía solar en WordPress. Reorganización de la estructura y los contenidos del sitio, y diseño de sus páginas.",
-    plateCap: "Ecolution Industries, Australia. Rediseño web, 2025.",
+    role: "Rediseño web corporativo",
+    blurb: "Rediseño y reestructuración del sitio web corporativo de una empresa australiana de energía solar, con énfasis en diseño de páginas y organización de contenidos.",
+    plateCap: "Portada rediseñada de una empresa australiana de energía solar.",
   },
 };
 
@@ -80,18 +81,18 @@ export const CV_PROJECTS_ES = PROJECTS_ES;
 export const EXPERIENCE_ES: Record<string, { title: string; location: string; period: string; blurb: string; company?: string }> = {
   "Independent2020 - Present": {
     company: "Independiente",
-    title: "Diseñador y Desarrollador",
+    title: "Desarrollador web y diseñador",
     location: "",
     period: "2020 - Presente",
     blurb:
-      "Trabajo de diseño independiente desde 2020, al que incorporé el diseño y desarrollo web en 2023. Mi trabajo incluye identidad de marca, interfaces, e-commerce, publicación y mantenimiento continuo.",
+      "Trabajo de diseño independiente desde 2020, al que incorporé el diseño y desarrollo web en 2023. Mi trabajo incluye UI/UX, sitios web, e-commerce, integración de servicios externos, despliegue y mantenimiento.",
   },
   "Projects for Design In DC2025 - 2026": {
     company: "Proyectos para Design In DC",
-    title: "Diseñador UI freelance",
+    title: "Diseñador UI",
     location: "",
     period: "2025 - 2026",
-    blurb: "Diseño de interfaces y prototipos web para clientes de la agencia. Preparación de propuestas y revisión responsive para su implementación.",
+    blurb: "Diseño web y prototipado para clientes de la agencia, incluyendo UI, diseño responsive y entrega de proyectos al equipo de desarrollo.",
   },
 };
 
@@ -107,19 +108,24 @@ export const EDUCATION_ES: Record<string, { title: string; detail: string }> = {
   },
 };
 
-/** Skill group labels. The items themselves are product names and stay as they are. */
+/** Website display labels, keyed by the shared CV categories. */
 export const SKILLS_ES: Record<(typeof SKILLS)[number]["label"], string> = {
-  Design: "Diseño",
-  Frontend: "Frontend",
-  "Motion & Graphics": "Motion y Gráficos",
-  "E-commerce": "E-commerce",
-  "CMS & Backend": "CMS y Backend",
-  "Infra & SEO": "Infraestructura y SEO",
+  "Frontend Development": "Desarrollo web",
+  "Data & APIs": "Bases de datos e integraciones",
+  "E-commerce & CMS": "E-commerce y CMS",
+  "Development Tools": "Herramientas e infraestructura",
+  "Design & Creative Coding": "Diseño y tecnología creativa",
+  "Professional Skills": "Habilidades profesionales",
 };
+
+export const SKILL_ITEMS_ES: Record<string, string> =
+  Object.fromEntries(CV_SKILLS.map((group) => [group.label, group.itemsEs]));
 
 export const LANGUAGES_ES: Record<string, { lang: string; level: string }> = {
   Spanish: { lang: "Español", level: "Nativo" },
   English: { lang: "Inglés", level: "Fluido" },
+  French: { lang: "Francés", level: "Básico" },
+  Portuguese: { lang: "Portugués", level: "Básico" },
 };
 
 /** UI chrome: headings, labels and the fixed strings written into the JSX. */
@@ -134,13 +140,13 @@ export const UI_ES = {
   contact: "Contacto",
   references: "Referencias",
 
-  // sidebar TOC labels (lowercase, they render as-is)
-  tocAbout: "sobre mí",
-  tocWork: "proyectos",
-  tocExperience: "experiencia",
-  tocEducation: "formación",
-  tocSkills: "habilidades",
-  tocContact: "contacto",
+  // sidebar TOC labels (sentence case)
+  tocAbout: "Sobre mí",
+  tocWork: "Proyectos",
+  tocExperience: "Experiencia",
+  tocEducation: "Formación",
+  tocSkills: "Habilidades",
+  tocContact: "Contacto",
 
   // sidebar chrome
   contents: "Contenido",
@@ -167,8 +173,11 @@ export const UI_ES = {
   languages: "Idiomas", // CV heading
 
   // contact
-  contactLead: "Cuéntame qué necesitas.",
-  contactBased: "Español e inglés. Disponible para proyectos freelance y trabajo remoto.",
+  contactLead: "Disponible para proyectos independientes y puestos de trabajo remoto.",
+  contactElsewhere: "Otros canales",
+  contactResume: "Currículum",
+  contactLocation: "Ubicación e idiomas",
+  contactBased: "Lima, Perú · Español e inglés",
 
   // welcome banner
   bannerLead: "Actualmente disponible para trabajo freelance y remoto.",

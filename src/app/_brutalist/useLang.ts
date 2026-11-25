@@ -34,6 +34,7 @@ export type Lang = "en" | "es";
 
 const EVENT = "langchange";
 const KEY = "lang";
+let manuallySelected = false;
 
 function subscribe(onChange: () => void): () => void {
   document.addEventListener(EVENT, onChange);
@@ -102,11 +103,28 @@ export function bootLang(): void {
   if (saved === "es") {
     swapText("es");
     announce("es");
+  } else if (saved !== "en") {
+    fetch("/api/language", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((result: { language?: string } | null) => {
+        let choice = null;
+        try { choice = localStorage.getItem(KEY); } catch { /* local storage is optional */ }
+        if (result?.language !== "es" || manuallySelected || choice === "en" || choice === "es") return;
+        swapText("es");
+        announce("es");
+      })
+      .catch(() => { /* English remains the fallback. */ });
   }
 }
 
 /** Switch the page, holding the reader's position steady. */
 export function applyLang(next: Lang): void {
+  manuallySelected = true;
+  try {
+    localStorage.setItem(KEY, next);
+  } catch {
+    /* private mode: the choice just does not persist */
+  }
   if (next === getSnapshot()) return;
 
   // the topmost section still on screen is what the reader is looking at
@@ -116,12 +134,6 @@ export function applyLang(next: Lang): void {
 
   swapText(next);
   announce(next);
-
-  try {
-    localStorage.setItem(KEY, next);
-  } catch {
-    /* private mode: the choice just does not persist */
-  }
 
   if (anchor) {
     const shift = anchor.getBoundingClientRect().top - before;
