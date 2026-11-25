@@ -153,21 +153,6 @@ export const PROJECTS: Project[] = [
     plateW: 440,
     plateH: 275,
   },
-  {
-    slug: "micaela",
-    title: "Micaela Lucía",
-    year: 2025,
-    role: "Photography portfolio: website design and development",
-    url: "https://micaelalucia.com",
-    tag: "client",
-    blurb: "Portfolio and archive for a photographer - full-width documentary photography, a minimal interface, and a grid that grows with her archive. Designed, built, and deployed.",
-    technologies: ["Next.js", "TypeScript", "Sanity", "Tailwind"],
-    plate: "/plates/micaela.png",
-    plateAlt: "The micaelalucia.com portfolio, an edge-to-edge masonry grid of documentary and archival photographs under a light header.",
-    plateCap: "The photo grid, edge to edge.",
-    plateW: 440,
-    plateH: 275,
-  },
 ];
 
 // The website shows all projects; the CV keeps its approved six-project selection.

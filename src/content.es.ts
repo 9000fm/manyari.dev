@@ -50,12 +50,6 @@ export const PROJECTS_ES: BySlug<{ role: string; blurb: string; plateCap: string
       "Sitio y marca para mi sello de música electrónica. Una identidad digital inspirada en la estética de internet temprano, con visuales generativos, catálogo de lanzamientos y merchandising. Diseñado y desarrollado de principio a fin, en tres idiomas.",
     plateCap: "La interfaz principal del sello, dibujada en perspectiva de un punto.",
   },
-  micaela: {
-    role: "Portafolio de fotografía: diseño y desarrollo web",
-    blurb:
-      "Portafolio y archivo para una fotógrafa - fotografía documental a todo lo ancho, una interfaz mínima y una grilla que crece con su obra. Diseñado, construido y desplegado.",
-    plateCap: "La grilla de fotos, de borde a borde.",
-  },
   digeart: {
     role: "Plataforma de descubrimiento musical: diseño y desarrollo de producto",
     blurb:
