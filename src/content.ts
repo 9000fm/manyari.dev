@@ -12,7 +12,7 @@ export const ME = {
   siteTitle: "Flavio Manyari's Portfolio",
   tagline: "Projects end to end - brand, design, code, deploy.",
   about:
-    "Hi, I'm Flavio, a web developer and designer from Lima, Peru, with experience working with clients in Peru, the US, and Australia. I specialize in designing and developing websites, online stores, and web applications, with professional experience in programming, graphic design, and UI/UX.\n\nOutside of client work, I dedicate part of my time to my own digital projects. My creative interests include electronic music production, generative art, and audiovisual design.\n\nThis portfolio brings together a selection of my professional and personal work. For new projects, collaborations, or job opportunities, feel free to reach out.",
+    "Hello, I'm Flavio, a web developer and designer from Lima, Peru, with experience working with clients in Peru, the US, and Australia. I specialize in designing and developing websites, online stores, and web applications, with professional experience in programming, graphic design, and UI/UX.\n\nOutside of client work, I dedicate part of my time to my own digital projects. My creative interests include electronic music production, generative art, and audiovisual design.\n\nThis portfolio brings together a selection of my professional and personal work. For new projects, collaborations, or job opportunities, feel free to reach out.",
   aboutContactLabel: "reach out",
   // CV summary; independent of the website About.
   summary:

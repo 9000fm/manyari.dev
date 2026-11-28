@@ -1,6 +1,6 @@
 // Prints both CV layouts in English and Spanish from the shared React content.
 // All files are generated and checked before any public PDF is replaced.
-// Usage: node scripts/cv-pdf.mjs [--png <directory>]
+// Usage: node scripts/cv-pdf.mjs [--ats-only] [--png <directory>]
 
 import fs from "node:fs";
 import os from "node:os";
@@ -40,7 +40,7 @@ const jobs = [
   { lang: "es", layout: "editorial", component: CvSheet, file: "Flavio-Manyari-CV-ES.pdf" },
   { lang: "en", layout: "ats", component: CvSingleColumn, file: "Flavio-Manyari-CV-ATS.pdf" },
   { lang: "es", layout: "ats", component: CvSingleColumn, file: "Flavio-Manyari-CV-ATS-ES.pdf" },
-];
+].filter((job) => !args.includes("--ats-only") || job.layout === "ats");
 const MARGIN_MM = 11;
 const PRINT_WIDTH = Math.floor((210 - 2 * MARGIN_MM) * 96 / 25.4);
 const PRINT_HEIGHT = Math.floor((297 - 2 * MARGIN_MM) * 96 / 25.4);
@@ -60,7 +60,7 @@ async function main() {
   let browser;
   try {
     if (PNG) fs.mkdirSync(PNG, { recursive: true });
-    browser = await chromium.launch();
+    browser = await chromium.launch(process.env.CV_CHROMIUM_PATH ? { executablePath: process.env.CV_CHROMIUM_PATH } : {});
     const page = await browser.newPage({ viewport: { width: PRINT_WIDTH, height: PRINT_HEIGHT } });
     await page.emulateMedia({ media: "print" });
     for (const job of jobs) {

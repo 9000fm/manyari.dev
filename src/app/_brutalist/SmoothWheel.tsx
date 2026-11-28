@@ -38,6 +38,11 @@ export default function SmoothWheel() {
     const maxScroll = () => docEl.scrollHeight - window.innerHeight;
 
     const frame = () => {
+      if (document.querySelector(".projectPreview[open]")) {
+        current = target = window.scrollY;
+        running = false;
+        return;
+      }
       const d = target - current;
       if (Math.abs(d) < 0.5) {
         current = target;
@@ -57,7 +62,10 @@ export default function SmoothWheel() {
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) return; // don't hijack pinch-zoom
+      if (e.ctrlKey || document.querySelector(".projectPreview[open]")) return; // don't hijack pinch-zoom
+      // Very short desktop viewports may have a scrollable sidebar; let its native scroll run.
+      const rail = (e.target as HTMLElement | null)?.closest?.(".portfolio .side");
+      if (rail && rail.scrollHeight > rail.clientHeight + 2) return;
       let delta = e.deltaY;
       if (e.deltaMode === 1) delta *= 16; // lines -> px
       else if (e.deltaMode === 2) delta *= window.innerHeight; // pages -> px

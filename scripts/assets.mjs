@@ -1,4 +1,4 @@
-// Plates and hover previews for Selected Work, built from the live sites.
+// Plates and device previews for Selected Work, built from the live sites.
 // See CLAUDE.md "Regenerating plates and previews" and scripts/assets.config.mjs.
 //
 //   npm run assets -- probe                       browser version, WebGL2 and H.264 support
@@ -286,7 +286,7 @@ function run(cmd, a) {
   if (r.status !== 0) throw new Error(`${cmd} ${a.join(" ")} -> exit ${r.status}`);
 }
 
-// cover-crop to 16:10, then 720x450 (the hover card's exact box)
+// cover-crop to 16:10, then 720x450 (the desktop preview's source size)
 const VF = "scale=720:450:force_original_aspect_ratio=increase:flags=lanczos,crop=720:450";
 
 function encodePreview(seq, out) {
@@ -475,18 +475,21 @@ async function verify() {
   for (const p of plates) {
     if (!(p.complete && p.natural[0] === 440 && p.attr[0] === 440 && p.attr[1] === p.natural[1])) throw new Error(`plate mismatch ${p.src}`);
   }
-  await page.mouse.move(20, 20);
-  await page.mouse.move(40, 40); // arms WorkHoverLazy, which mounts on first interaction
-  await page.waitForTimeout(500);
-  for (const li of await page.$$(".brutWork > li")) {
-    await li.scrollIntoViewIfNeeded();
-    await li.hover();
-    await page.waitForTimeout(900);
+  for (const plate of await page.$$(".plateZoom")) {
+    await plate.scrollIntoViewIfNeeded();
+    await plate.click();
+    await page.waitForSelector(".projectPreview[open] .deviceScreen video");
+    await page.waitForFunction(() => {
+      const v = document.querySelector(".projectPreview[open] .deviceScreen video");
+      return v && v.readyState >= 2 && !v.paused;
+    });
     const v = await page
-      .$eval(".workHoverMedia video", (el) => ({ src: el.getAttribute("src"), ready: el.readyState, paused: el.paused, size: [el.videoWidth, el.videoHeight] }))
+      .$eval(".projectPreview[open] .deviceScreen video", (el) => ({ src: el.getAttribute("src"), ready: el.readyState, paused: el.paused, size: [el.videoWidth, el.videoHeight] }))
       .catch(() => null);
     console.log(v);
     if (!v || v.ready < 2 || v.paused || v.size[0] !== 720 || v.size[1] !== 450) throw new Error("preview not playing at 720x450");
+    await page.locator(".projectPreviewClose").click();
+    await page.waitForSelector(".projectPreview[open]", { state: "hidden" });
   }
   if (errors.length) throw new Error(`console errors:\n${errors.join("\n")}`);
   await browser.close();

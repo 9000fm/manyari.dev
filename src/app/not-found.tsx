@@ -3,6 +3,7 @@ import { ME } from "@/content";
 import { ME_ES, UI_ES } from "@/content.es";
 import { SHARED_CSS, NAV_SECTIONS } from "./_brutalist/shared";
 import LangSwitch from "./_brutalist/LangSwitch";
+import "./portfolio.css";
 
 /**
  * The 404, in the register of a wiki's "this article does not exist" page and
@@ -59,7 +60,7 @@ export default function NotFound() {
             ))}
           </ul>
           <div className="nfLang">
-            <LangSwitch variant="button" />
+            <LangSwitch />
           </div>
         </article>
       </div>

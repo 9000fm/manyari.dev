@@ -24,7 +24,7 @@ export const ME_ES = {
   topline: "Desarrollo web · Diseño visual · E-commerce · Productos digitales · Remoto",
   available: "Disponible",
   about:
-    "Hola, soy Flavio, desarrollador web y diseñador de Lima, Perú, con experiencia trabajando con clientes en Perú, Estados Unidos y Australia. Me especializo en el diseño y desarrollo de sitios web, tiendas online y aplicaciones web, con experiencia profesional tanto en programación como en diseño gráfico y UI/UX.\n\nAdemás del trabajo para clientes, dedico parte de mi tiempo a proyectos digitales propios. Mis intereses creativos incluyen la producción de música electrónica, el arte generativo y el diseño audiovisual.\n\nEste portafolio reúne una selección de mi trabajo profesional y personal. Para nuevos proyectos, colaboraciones u oportunidades laborales, no dudes en ponerte en contacto.",
+    "Hola, soy Flavio, programador y diseñador de Lima, Perú, con experiencia trabajando con clientes en Perú, Estados Unidos y Australia. Me especializo en el diseño y desarrollo de sitios web, tiendas online y aplicaciones web, con experiencia profesional tanto en programación como en diseño gráfico y UI/UX.\n\nAdemás del trabajo para clientes, dedico parte de mi tiempo a proyectos digitales propios. Mis intereses creativos incluyen la producción de música electrónica, el arte generativo y el diseño audiovisual.\n\nEste portafolio reúne una selección de mi trabajo profesional y personal. Para nuevos proyectos, colaboraciones u oportunidades laborales, no dudes en ponerte en contacto.",
   aboutContactLabel: "ponerte en contacto",
   // Resumen del CV, independiente de la sección Acerca de.
   summary:

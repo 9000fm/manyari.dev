@@ -69,6 +69,10 @@ function swapText(next: Lang) {
     const to = next === "es" ? el.dataset.es : el.dataset.en;
     if (to !== undefined) el.textContent = to;
   });
+  document.querySelectorAll<HTMLElement>("[data-es-aria-label]").forEach((el) => {
+    const to = next === "es" ? el.dataset.esAriaLabel : el.dataset.enAriaLabel;
+    if (to !== undefined) el.setAttribute("aria-label", to);
+  });
   // Links with a Spanish edition (the CV PDF) carry it in data-es-href.
   document.querySelectorAll<HTMLElement>("[data-es-href]").forEach((el) => {
     const to = next === "es" ? el.dataset.esHref : el.dataset.enHref;
@@ -92,6 +96,10 @@ export function bootLang(): void {
   });
   document.querySelectorAll<HTMLElement>("[data-es-href]").forEach((el) => {
     if (el.dataset.enHref === undefined) el.dataset.enHref = el.getAttribute("href") ?? "";
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-es-aria-label]").forEach((el) => {
+    if (el.dataset.enAriaLabel === undefined) el.dataset.enAriaLabel = el.getAttribute("aria-label") ?? "";
   });
 
   let saved: string | null = null;
@@ -135,7 +143,7 @@ export function applyLang(next: Lang): void {
   swapText(next);
   announce(next);
 
-  if (anchor) {
+  if (anchor && window.scrollY > 0) {
     const shift = anchor.getBoundingClientRect().top - before;
     if (shift) window.scrollBy(0, shift);
   }

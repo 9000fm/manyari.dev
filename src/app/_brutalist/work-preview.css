@@ -1,0 +1,84 @@
+/* Native top-layer dialog: no hover, fade, artificial loading or page jump. */
+.projectPreview {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  background: transparent;
+  color: #111;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+.projectPreview:not([open]) { display: none; }
+.projectPreview[open] { display: grid; place-items: center; }
+.projectPreview::backdrop { background: rgba(220, 225, 231, .90); }
+.previewDevice { position: relative; isolation: isolate; filter: drop-shadow(0 13px 18px #0003); }
+.previewCase { display: block; width: 100%; height: auto; pointer-events: none; }
+.deviceScreen { position: absolute; overflow: hidden; background: #101010; }
+.deviceScreenSurface { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #101010; transform-origin: 0 0; }
+.deviceScreen img, .deviceScreen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Keep every captured pixel; only the iMac surface is projected in perspective. */
+  object-position: center;
+}
+.previewDevice--imac {
+  width: min(86vw, calc((100dvh - 88px) * 1160 / 935), 1100px);
+}
+.previewDevice--imac .deviceScreen {
+  /* Measured against the 1160×935 case asset. */
+  left: 4.224138%; top: 4.278075%; width: 91.551724%; height: 62.032086%;
+  clip-path: polygon(2.165725% 0, 97.834275% 0, 100% 100%, 0 100%);
+}
+.previewDevice--imac .deviceScreenSurface { width: 97.091441%; } /* Flat 16:9 plane, then mapped to the photograph. */
+.previewDevice--thunderbolt {
+  width: min(86vw, calc((100dvh - 88px) * 446 / 341), 1120px);
+}
+/* Screen aperture (18,18) → (428,248) in the 446×341 asset. */
+.previewDevice--thunderbolt .deviceScreen { left: 4.035874%; top: 5.278592%; width: 91.928251%; height: 67.448680%; }
+.previewDevice--iphone {
+  width: min(88vw, calc((100dvh - 76px) * 433 / 920), 440px);
+}
+/* Screen aperture (28,134) → (401,795) in the 433×920 asset. */
+.previewDevice--iphone .deviceScreen { left: 6.466513%; top: 14.565217%; width: 86.143187%; height: 71.847826%; }
+.projectPreviewClose {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  font: 31px/1 Arial, sans-serif;
+  border: 1px solid #8b939e;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+}
+.projectPreviewClose:hover { background: #f1f3f6; }
+.projectPreviewClose:focus-visible { outline: 2px solid #0645ad; outline-offset: 3px; }
+
+/* Required third-party artwork attribution belongs with the artwork itself. */
+.projectPreviewInfo {
+  position: absolute;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #626873;
+  font: 20px/1 Georgia, serif;
+  text-decoration: none;
+}
+.projectPreviewInfo:hover, .projectPreviewInfo:focus-visible { color: #111; }

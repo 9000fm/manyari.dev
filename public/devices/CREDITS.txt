@@ -1,0 +1,19 @@
+Device artwork sources
+
+iMac 2009 — Imac 16-9.png
+Matthieu Riegler, Wikimedia Commons, CC BY 3.0.
+https://commons.wikimedia.org/wiki/File:Imac_16-9.png
+https://creativecommons.org/licenses/by/3.0/
+Cropped transparent exterior and converted to WebP. The source screen is covered in the interactive viewer.
+
+Apple Thunderbolt Display — Apple Thunderbolt Display.png
+andrew-gw, Wikimedia Commons, CC BY-SA 3.0.
+https://commons.wikimedia.org/wiki/File:Apple_Thunderbolt_Display.png
+https://creativecommons.org/licenses/by-sa/3.0/
+Converted to WebP. The device image is distributed under CC BY-SA 3.0. Portfolio videos are presented as a separate layer.
+
+iPhone 5 — IPhone 5 front creation.jpg
+Servaboss, Wikimedia Commons, CC BY-SA 3.0.
+https://commons.wikimedia.org/wiki/File:IPhone_5_front_creation.jpg
+https://creativecommons.org/licenses/by-sa/3.0/
+Removed the exterior white background and converted to WebP. The modified device image is distributed under CC BY-SA 3.0. Portfolio videos are presented as a separate layer.
